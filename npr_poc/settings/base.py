@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'npr_poc.home',
     'npr_poc.images',
     'npr_poc.navigation',
+    'npr_poc.podcasts',
     'npr_poc.search',
     'npr_poc.standardpages',
     'npr_poc.utils',
