@@ -3,6 +3,7 @@ wagtail==2.4
 psycopg2==2.7.7
 wagtail-django-recaptcha==1.0
 django-pattern-library==0.2.3
+mutagen==1.42.0
 
 # Production dependencies
 whitenoise[brotli]==4.1.2

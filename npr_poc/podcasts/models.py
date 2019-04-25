@@ -1,4 +1,7 @@
+import mimetypes
+
 from django.conf import settings
+from django.core.validators import MinValueValidator
 from django.db import models
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -9,6 +12,7 @@ from wagtail.core.models import CollectionMember, Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
+import mutagen
 from taggit.models import TaggedItemBase
 
 from npr_poc.utils.models import BasePage
@@ -104,13 +108,6 @@ class EpisodeImage(Orderable, models.Model):
 
 
 class EpisodeEnclosure(CollectionMember, Orderable, models.Model):
-    CHANNEL_MONO = 'mono'
-    CHANNEL_STEREO = 'stereo'
-    CHANNEL_CHOICES = (
-        (CHANNEL_MONO, 'Mono'),
-        (CHANNEL_STEREO, 'Stereo'),
-    )
-
     episode = ParentalKey(
         'podcasts.Episode',
         on_delete=models.CASCADE,
@@ -120,15 +117,24 @@ class EpisodeEnclosure(CollectionMember, Orderable, models.Model):
     media_file = models.FileField(upload_to='media')
     date_created = models.DateTimeField(auto_now_add=True)
 
-    # TODO see https://mutagen.readthedocs.io/en/latest/ for getting metadata from audio files
-    file_size = models.PositiveIntegerField(null=True, editable=False)
-    bitrate = models.PositiveIntegerField(null=True)
-    sample_rate = models.PositiveIntegerField(null=True)
-    channel = models.CharField(max_length=20, choices=CHANNEL_CHOICES, blank=True)
-    mime_type = models.CharField(max_length=20, blank=True)
+    bitrate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
+    sample_rate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
+    channels = models.PositiveSmallIntegerField(null=True, validators=[MinValueValidator(1)], editable=False)
+    mime_type = models.CharField(max_length=20, blank=True, editable=False)
 
     def __str__(self):
         return self.title
+
+    def save(self):
+        ftype = mutagen.File(self.media_file.open())
+        if fytpe is not None:
+            self.bitrate = ftype.info.bitrate or None
+            self.sample_rate = ftype.info.sample_rate or None
+            self.channels = ftype.info.channels or None
+
+        mime_type =  mimetypes.guess_type(self.media_file.name)
+        self.mime_type = mime_type[0] or None
+        return super().save()
 
     search_fields = CollectionMember.search_fields + [
         index.SearchField('title', partial_match=True, boost=10),
