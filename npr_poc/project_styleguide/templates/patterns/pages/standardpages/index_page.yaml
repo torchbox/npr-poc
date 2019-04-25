@@ -1,0 +1,26 @@
+context:
+  page:
+    title: Test listing page
+    introduction: Test intro for this listing page
+  subpages:
+    object_list:
+      exists: true
+      specific:
+      - title: Test sub page
+        listing_image: fake
+        listing_summary: Listing summary for the sub page
+      - title: Another test sub page
+        listing_image: fake
+        listing_summary: Listing summary for the sub page
+      - title: Another test sub page
+        listing_image: fake
+        listing_summary: Listing summary for the sub page
+
+tags:
+  pageurl:
+    subpage:
+      raw: "#"
+  image:
+    subpage.listing_image fill-450x300:
+      raw: |
+        <img src="http://via.placeholder.com/450x300" width="450" height="300" alt="Some alt">

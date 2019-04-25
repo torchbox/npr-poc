@@ -1,0 +1,12 @@
+context:
+  page:
+    title: Test info page
+    introduction: Some intro text
+
+tags:
+  include_block:
+    page.body:
+      template_name: "patterns/molecules/streamfield/stream_block.html"
+  sidebar:
+    "":
+      template_name: "patterns/molecules/navigation/sidebar.html"

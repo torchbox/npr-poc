@@ -1,0 +1,14 @@
+{% load wagtailcore_tags %}
+<div>
+    {% if value.heading %}
+        <h5>{{ value.heading }}</h5>
+    {% endif %}
+    <ul class="nav nav--tertiary">
+        {% for item in value.links %}
+            <li class="nav__item nav__item--footer-column" role="presentation">
+                {% include_block item %}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+

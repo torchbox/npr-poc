@@ -1,0 +1,43 @@
+{% extends "patterns/base_page.html" %}
+{% load wagtailcore_tags wagtailimages_tags navigation_tags static %}
+
+{% block content %}
+<div class="wrapper">
+    <section class="section section--main">
+        <h1>{{ page.title }}</h1>
+        <p>{{ page.introduction }}</p>
+
+        {% if subpages %}
+            <div class="grid">
+                {% if subpages.object_list.exists %}
+                    {% for subpage in subpages.object_list.specific %}
+                        <a class="card-with-image" href="{% pageurl subpage %}">
+                            {% if subpage.listing_image %}
+                                {% image subpage.listing_image fill-450x300 %}
+                            {% else %}
+                                {# Add a default image here #}
+                            {% endif %}
+                            <div class="card">
+                                <h3 role="listitem">
+                                    {% firstof subpage.listing_title subpage.title %}
+                                </h3>
+                                {% if subpage.listing_summary or subpage.introduction %}
+                                    <p>{% firstof subpage.listing_summary subpage.introduction %}</p>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    {# no items on this page #}
+                {% endif %}
+            </div>
+
+            {% include "patterns/molecules/pagination/pagination.html" with paginator_page=subpages %}
+
+        {% else %}
+            {# no items on any page #}
+        {% endif %}
+
+    </section>
+</div>
+{% endblock %}

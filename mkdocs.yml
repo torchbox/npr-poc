@@ -1,0 +1,14 @@
+site_name: NPR POC
+repo_url: https://github.com/torchbox/npr_poc
+repo_name: Gitlab
+dev_addr: 0.0.0.0:8001
+theme:
+  name: 'material'
+markdown_extensions:
+  - codehilite
+  - admonition
+  - toc:
+      permalink: true
+
+nav:
+  - 'Home': 'index.md'

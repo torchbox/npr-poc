@@ -1,0 +1,136 @@
+{% extends "patterns/base.html" %}
+
+{% load static wagtailuserbar wagtailcore_tags wagtailimages_tags navigation_tags util_tags %}
+
+{% block meta_tags %}
+    {% if GOOGLE_TAG_MANAGER_ID %}
+        {# To enable GTM code you need to specify GOOGLE_TAG_MANAGER_ID in Django settings #}
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','{{ GOOGLE_TAG_MANAGER_ID|escapejs }}');</script>
+    {% endif %}
+
+    {# favicons #}
+    {% comment %}
+        Generate favicons by http://realfavicongenerator.net using the following path: settings.STATIC_URL + img/favicons.
+        Then favicon.ico should be copied to a directory called "public" in the application root and puppet does some magic to serve it up at the site root.
+    {% endcomment %}
+
+    {% comment %}
+        Twitter summary card - see https://dev.twitter.com/cards/types/summary
+        and https://dev.twitter.com/cards/getting-started
+    {% endcomment %}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@{{ settings.utils.SocialMediaSettings.twitter_handle }}" />
+    <meta name="twitter:title" content="{{ page.title }}" />
+    <meta name="twitter:description" content="{{ page|social_text:request.site }}">
+    {% if page.social_image  %}
+        {% image page.social_image width-320 as social_img %}
+        <meta name="twitter:image" content="{{ request.site.root_url }}{{ social_img.url }}">
+    {% else %}
+        {# Add a default image to use for social sharing here in case one is not provided on the page. #}
+    {% endif %}
+
+    {# facebook opengraph tags #}
+    <meta property="fb:app_id" content="{{ settings.utils.SocialMediaSettings.facebook_app_id }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ page.url }}" />
+    <meta property="og:title" content="{{ page.title }}" />
+    {% if page.social_image %}
+        <meta property="og:image" content="http://{{ request.site.hostname }}{{ social_img.url }}" />
+    {% else %}
+        {# Add a default image to use for social sharing here in case one is not provided on the page. #}
+    {% endif %}
+    <meta property="og:description" content="{{ page|social_text:request.site }}" />
+    <meta property="og:site_name" content="{{ settings.utils.SocialMediaSettings.site_name }}" />
+{% endblock meta_tags %}
+
+
+{% block body_top %}
+    {% if GOOGLE_TAG_MANAGER_ID %}
+        {# To enable GTM code you need to specify GOOGLE_TAG_MANAGER_ID in Django settings #}
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ GOOGLE_TAG_MANAGER_ID|urlencode }}"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    {% endif %}
+{% endblock body_top %}
+
+
+{% block header %}
+    <header class="header">
+        <div class="header__inner wrapper wrapper--large">
+            <a href="{% slugurl 'home' %}">
+                <img class="header__logo" src="https://placehold.it/150x100" alt="Logo for NPR POC">
+            </a>
+
+            <div class="header__menu-toggle">
+                <span>Menu</span>
+                <button class="button button-menu-toggle js-mobile-menu-toggle" aria-haspopup="true" aria-label="Mobile menu toggle">
+                    <span class="button-menu-toggle__line"></span>
+                    <span class="button-menu-toggle__line"></span>
+                    <span class="button-menu-toggle__line"></span>
+                    <span class="button-menu-toggle__line"></span>
+                </button>
+            </div>
+
+            <section class="header__menus header__menus--desktop">
+                <div class="header__inner--top">
+                    {% secondarynav %}
+                    <form action="{% url 'search' %}" method="get" role="search" class="form form--header-search">
+                        <input class="input" type="text" placeholder="Search…" name="query"{% if search_query %} value="{{ search_query }}{% endif %}">
+                        <button class="button" type="submit">
+                            <svg class="icon icon--magnifying-glass"><use xlink:href="#magnifying-glass"></use></svg>
+                        </button>
+                    </form>
+                </div>
+
+                {% primarynav %}
+            </section>
+
+            <section class="header__menus header__menus--mobile js-mobile-menu">
+                {% primarynav %}
+            </section>
+        </div>
+    </header>
+{% endblock header %}
+
+{% block footer %}
+    <footer class="footer">
+        <div class="footer__inner wrapper wrapper--large">
+            <div class="footer__nav-container">
+                {% if settings.utils.SocialMediaSettings.twitter_handle or settings.utils.SocialMediaSettings.facebook_app_id %}
+                    <section class="footer__social-links">
+                        <h5 class="footer__heading">Follow us:</h5>
+                        {% if settings.utils.SocialMediaSettings.twitter_handle %}
+                            <a href="https://twitter.com/{{ settings.utils.SocialMediaSettings.twitter_handle }}">
+                                <svg class="icon icon--footer-social"><use xlink:href="#twitter"></use></svg>
+                            </a>
+                        {% endif %}
+                        {% if settings.utils.SocialMediaSettings.facebook_app_id %}
+                            <a href="https://www.facebook.com/{{ settings.utils.SocialMediaSettings.facebook_app_id }}">
+                                <svg class="icon icon--footer-social"><use xlink:href="#facebook"></use></svg>
+                            </a>
+                        {% endif %}
+                    </section>
+                {% endif %}
+
+                <section>
+                    {% footernav %}
+                </section>
+
+                <section>
+                    {% footerlinks %}
+                </section>
+            </div>
+
+            <div class="footer__credit" role="contentinfo">
+                {% if COPYRIGHT %}
+                    <p>© {% now "Y" %} {{ COPYRIGHT }}</p>
+                {% endif %}
+                <div>Site by <a href="https://torchbox.com/">Torchbox</a></div>
+            </div>
+        </div>
+    </footer>
+{% endblock footer %}
+

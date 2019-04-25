@@ -1,0 +1,251 @@
+# vim:set sw=2 ts=2 et:
+# This is a sample .gitlab-ci.yml created by wagtail-kit.  You should review
+# it for any necessary changes.
+
+
+# Stages are groups that jobs can be groupped into.
+# Jobs within each stage run in parallel and if one of them fails, the next
+# stage won't be run.
+# This will set up the following:
+#
+# - Build stage: build of static assets.
+# - Test stage: code style, migration, basic configuration checks and unit
+#   tests.
+# - Deploy stage: deploy to Heroku or Dokku.
+stages:
+  - build
+  - test
+  - deploy
+
+
+# Global variables accessible to the all jobs.
+variables:
+  # What SSH user and host to use for connecting to Dokku.
+  # We host dev server and staging on the same instance so that's why it's set
+  # as global for all the cases.
+  DOKKU_SSH_USER: dokku
+  DOKKU_HOST: staging.torchbox.com
+
+
+# Test if static assets can be built succesfully.
+static:
+  image: node:8-alpine
+  stage: build
+  before_script:
+    - apk add --no-cache rsync
+  script:
+    - cd ./npr_poc/static_src
+    - npm install
+    - npm run build:prod
+  # Saving the job result as an artifact means that the files can be used by
+  # other jobs.
+  artifacts:
+    name: "static-$CI_JOB_ID"
+    paths:
+      - ./npr_poc/static_compiled
+    expire_in: 1 week
+
+
+# Check python code style.
+flake8:
+  image: python:3.6
+  stage: test
+  script:
+    # Remember to update a version in requirements-dev.txt
+    - pip install flake8==3.7.7
+    - flake8 npr_poc
+
+
+# Check imports sort order, i.e. check whether they are in an alphabetical
+# order and grouped properly.
+isort:
+  image: python:3.6
+  stage: test
+  before_script:
+    # Remember to update a version in requirements-dev.txt
+    - pip install isort==4.3.15
+  script:
+    - isort --check-only --diff --recursive npr_poc
+
+
+# Check settings, migrations and run tests.
+test:
+  # Make sure this Python version matches the version in your Dockerfile.
+  image: python:3.6.6
+  stage: test
+  services:
+    # Make sure this matches the Postgres version you run on your servers.
+    - postgres:9.6
+  dependencies:
+    - static
+  variables:
+    # Run tests with the production settings.
+    DJANGO_SETTINGS_MODULE: npr_poc.settings.production
+
+    # SECRET_KEY is required by Django to start.
+    SECRET_KEY: fake_secret_key_to_run_tests
+
+    # Silence RECAPTCHA
+    RECAPTCHA_PUBLIC_KEY: 'dummy-key-value'
+    RECAPTCHA_PRIVATE_KEY: 'dummy-key-value'
+
+    # This is the URL used by databases on our CI.
+    DATABASE_URL: postgres://postgres@postgres/postgres
+
+    # Don't redirect to HTTPS in tests.
+    SECURE_SSL_REDIRECT:  "false"
+  before_script:
+    # Install requirements
+    - pip install wheel
+    - pip install -r requirements.txt
+  script:
+    # We need to run the collectstatic command, because we use ManifestStaticFilesStorage.
+    # Otherwise the check command will fail
+    - python manage.py collectstatic --verbosity 0 --noinput --clear
+
+    # Run system checks
+    - python manage.py check
+
+    # Check for missing migrations
+    - python manage.py makemigrations --check --noinput
+
+    # Create cache table.
+    - python manage.py createcachetable
+
+    # Run tests
+    - python manage.py test
+
+
+# Deploy to the dev server.
+deploy_dev:
+  # Use Alpine image since it's lightweight. We only require SSH and Git for
+  # this job.
+  image: alpine:3.7
+  stage: deploy
+  variables:
+    # Name of your Dokku app.
+    #   $ dokku apps
+    DOKKU_APP_INSTANCE: npr_poc-dev
+
+    # Branch used by Dokku to deploy. You can verify the branch with:
+    #   $ dokku git:report [your-app-name]
+    DOKKU_DEPLOY_BRANCH: develop
+  only:
+    - develop
+  before_script:
+    # Git and SSH is required to push to Git via SSH.
+    - apk add --no-cache git openssh-client
+
+    # Create a directory used by the SSH agent.
+    - mkdir -p ~/.ssh
+
+    # Start up SSH agent.
+    - eval $(ssh-agent -s)
+
+    # Add our Dokku server as a known host so the push to Git succeeds.
+    - ssh-keyscan -H "$DOKKU_HOST" >> ~/.ssh/known_hosts
+
+    # Add the private key set in your project settings on GitLab to the
+    # SSH agent. You can obtain it from sysadmin.
+    - echo "$DOKKU_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  script:
+    # Push the HEAD of this job to the specified branch. It seems that the CI
+    # does not run on a specific branch, so we need to use HEAD.
+    - git push $DOKKU_SSH_USER@$DOKKU_HOST:$DOKKU_APP_INSTANCE HEAD:$DOKKU_DEPLOY_BRANCH
+
+# Deploy to the staging server.
+deploy_staging:
+  # Use Alpine image since it's lightweight. We only require SSH and Git for
+  # this job.
+  image: alpine:3.7
+  stage: deploy
+  variables:
+    # Name of your Dokku app.
+    #   $ dokku apps
+    DOKKU_APP_INSTANCE: npr_poc-staging
+
+
+    # Branch used by Dokku to deploy. You can verify the branch with:
+    #   $ dokku git:report [your-app-name]
+    DOKKU_DEPLOY_BRANCH: staging
+  only:
+    - staging
+  before_script:
+    # Git and SSH is required to push to Git via SSH.
+    - apk add --no-cache git openssh-client
+
+    # Create a directory used by the SSH agent.
+    - mkdir -p ~/.ssh
+
+    # Start up SSH agent.
+    - eval $(ssh-agent -s)
+
+    # Add our Dokku server as a known host so the push to Git succeeds.
+    - ssh-keyscan -H "$DOKKU_HOST" >> ~/.ssh/known_hosts
+
+    # Add the private key set in your project settings on GitLab to the
+    # SSH agent. You can obtain it from sysadmin.
+    - echo "$DOKKU_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+  script:
+    # Push the HEAD of this job to the specified branch. It seems that the CI
+    # does not run on a specific branch, so we need to use HEAD.
+    - git push $DOKKU_SSH_USER@$DOKKU_HOST:$DOKKU_APP_INSTANCE HEAD:$DOKKU_DEPLOY_BRANCH
+
+
+# Deploy to the production site.
+deploy_production:
+  # We use Debian image because Heroku has a lot of dependencies and is well
+  # supported on Debian based distributions.
+  image: debian:stretch
+  stage: deploy
+  variables:
+    # Your app's name.
+    #   $ heroku apps - t torchbox
+    HEROKU_APP: npr_poc-production
+  only:
+    - master
+  when: manual
+  before_script:
+    # Install cURL and GnuPG to install Heroku CLI.
+    # Install Git to push the code to Heroku. It uses HTTP to push the code.
+    - apt-get update -y
+    - apt-get install -y curl git gnupg
+
+    # Install Heroku CLI.
+    - curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
+
+    # Use Heroku credentials that you can add in your project settings on
+    # GitLab. They can be obtained from sysadmin or pwman.
+    - |
+      cat >~/.netrc <<EOF
+      machine api.heroku.com
+        login $HEROKU_EMAIL
+        password $HEROKU_TOKEN
+      machine git.heroku.com
+        login $HEROKU_EMAIL
+        password $HEROKU_TOKEN
+      EOF
+    - chmod 600 ~/.netrc
+
+    # Add Heroku's Git remote using Heroku CLI.
+    - heroku git:remote --app $HEROKU_APP --remote heroku-production
+  script:
+    # Push to Heroku's Git via HTTP. Heroku always expects you to push to
+    # master.
+    - git push heroku-production HEAD:master
+
+docs:
+  stage: deploy
+  only:
+    - master
+  script:
+    - pip install -r requirements-docs.txt
+    - mkdocs build
+    - pushd site
+    - tar -cvzf docs.tar.gz *
+    - popd
+    - mv site/docs.tar.gz .
+  artifacts:
+    paths:
+      - docs.tar.gz
+    expire_in: 1 week
