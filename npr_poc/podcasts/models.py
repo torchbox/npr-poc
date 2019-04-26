@@ -1,4 +1,5 @@
 import mimetypes
+import os
 
 from django.conf import settings
 from django.core.validators import MinValueValidator
@@ -132,13 +133,14 @@ class AudioMedia(CollectionMember, models.Model):
             self.channels = ftype.info.channels or None
             self.duration = ftype.info.length or None
 
-        mime_type =  mimetypes.guess_type(self.media_file.name)
+        mime_type = mimetypes.guess_type(self.media_file.name)
         self.mime_type = mime_type[0] or None
 
         # TODO we probably don't want to transcribe each enclosure, on the basis
         # that they should all contain the same content.
         if not self.transcript:
-            self.transcript = '\n\n'.join(transcribe_audio(self))
+            self.media_file.seek(0, os.SEEK_SET)
+            self.transcript = '\n\n'.join(transcribe_audio(self.media_file.read(), self.sample_rate))
 
         return super().save()
 

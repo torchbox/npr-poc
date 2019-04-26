@@ -18,19 +18,17 @@ def get_text_to_speech_client():
     return speech.SpeechClient(credentials=credentials)
 
 
-def transcribe_audio(media_obj):
+def transcribe_audio(content, sample_rate):
     client = get_text_to_speech_client()
     # We are assuming here that the audio file is encoded with FLAC
     # Later we will need to convert all incoming audio to a format acceptable to
     # Google's speech-to-text API.
     config = speech.types.RecognitionConfig(
         encoding=speech.enums.RecognitionConfig.AudioEncoding.FLAC,
-        sample_rate_hertz=media_obj.sample_rate,
+        sample_rate_hertz=sample_rate,
         language_code='en-US'
     )
 
-    with media_obj.media_file.open('rb') as f:
-        content = f.read()
     audio = speech.types.RecognitionAudio(content=content)
     try:
         response = client.recognize(config, audio, retry=None, timeout=30)
