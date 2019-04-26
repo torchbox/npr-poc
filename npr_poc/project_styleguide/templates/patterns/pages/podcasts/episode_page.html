@@ -7,7 +7,7 @@
     <h5>{{ page.subtitle }}</h5>
 
     {% for enc in page.enclosures.all %}
-    <object width="400" height="30" data="{{ enc.media_file.url }}"></object>
+    <object width="400" height="30" data="{{ enc.media.media_file.url }}"></object>
     {% endfor %}
 
     {% include "patterns/molecules/share/share.html" %}

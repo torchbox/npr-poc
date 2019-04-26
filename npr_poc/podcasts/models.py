@@ -16,6 +16,7 @@ import mutagen
 from taggit.models import TaggedItemBase
 
 from npr_poc.utils.models import BasePage
+from .utils import transcribe_audio
 
 
 class ShowTag(TaggedItemBase):
@@ -107,43 +108,57 @@ class EpisodeImage(Orderable, models.Model):
     ]
 
 
-class EpisodeEnclosure(CollectionMember, Orderable, models.Model):
-    episode = ParentalKey(
-        'podcasts.Episode',
-        on_delete=models.CASCADE,
-        related_name='enclosures',
-    )
+class AudioMedia(CollectionMember, models.Model):
     title = models.CharField(max_length=255)
     media_file = models.FileField(upload_to='media')
     date_created = models.DateTimeField(auto_now_add=True)
 
+    duration = models.DecimalField(null=True, decimal_places=2, max_digits=10, editable=False)
     bitrate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
     sample_rate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
     channels = models.PositiveSmallIntegerField(null=True, validators=[MinValueValidator(1)], editable=False)
     mime_type = models.CharField(max_length=20, blank=True, editable=False)
+
+    transcript = models.TextField(blank=True, editable=False)
 
     def __str__(self):
         return self.title
 
     def save(self):
         ftype = mutagen.File(self.media_file.open())
-        if fytpe is not None:
+        if ftype is not None:
             self.bitrate = ftype.info.bitrate or None
             self.sample_rate = ftype.info.sample_rate or None
             self.channels = ftype.info.channels or None
+            self.duration = ftype.info.length or None
 
         mime_type =  mimetypes.guess_type(self.media_file.name)
         self.mime_type = mime_type[0] or None
+
+        # TODO we probably don't want to transcribe each enclosure, on the basis
+        # that they should all contain the same content.
+        if not self.transcript:
+            self.transcript = '\n\n'.join(transcribe_audio(self))
+
         return super().save()
 
     search_fields = CollectionMember.search_fields + [
         index.SearchField('title', partial_match=True, boost=10),
     ]
 
-    panels = [
-        FieldPanel('title'),
-        FieldPanel('media_file'),   # TODO use a media chooser for this?
-    ]
+
+class EpisodeEnclosure(Orderable, models.Model):
+    episode = ParentalKey(
+        'podcasts.Episode',
+        on_delete=models.CASCADE,
+        related_name='enclosures',
+    )
+    media = models.ForeignKey(
+        'podcasts.AudioMedia',
+        models.PROTECT,
+        null=True,
+        related_name='+'
+    )
 
 
 class Episode(BasePage):
@@ -171,12 +186,16 @@ class Episode(BasePage):
     episode_type = models.CharField(max_length=255, choices=EPISODE_TYPES)
     tags = ClusterTaggableManager(through=EpisodeTag, blank=True)
     season_number = models.CharField(max_length=255, blank=True)        # Are seasons always numeric?
-    duration = models.DurationField()
     is_explicit = models.BooleanField(default=False)
 
     search_fields = BasePage.search_fields + [
         index.SearchField('subtitle'),
         index.SearchField('description'),
+        index.RelatedFields('enclosures', [
+            index.RelatedFields('media', [
+                index.SearchField('transcript'),
+            ]),
+        ]),
     ]
 
     content_panels = BasePage.content_panels + [
@@ -185,7 +204,6 @@ class Episode(BasePage):
         FieldPanel('episode_type'),
         FieldPanel('tags'),
         FieldPanel('season_number'),
-        FieldPanel('duration'),
         FieldPanel('is_explicit'),
         InlinePanel('images', label='Images'),
         InlinePanel('enclosures', label='Enclosures'),
