@@ -5,7 +5,7 @@ from .models import AudioMedia
 
 class AudioMediaAdmin(ModelAdmin):
     model = AudioMedia
-    verbose_name_plural = 'Audio Media'
+    menu_label = 'Audio Media'
     menu_icon = 'media'
     menu_order = 200
     add_to_settings_menu = False
