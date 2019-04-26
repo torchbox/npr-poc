@@ -11,6 +11,9 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.utils.urlpatterns import decorate_urlpatterns
 
+from wagtailautocomplete.urls.admin import \
+    urlpatterns as autocomplete_admin_urls
+
 from npr_poc.search import views as search_views
 from npr_poc.utils.cache import get_default_cache_control_decorator
 
@@ -19,6 +22,7 @@ from .api import api_router
 # Private URLs are not meant to be cached.
 private_urlpatterns = [
     path('django-admin/', admin.site.urls),
+    path('admin/autocomplete/', include(autocomplete_admin_urls)),
     path('admin/', include(wagtailadmin_urls)),
     path('documents/', include(wagtaildocs_urls)),
 

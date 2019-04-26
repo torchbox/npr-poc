@@ -16,8 +16,10 @@ from wagtail.search import index
 
 import mutagen
 from taggit.models import TaggedItemBase
+from wagtailautocomplete.edit_handlers import AutocompletePanel
 
 from npr_poc.utils.models import BasePage
+
 from .utils import transcribe_audio
 
 
@@ -181,6 +183,10 @@ class EpisodeEnclosure(Orderable, models.Model):
 
     api_fields = [
         APIField('media'),
+    ]
+
+    panels = [
+        AutocompletePanel('media', target_model='podcasts.AudioMedia')
     ]
 
 
