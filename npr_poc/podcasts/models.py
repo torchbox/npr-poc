@@ -8,6 +8,7 @@ from django.db import models
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.api import APIField
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import CollectionMember, Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -72,6 +73,18 @@ class Show(BasePage):
         index.SearchField('description'),
     ]
 
+    api_fields = [
+        APIField('subtitle'),
+        APIField('description'),
+        APIField('podcast_type'),
+        APIField('language'),
+        APIField('tags'),
+        APIField('is_explicit'),
+        APIField('date_created'),
+        APIField('date_updated'),
+        APIField('license'),
+    ]
+
     content_panels = BasePage.content_panels + [
         FieldPanel('subtitle'),
         FieldPanel('description'),
@@ -106,6 +119,10 @@ class EpisodeImage(Orderable, models.Model):
 
     panels = [
         ImageChooserPanel('image'),
+    ]
+
+    api_fields = [
+        APIField('image'),
     ]
 
 
@@ -162,6 +179,10 @@ class EpisodeEnclosure(Orderable, models.Model):
         related_name='+'
     )
 
+    api_fields = [
+        APIField('media'),
+    ]
+
 
 class Episode(BasePage):
     template = 'patterns/pages/podcasts/episode_page.html'
@@ -198,6 +219,19 @@ class Episode(BasePage):
                 index.SearchField('transcript'),
             ]),
         ]),
+    ]
+
+    api_fields = [
+        APIField('subtitle'),
+        APIField('description'),
+        APIField('episode_type'),
+        APIField('season_number'),
+        APIField('tags'),
+        APIField('is_explicit'),
+        APIField('date_created'),
+        APIField('date_updated'),
+        APIField('enclosures'),
+        APIField('images'),
     ]
 
     content_panels = BasePage.content_panels + [
