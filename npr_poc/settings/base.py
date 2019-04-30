@@ -97,6 +97,8 @@ INSTALLED_APPS = [
 
     'pattern_library',
     'npr_poc.project_styleguide.apps.ProjectStyleguideConfig',
+
+    'wagtailmedia',
 ]
 
 
@@ -683,3 +685,5 @@ if 'RECAPTCHA_PUBLIC_KEY' in env:
 
 # Google Cloud service account
 GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS = env.get('GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS')
+
+WAGTAILMEDIA_MEDIA_MODEL = 'podcasts.CustomMedia'

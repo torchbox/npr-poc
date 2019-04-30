@@ -10,16 +10,17 @@ from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
 from wagtail.api import APIField
 from wagtail.core.fields import RichTextField
-from wagtail.core.models import CollectionMember, Orderable
+from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.search import index
 
 import mutagen
 from taggit.models import TaggedItemBase
-from wagtailautocomplete.edit_handlers import AutocompletePanel
+from wagtailmedia.models import AbstractMedia
 
 from npr_poc.utils.models import BasePage
 
+from .edit_handlers import MediaChooserPanel
 from .utils import transcribe_audio
 
 
@@ -128,11 +129,7 @@ class EpisodeImage(Orderable, models.Model):
     ]
 
 
-class AudioMedia(CollectionMember, models.Model):
-    title = models.CharField(max_length=255)
-    media_file = models.FileField(upload_to='media')
-    date_created = models.DateTimeField(auto_now_add=True)
-
+class CustomMedia(AbstractMedia):
     duration = models.DecimalField(null=True, decimal_places=2, max_digits=10, editable=False)
     bitrate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
     sample_rate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
@@ -145,27 +142,30 @@ class AudioMedia(CollectionMember, models.Model):
         return self.title
 
     def save(self):
-        ftype = mutagen.File(self.media_file.open())
+        ftype = mutagen.File(self.file.open())
         if ftype is not None:
             self.bitrate = ftype.info.bitrate or None
             self.sample_rate = ftype.info.sample_rate or None
             self.channels = ftype.info.channels or None
             self.duration = ftype.info.length or None
 
-        mime_type = mimetypes.guess_type(self.media_file.name)
+        mime_type = mimetypes.guess_type(self.file.name)
         self.mime_type = mime_type[0] or None
 
         # TODO we probably don't want to transcribe each enclosure, on the basis
         # that they should all contain the same content.
         if not self.transcript:
-            self.media_file.seek(0, os.SEEK_SET)
-            self.transcript = '\n\n'.join(transcribe_audio(self.media_file.read(), self.sample_rate))
+            self.file.seek(0, os.SEEK_SET)
+            self.transcript = '\n\n'.join(transcribe_audio(self.file.read(), self.sample_rate))
 
         return super().save()
 
-    search_fields = CollectionMember.search_fields + [
-        index.SearchField('title', partial_match=True, boost=10),
-    ]
+    admin_form_fields = (
+        'title',
+        'file',
+        'collection',
+        'tags',
+    )
 
 
 class EpisodeEnclosure(Orderable, models.Model):
@@ -175,7 +175,7 @@ class EpisodeEnclosure(Orderable, models.Model):
         related_name='enclosures',
     )
     media = models.ForeignKey(
-        'podcasts.AudioMedia',
+        'podcasts.CustomMedia',
         models.PROTECT,
         null=True,
         related_name='+'
@@ -186,7 +186,7 @@ class EpisodeEnclosure(Orderable, models.Model):
     ]
 
     panels = [
-        AutocompletePanel('media', target_model='podcasts.AudioMedia')
+        MediaChooserPanel('media')
     ]
 
 
