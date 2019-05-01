@@ -133,7 +133,7 @@ class CustomMedia(AbstractMedia):
     channels = models.PositiveSmallIntegerField(null=True, validators=[MinValueValidator(1)], editable=False)
     mime_type = models.CharField(max_length=20, blank=True, editable=False)
 
-    transcript = models.TextField(blank=True, editable=False)
+    transcript = models.TextField(blank=True)
 
     def __str__(self):
         return self.title
@@ -155,6 +155,7 @@ class CustomMedia(AbstractMedia):
         'file',
         'collection',
         'tags',
+        'transcript',
     )
 
 
