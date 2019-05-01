@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     'npr_poc.project_styleguide.apps.ProjectStyleguideConfig',
 
     'wagtailmedia',
+    'corsheaders',
 ]
 
 
@@ -106,7 +107,7 @@ INSTALLED_APPS = [
 # https://docs.djangoproject.com/en/stable/topics/http/middleware/
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
+    'corsheaders.middleware.CorsMiddleware',
     # Whitenoise middleware is used to server static files (CSS, JS, etc.).
     # According to the official documentation it should be listed underneath
     # SecurityMiddleware.
@@ -686,3 +687,6 @@ if 'RECAPTCHA_PUBLIC_KEY' in env:
 GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS = env.get('GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS')
 
 WAGTAILMEDIA_MEDIA_MODEL = 'podcasts.CustomMedia'
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_URLS_REGEX = r'^/api/.*$'

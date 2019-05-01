@@ -6,6 +6,7 @@ django-pattern-library==0.2.3
 mutagen==1.42.0
 google-cloud-speech==1.0.0
 git+git://github.com/thibaudcolas/wagtailmedia.git@chore/support-wagtail-v2.5#egg=wagtailmedia
+django-cors-headers==2.5.3
 
 # Production dependencies
 whitenoise[brotli]==4.1.2
