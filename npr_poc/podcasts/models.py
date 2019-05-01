@@ -16,11 +16,11 @@ from wagtail.search import index
 
 import mutagen
 from taggit.models import TaggedItemBase
+from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import AbstractMedia
 
 from npr_poc.utils.models import BasePage
 
-from .edit_handlers import MediaChooserPanel
 from .utils import transcribe_audio
 
 
