@@ -7,6 +7,7 @@ mutagen==1.42.0
 google-cloud-speech==1.0.0
 git+git://github.com/solarissmoke/wagtailmedia.git@wagtail25#egg=wagtailmedia
 django-cors-headers==2.5.3
+ffmpeg-python==0.1.17
 
 # Production dependencies
 whitenoise[brotli]==4.1.2
