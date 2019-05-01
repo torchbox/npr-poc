@@ -1,3 +1,4 @@
+import io
 import json
 import logging
 import subprocess
@@ -9,7 +10,7 @@ from django.core.files import File
 
 import ffmpeg
 from google.api_core.exceptions import GoogleAPIError
-from google.cloud import speech
+from google.cloud import speech, storage
 from google.oauth2 import service_account
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,13 @@ def get_text_to_speech_client():
     service_account_info = json.loads(settings.GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS)
     credentials = service_account.Credentials.from_service_account_info(service_account_info)
     return speech.SpeechClient(credentials=credentials)
+
+
+@lru_cache(maxsize=1)
+def get_storage_client():
+    service_account_info = json.loads(settings.GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS)
+    credentials = service_account.Credentials.from_service_account_info(service_account_info)
+    return storage.Client(credentials=credentials, project=settings.GOOGLE_CLOUD_PROJECT_ID)
 
 
 def get_flac_alternative(input_path):
@@ -46,6 +54,14 @@ def transcribe_audio(media_file: File):
     else:
         content = get_flac_alternative(input_path)
 
+    # Push the content to Cloud Storage, so the API can read it from there
+    storage = get_storage_client()
+    bucket = storage.get_bucket(settings.GOOGLE_CLOUD_BUCKET_NAME)
+    blob_name = media_file.name + '.flac'
+    blob = bucket.blob(blob_name)
+    blob.upload_from_file(io.BytesIO(content), rewind=True, size=len(content))
+    blob_uri = 'gs://{}/{}'.format(settings.GOOGLE_CLOUD_BUCKET_NAME, blob_name)
+
     client = get_text_to_speech_client()
     config = speech.types.RecognitionConfig(
         encoding=speech.enums.RecognitionConfig.AudioEncoding.FLAC,
@@ -53,13 +69,16 @@ def transcribe_audio(media_file: File):
         language_code='en-US'
     )
 
-    audio = speech.types.RecognitionAudio(content=content)
+    audio = speech.types.RecognitionAudio(uri=blob_uri)
     try:
         operation = client.long_running_recognize(config, audio, retry=None)
         response = operation.result()
     except GoogleAPIError:
         logger.exception('Failed to query Google Speech-to-Text API')
         return []
+
+    # Clear object from storage
+    bucket.delete_blob(blob_name)
 
     results = [result.alternatives[0].transcript for result in response.results]
     return results
