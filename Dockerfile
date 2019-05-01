@@ -43,12 +43,14 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 # Install ffmpeg
-RUN apt-get install -y ffmpeg
+WORKDIR /vendor/ffmpeg
+RUN curl -L --silent https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz | tar xJ --strip-components=1
+ENV PATH "$PATH:/vendor/ffmpeg"
 
 # Intsall WSGI server - Gunicorn - that will serve the application.
 RUN pip install "gunicorn== 19.9.0"
 
-WORKDIR npr_poc/static_src
+WORKDIR /app/npr_poc/static_src
 
 # Install front-end dependencies.
 # TODO: Once new npm LTS version is released, please switch to using "npm ci"
