@@ -1,5 +1,4 @@
 import mimetypes
-import os
 
 from django.conf import settings
 from django.core.validators import MinValueValidator
@@ -20,8 +19,6 @@ from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import AbstractMedia
 
 from npr_poc.utils.models import BasePage
-
-from .utils import transcribe_audio
 
 
 class ShowTag(TaggedItemBase):
@@ -151,13 +148,6 @@ class CustomMedia(AbstractMedia):
 
         mime_type = mimetypes.guess_type(self.file.name)
         self.mime_type = mime_type[0] or None
-
-        # TODO we probably don't want to transcribe each enclosure, on the basis
-        # that they should all contain the same content.
-        if not self.transcript:
-            self.file.seek(0, os.SEEK_SET)
-            self.transcript = '\n\n'.join(transcribe_audio(self.file.read(), self.sample_rate))
-
         return super().save()
 
     admin_form_fields = (

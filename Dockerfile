@@ -42,6 +42,9 @@ RUN apt-get update -y && \
     apt-get install -y nodejs &&\
     rm -rf /var/lib/apt/lists/*
 
+# Install ffmpeg
+RUN apt-get install -y ffmpeg
+
 # Intsall WSGI server - Gunicorn - that will serve the application.
 RUN pip install "gunicorn== 19.9.0"
 

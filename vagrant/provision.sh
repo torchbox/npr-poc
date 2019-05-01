@@ -74,3 +74,5 @@ EOF
 curl -sSL https://deb.nodesource.com/setup_8.x | bash -
 apt-get install -y nodejs
 
+# Install ffmpeg
+apt-get install -y ffmpeg
