@@ -26,6 +26,9 @@ private_urlpatterns = [
     path('search/', search_views.search, name='search'),
 ]
 
+if settings.USE_REDIS_QUEUE:
+    private_urlpatterns.append(path('django-rq/', include('django_rq.urls')))
+
 
 # Public URLs that are meant to be cached.
 urlpatterns = [

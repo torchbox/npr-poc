@@ -36,7 +36,7 @@ def get_flac_alternative(input_path):
         converted_file.name, ac=1, format='flac'
     ).compile(overwrite_output=True)
     subp = subprocess.Popen(cmd)
-    subp.communicate(timeout=30)
+    subp.communicate(timeout=60)
     with open(converted_file.name, 'rb') as output:
         content = output.read()
     return content

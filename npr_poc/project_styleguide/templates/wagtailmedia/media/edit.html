@@ -59,6 +59,11 @@
 
                 <dt>{% trans "MIME type" %}</dt>
                 <dd>{{ media.mime_type }}</dd>
+
+                {% if not media.is_transcribed %}
+                <dt class="error-message">{% trans "Transcription pending" %}</dt>
+                <dd>{% trans "Speech-to-text transcription is in progress" %}</dd>
+                {% endif %}
             </dl>
         </div>
     </div>

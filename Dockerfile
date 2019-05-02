@@ -83,7 +83,3 @@ RUN SECRET_KEY=none django-admin collectstatic --noinput --clear
 # containers as root either.
 # https://devcenter.heroku.com/articles/container-registry-and-runtime#dockerfile-commands-and-runtime
 USER npr_poc
-
-# Run the WSGI server. It reads GUNICORN_CMD_ARGS, PORT and WEB_CONCURRENCY
-# environment variable hence we don't specify a lot options below.
-CMD gunicorn npr_poc.wsgi:application

@@ -185,6 +185,18 @@ else:
         }
     }
 
+if env.get('USE_REDIS_QUEUE', 'false') == 'true':
+    INSTALLED_APPS.append('django_rq')
+    USE_REDIS_QUEUE = True
+    RQ_QUEUES = {
+        'default': {
+            'URL': env.get('REDISTOGO_URL', 'redis://localhost:6379/0'),
+            'DEFAULT_TIMEOUT': 500,
+        },
+    }
+else:
+    USE_REDIS_QUEUE = False
+
 # Search
 # https://docs.wagtail.io/en/latest/topics/search/backends.html
 

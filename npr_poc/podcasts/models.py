@@ -134,6 +134,7 @@ class CustomMedia(AbstractMedia):
     mime_type = models.CharField(max_length=20, blank=True, editable=False)
 
     transcript = models.TextField(blank=True)
+    is_transcribed = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         return self.title
