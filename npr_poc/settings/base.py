@@ -99,6 +99,7 @@ INSTALLED_APPS = [
 
     'wagtailmedia',
     'corsheaders',
+    'wagtail_headless_preview',
 ]
 
 
@@ -704,3 +705,7 @@ WAGTAILMEDIA_MEDIA_MODEL = 'podcasts.CustomMedia'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
+
+HEADLESS_PREVIEW_CLIENT_URLS = {
+    'default': env.get('HEADLESS_PREVIEW_CLIENT_URL', 'http://localhost:8020/'),
+}

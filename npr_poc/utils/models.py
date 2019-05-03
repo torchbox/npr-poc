@@ -10,6 +10,7 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable, Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
+from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from npr_poc.utils.cache import get_default_cache_control_decorator
 
@@ -246,7 +247,7 @@ class SystemMessagesSettings(BaseSetting):
 
 # Apply default cache headers on this page model's serve method.
 @method_decorator(get_default_cache_control_decorator(), name='serve')
-class BasePage(SocialFields, ListingFields, Page):
+class BasePage(HeadlessPreviewMixin, SocialFields, ListingFields, Page):
     show_in_menus_default = True
 
     class Meta:
