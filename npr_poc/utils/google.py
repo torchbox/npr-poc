@@ -3,6 +3,7 @@ import json
 from django.conf import settings
 from django.urls import reverse
 
+from dateutil.parser import parse
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
@@ -47,8 +48,13 @@ def search_documents(credentials, q=''):
     results = service.files().list(
         pageSize=10,
         orderBy='modifiedTime desc',
-        fields="nextPageToken, files(id, name, webViewLink)",
+        fields="nextPageToken, files(id, name, webViewLink, modifiedTime)",
         q=query,
     ).execute()
 
-    return results.get('files', [])
+    files = results.get('files', [])
+    # Convert modifiedTime to a datetime object
+    for f in files:
+        f['modifiedTime'] = parse(f['modifiedTime'])
+
+    return files
