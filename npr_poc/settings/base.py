@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'npr_poc.search',
     'npr_poc.standardpages',
     'npr_poc.utils',
+    'npr_poc.project_styleguide.apps.ProjectStyleguideConfig',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.postgres_search',
@@ -95,7 +96,6 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
 
     'pattern_library',
-    'npr_poc.project_styleguide.apps.ProjectStyleguideConfig',
 
     'wagtailmedia',
     'corsheaders',
@@ -700,6 +700,9 @@ if 'RECAPTCHA_PUBLIC_KEY' in env:
 GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS = env.get('GOOGLE_CLOUD_SERVICE_ACCOUNT_CREDENTIALS')
 GOOGLE_CLOUD_PROJECT_ID = env.get('GOOGLE_CLOUD_PROJECT_ID')
 GOOGLE_CLOUD_BUCKET_NAME = env.get('GOOGLE_CLOUD_BUCKET_NAME')
+
+# Google Cloud API
+GOOGLE_OAUTH_CLIENT_CONFIG = env.get('GOOGLE_OAUTH_CLIENT_CONFIG')
 
 WAGTAILMEDIA_MEDIA_MODEL = 'podcasts.CustomMedia'
 

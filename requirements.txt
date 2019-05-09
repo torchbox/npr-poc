@@ -4,6 +4,8 @@ psycopg2==2.7.7
 wagtail-django-recaptcha==1.0
 django-pattern-library==0.2.3
 mutagen==1.42.0
+google-api-python-client==1.7.8
+google-auth-oauthlib==0.3.0
 google-cloud-speech==1.0.0
 google-cloud-storage==1.15.0
 git+git://github.com/solarissmoke/wagtailmedia.git@wagtail25#egg=wagtailmedia

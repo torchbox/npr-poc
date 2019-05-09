@@ -1,0 +1,13 @@
+{% if documents %}
+    <ul class="listing">
+        {% for doc in documents %}
+            <li>
+                <div class="row row-flush">
+                    <div class="col12">
+                        <a href="{{ doc.webViewLink }}" target="_blank" class="icon icon-plus-inverse icon-larger">{{ doc.name }}</a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
