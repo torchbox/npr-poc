@@ -28,7 +28,7 @@ def get_auth_url():
 
 def save_access_tokens_to_session(request, redirect_uri):
     flow = get_flow()
-    flow.fetch_token(authorization_response=request.get_full_path())
+    flow.fetch_token(authorization_response=request.build_absolute_uri())
     credentials = flow.credentials
     request.session['google_oauth_credentials'] = {
         'token': credentials.token,
