@@ -32,4 +32,4 @@ wheels/
 .installed.cfg
 *.egg
 
-npr_rss_importer/*.xml
+*/news/*.xml

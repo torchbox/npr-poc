@@ -1,6 +1,8 @@
 import os
 import re
 import feedparser
+from npr_poc.news.models import NewsPage
+from wagtail.core.models import Page
 
 IMPORT_ROOT = "."
 
@@ -39,11 +41,20 @@ def extract(rss_file):
 
 def insert(item):
     # create a news story in wagtail
-    # check that the story isn't there (using 'link')
-    # otherwise insert
-    link = item["link"]
-    title = item["title"]
-    print(f"inserting item {title}")
+    # skip previously imported items
+    if NewsPage.objects.filter(source_link=item["link"]):
+        print(item["title"] + "already exists, skipping")
+    else:
+        # start with parent as home page
+        parent_page = Page.objects.get(id=3)
+        news_page = NewsPage()
+        news_page.title = item["title"]
+        news_page.source_link = item["link"]
+        news_page.date = item["published"]
+        news_page.summary = item["summary"]
+        # TODO: category, tags, author, streamfield
+        parent_page.add_child(instance=news_page)
+        print(f"inserting item {title}")
 
 
 if __name__ == "__main__":
