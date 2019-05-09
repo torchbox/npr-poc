@@ -37,6 +37,16 @@ class NewsCategory(models.Model):
         verbose_name_plural = "Categories"
 
 
+@register_snippet
+class Author(models.Model):
+    name = models.CharField(max_length=255)
+
+    panels = [FieldPanel("name")]
+
+    def __str__(self):
+        return self.name
+
+
 class NewsPageNewsCategory(models.Model):
     page = ParentalKey(
         "news.NewsPage", on_delete=models.CASCADE, related_name="categories"
@@ -56,6 +66,13 @@ class NewsPage(BasePage):
     # publish date, body streamfield (para, heading, image)
     # and tags
     date = models.DateField("Publish date")
+    author = models.ForeignKey(
+        "news.Author",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
     summary = models.TextField(blank=True)
     body = StreamField(StoryBlock())
     # keep track of imported content
@@ -69,6 +86,7 @@ class NewsPage(BasePage):
 
     content_panels = BasePage.content_panels + [
         FieldPanel("date"),
+        SnippetChooserPanel("author"),
         FieldPanel("summary"),
         StreamFieldPanel("body"),
         FieldPanel("tags"),
