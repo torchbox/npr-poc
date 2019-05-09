@@ -19,7 +19,7 @@
                                 <a href="{% url 'wagtailadmin_pages:add' app_label model_name parent_page.id %}{% if next %}?next={{ next }}{% endif %}" class="icon icon-plus-inverse icon-larger">{{ verbose_name }}</a>
                             </div>
                             <div class="col4">
-                                <a href="{% url 'samaritans_utils_page_from_google_doc' app_label model_name parent_page.id %}" class="icon icon-plus-inverse icon-larger">{{ verbose_name }} from Google Document</a>
+                                <a href="{% url 'npr_utils_page_from_google_doc' app_label model_name parent_page.id %}" class="icon icon-plus-inverse icon-larger">{{ verbose_name }} from Google Document</a>
                             </div>
 
                             <small class="col5" style="text-align:right">

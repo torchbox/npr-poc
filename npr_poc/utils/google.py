@@ -16,7 +16,7 @@ def get_flow():
             'https://www.googleapis.com/auth/documents.readonly'
         ]
     )
-    flow.redirect_uri = settings.BASE_URL + reverse('samaritans_utils_google_oauth_complete')
+    flow.redirect_uri = settings.BASE_URL + reverse('npr_utils_google_oauth_complete')
     return flow
 
 

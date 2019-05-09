@@ -38,7 +38,7 @@ class PageFromGoogleDocChooserView(TemplateView):
     def get(self, request, *args, **kwargs):
         if 'google_oauth_credentials' not in request.session:
             request.session['oauth_complete_redirect_uri'] = request.get_full_path()
-            return HttpResponseRedirect(reverse('samaritans_utils_google_oauth'))
+            return HttpResponseRedirect(reverse('npr_utils_google_oauth'))
 
         return super().get(request, *args, *kwargs)
 
