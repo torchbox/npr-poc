@@ -32,4 +32,4 @@ wheels/
 .installed.cfg
 *.egg
 
-*/news/*.xml
+*/downloads/*.xml

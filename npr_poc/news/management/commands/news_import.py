@@ -1,10 +1,14 @@
 import os
 import re
+import sys
+from time import strftime
 import feedparser
-from npr_poc.news.models import NewsPage
+from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
+from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory
 from wagtail.core.models import Page
 
-IMPORT_ROOT = "."
+IMPORT_ROOT = settings.IMPORT_ROOT
 
 cleanr = re.compile("<.*?>")
 
@@ -29,7 +33,7 @@ def extract(rss_file):
             link = item.link
         d = {
             "title": item.title,
-            "published": item.published_parsed,
+            "published": strftime("%Y-%m-%d", item.published_parsed),
             "summary": item.summary,
             "author": author,
             "text": cleanhtml(item.content[0]["value"]),
@@ -39,26 +43,39 @@ def extract(rss_file):
     return items
 
 
-def insert(item):
-    # create a news story in wagtail
-    # skip previously imported items
-    if NewsPage.objects.filter(source_link=item["link"]):
-        print(item["title"] + "already exists, skipping")
-    else:
-        # start with parent as home page
-        parent_page = Page.objects.get(id=3)
-        news_page = NewsPage()
-        news_page.title = item["title"]
-        news_page.source_link = item["link"]
-        news_page.date = item["published"]
-        news_page.summary = item["summary"]
-        # TODO: category, tags, author, streamfield
-        parent_page.add_child(instance=news_page)
-        print(f"inserting item {title}")
+class Command(BaseCommand):
+    help = "Insert everything"
 
+    # def add_arguments(self, parser):
+    #     parser.add_argument("poll_id", nargs="+", type=int)
 
-if __name__ == "__main__":
-    for file in os.listdir(IMPORT_ROOT):
-        if file.endswith(".xml"):
-            for item in extract(file):
-                insert(item)
+    def handle(self, *args, **options):
+
+        self.news_category = NewsCategory.objects.get(slug="world-news")
+        sys.exit()
+
+        for file in os.listdir(IMPORT_ROOT):
+            if file.endswith(".xml"):
+                for item in extract(os.path.join(IMPORT_ROOT, file)):
+                    self.insert(item)
+
+    def insert(self, item):
+        # create a news story in wagtail
+        # skip previously imported items
+        if NewsPage.objects.filter(source_link=item["link"]):
+            print(item["title"] + "already exists, skipping")
+        else:
+            # start with parent as home page
+            parent_page = Page.objects.get(id=3)
+            news_page = NewsPage()
+            title = item["title"]
+            news_page.title = title
+            news_page.source_link = item["link"]
+            news_page.date = item["published"]
+            news_page.summary = item["summary"]
+            # TODO: tags, author, streamfield
+            parent_page.add_child(instance=news_page)
+            npc = NewsPageNewsCategory()
+            npc.page = news_page
+            npc.category = self.news_category
+            npc.save()
