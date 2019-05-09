@@ -31,3 +31,5 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+
+npr_rss_importer/*.xml
