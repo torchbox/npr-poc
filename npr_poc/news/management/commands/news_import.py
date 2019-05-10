@@ -5,7 +5,7 @@ from time import strftime
 import feedparser
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
-from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory
+from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory, Author
 from wagtail.core.models import Page
 
 IMPORT_ROOT = settings.IMPORT_ROOT
@@ -52,12 +52,20 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.news_category = NewsCategory.objects.get(slug="world-news")
-        sys.exit()
+        self.home_page = Page.objects.get(id=3)
 
         for file in os.listdir(IMPORT_ROOT):
             if file.endswith(".xml"):
                 for item in extract(os.path.join(IMPORT_ROOT, file)):
                     self.insert(item)
+
+    def get_or_create_author(self, author_name):
+        try:
+            author = Author.objects.get(name=author_name)
+        except Author.DoesNotExist:
+            author = Author(name=author_name)
+            author.save()
+        return author
 
     def insert(self, item):
         # create a news story in wagtail
@@ -66,9 +74,10 @@ class Command(BaseCommand):
             print(item["title"] + "already exists, skipping")
         else:
             # start with parent as home page
-            parent_page = Page.objects.get(id=3)
+            parent_page = self.home_page
             news_page = NewsPage()
             title = item["title"]
+            news_page.author = self.get_or_create_author(item["author"])
             news_page.title = title
             news_page.source_link = item["link"]
             news_page.date = item["published"]
