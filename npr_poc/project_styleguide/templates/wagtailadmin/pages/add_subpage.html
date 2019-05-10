@@ -1,6 +1,6 @@
 {% extends "wagtailadmin/pages/add_subpage.html" %}
 {% load i18n %}
-{% load wagtailadmin_tags %}
+{% load wagtailadmin_tags util_tags %}
 
 
 {% block content %}
@@ -15,12 +15,16 @@
                 {% for verbose_name, app_label, model_name in page_types %}
                     <li>
                         <div class="row row-flush">
-                            <div class="col3">
+                            {% can_import_from_google app_label model_name as can_import_from_google %}
+                            <div class="{% if can_import_from_google %}col3{% else %}col7{% endif %}">
                                 <a href="{% url 'wagtailadmin_pages:add' app_label model_name parent_page.id %}{% if next %}?next={{ next }}{% endif %}" class="icon icon-plus-inverse icon-larger">{{ verbose_name }}</a>
                             </div>
+
+                            {% if can_import_from_google %}
                             <div class="col4">
                                 <a href="{% url 'npr_utils_page_from_google_doc' app_label model_name parent_page.id %}" class="icon icon-plus-inverse icon-larger">{{ verbose_name }} from Google Document</a>
                             </div>
+                            {% endif %}
 
                             <small class="col5" style="text-align:right">
                                 <a href="{% url 'wagtailadmin_pages:type_use' app_label model_name %}" class="nolink">{% blocktrans with page_type=verbose_name %}Pages using {{ page_type }}{% endblocktrans %}</a>

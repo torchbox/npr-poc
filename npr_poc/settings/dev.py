@@ -1,3 +1,5 @@
+import os
+
 from .base import *  # noqa
 
 # Debugging to be enabled locally only
@@ -41,6 +43,10 @@ INSTALLED_APPS += ['django_extensions']  # noqa
 
 # Disable forcing HTTPS locally since development server supports HTTP only.
 SECURE_SSL_REDIRECT = False
+
+
+# This allows oAuth to work locally over http
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 
 # Adds Django Debug Toolbar, if preset

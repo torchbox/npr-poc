@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -6,7 +7,8 @@ from django.views.generic import TemplateView, View
 
 from wagtail.admin.forms.search import SearchForm
 
-from .google import get_auth_url, save_access_tokens_to_session, search_documents
+from .google import (get_auth_url, save_access_tokens_to_session,
+                     search_documents)
 
 
 def page_not_found(request, exception, template_name='patterns/pages/errors/404.html'):
@@ -39,8 +41,15 @@ class PageFromGoogleDocChooserView(TemplateView):
         if 'google_oauth_credentials' not in request.session:
             request.session['oauth_complete_redirect_uri'] = request.get_full_path()
             return HttpResponseRedirect(reverse('npr_utils_google_oauth'))
-
         return super().get(request, *args, *kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return HttpResponseRedirect(
+            reverse(
+                'wagtailadmin_pages:add',
+                args=(kwargs['app_label'], kwargs['model_name'], kwargs['parent_page_id'])
+            ) + '?google-doc-id={}'.format(request.POST['docid'])
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

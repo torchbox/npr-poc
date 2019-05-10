@@ -62,6 +62,7 @@ class NewsPageNewsCategory(models.Model):
 
 
 class NewsPage(BasePage):
+    can_import_from_google = True
     # title, summary, author (snippet / modeladmin),
     # publish date, body streamfield (para, heading, image)
     # and tags
