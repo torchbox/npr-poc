@@ -2,7 +2,7 @@ from invoke import run as local
 from invoke.exceptions import Exit
 from invoke.tasks import task
 
-PRODUCTION_APP_INSTANCE = 'npr_poc-production'
+PRODUCTION_APP_INSTANCE = 'npr-poc'
 
 STAGING_APP_INSTANCE = 'npr_poc-staging'
 STAGING_APP_DB_INSTANCE = 'npr_poc-staging-db'
