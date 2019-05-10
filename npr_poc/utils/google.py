@@ -1,13 +1,18 @@
 import json
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.urls import reverse
+from django.utils.text import slugify
 
 from bs4 import BeautifulSoup
 from dateutil.parser import parse
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
+import requests
+
+from npr_poc.images.models import CustomImage
 
 
 def get_flow():
@@ -65,6 +70,33 @@ def search_documents(credentials, q=''):
     return files
 
 
+def close_paragraph(block, stream_data):
+    if block:
+        stream_data.append({
+            'type': 'paragraph',
+            'value': ''.join(block)
+        })
+    block.clear()
+
+
+def import_image(img_tag):
+    # Create the image
+    image = CustomImage(
+        title=img_tag.alt or 'Imported from Google Docs',
+    )
+    response = requests.get(img_tag['src'])
+    img_content = response.content
+    img_file_name = slugify(image.title)
+    img_content_type = response.headers.get('Content-Type', '')
+    if img_content_type.startswith('image/'):
+        # TODO we probably want to be a lot more discriminating here
+        file_extension = img_content_type.split('/')[1]
+
+    image.file.save('{}.{}'.format(img_file_name, file_extension), ContentFile(response.content))
+    image.save()
+    return image
+
+
 def parse_document(credentials, doc_id):
     # We may want to use the docs API in future, as it provides a much more structured format
     service = build('drive', 'v3', credentials=google.oauth2.credentials.Credentials(**credentials))
@@ -77,18 +109,7 @@ def parse_document(credentials, doc_id):
     # Run through contents and populate stream
     current_paragraph_block = []
 
-    def close_paragraph(block, stream_data):
-        if block:
-            stream_data.append({
-                'type': 'paragraph',
-                'value': ''.join(current_paragraph_block)
-            })
-        block.clear()
-
     for tag in soup.body.contents:
-        if not tag.text:
-            continue
-
         if tag.name == 'h1':
             close_paragraph(current_paragraph_block, stream_data)
             # Wagtail will render this as a h2
@@ -100,8 +121,19 @@ def parse_document(credentials, doc_id):
         elif tag.name in ['h3', 'h4', 'h5', 'h6']:
             # Rich text field only allows h3 and h4 by default, so we just set to h4
             current_paragraph_block.append('<h4>{}</h4>'.format(tag.text))
-        else:
+        elif tag.name == 'img':
+            # Break the paragraph and add an image
+            close_paragraph(current_paragraph_block, stream_data)
+            image = import_image(tag)
+            stream_data.append({'type': 'image', 'value': {'image': image.pk}})
+        elif tag.text:
             current_paragraph_block.append(str(tag))
+        if tag.find_all('img'):
+            # Break the paragraph and add images
+            close_paragraph(current_paragraph_block, stream_data)
+            for img in tag.find_all('img'):
+                image = import_image(img)
+                stream_data.append({'type': 'image', 'value': {'image': image.pk}})
 
     close_paragraph(current_paragraph_block, stream_data)
 
