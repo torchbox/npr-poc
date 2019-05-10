@@ -1,6 +1,9 @@
+from decimal import Decimal
+
 from django.db import models
 
 from wagtail.core.fields import StreamField
+from wagtail.core.rich_text import RichText
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
@@ -10,6 +13,9 @@ from modelcluster.tags import ClusterTaggableManager
 from npr_poc.utils.models import BasePage
 from npr_poc.utils.blocks import StoryBlock
 from taggit.models import TaggedItemBase, Tag as TaggitTag
+
+import html2text
+from wagtailtextanalysis.text_analysis import KeyPhrasesField, SentimentField, TextAnalysis
 
 
 class NewsPageTag(TaggedItemBase):
@@ -61,7 +67,7 @@ class NewsPageNewsCategory(models.Model):
         unique_together = ("page", "category")
 
 
-class NewsPage(BasePage):
+class NewsPage(BasePage, TextAnalysis):
     can_import_from_google = True
     # title, summary, author (snippet / modeladmin),
     # publish date, body streamfield (para, heading, image)
@@ -79,10 +85,23 @@ class NewsPage(BasePage):
     # keep track of imported content
     source_link = models.URLField(blank=True, db_index=True)
     tags = ClusterTaggableManager(through="news.NewsPageTag", blank=True)
+    sentiment = models.DecimalField(max_digits=9, decimal_places=8,
+                                    null=True, blank=True)
+    key_phrases = models.TextField(blank=True)
 
     search_fields = BasePage.search_fields + [
         index.SearchField("summary"),
         index.SearchField("body"),
+        index.SearchField('key_phrases'),
+    ]
+
+    text_analysis_fields = [
+        KeyPhrasesField('title'),
+        KeyPhrasesField('summary'),
+        KeyPhrasesField('body_str'),
+        SentimentField('title'),
+        SentimentField('summary'),
+        SentimentField('body_str'),
     ]
 
     content_panels = BasePage.content_panels + [
@@ -93,3 +112,22 @@ class NewsPage(BasePage):
         FieldPanel("tags"),
         InlinePanel("categories", label="category"),
     ]
+
+    def body_str(self):
+        body = []
+
+        for block in self.body:
+            if isinstance(block.value, RichText):
+                body.append(html2text.html2text(str(block.value)))
+            elif isinstance(block.value, str):
+                body.append(block.value)
+
+        return '\n'.join(body)
+
+    def update_key_phrases(self, phrases):
+        self.key_phrases = ','.join(phrases)
+        self.save()
+
+    def update_sentiment(self, sentiment):
+        self.sentiment = Decimal(sentiment)
+        self.save()

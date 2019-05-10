@@ -97,6 +97,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "wagtail_headless_preview",
     "wagtailaltgenerator",
+    "wagtailtextanalysis",
 ]
 
 

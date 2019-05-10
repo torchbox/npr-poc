@@ -25,4 +25,4 @@ django-csp==3.5
 scout-apm==2.0.2
 django-basic-auth-ip-whitelist==0.2.1
 django-rq==2.0
-wagtailtextanalysis==0.0.1
+git+git://github.com/tm-kn/wagtail-text-analysis.git@npr#egg=wagtailtextanalysis
