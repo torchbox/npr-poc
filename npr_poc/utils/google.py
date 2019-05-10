@@ -91,6 +91,9 @@ def import_image(img_tag):
     if img_content_type.startswith('image/'):
         # TODO we probably want to be a lot more discriminating here
         file_extension = img_content_type.split('/')[1]
+    else:
+        # Don't mess with what isn't an image
+        return
 
     image.file.save('{}.{}'.format(img_file_name, file_extension), ContentFile(response.content))
     image.save()
@@ -122,10 +125,11 @@ def parse_document(credentials, doc_id):
             # Rich text field only allows h3 and h4 by default, so we just set to h4
             current_paragraph_block.append('<h4>{}</h4>'.format(tag.text))
         elif tag.name == 'img':
-            # Break the paragraph and add an image
-            close_paragraph(current_paragraph_block, stream_data)
             image = import_image(tag)
-            stream_data.append({'type': 'image', 'value': {'image': image.pk}})
+            if image:
+                # Break the paragraph and add an image
+                close_paragraph(current_paragraph_block, stream_data)
+                stream_data.append({'type': 'image', 'value': {'image': image.pk}})
         elif tag.text:
             current_paragraph_block.append(str(tag))
         if tag.find_all('img'):
@@ -133,7 +137,8 @@ def parse_document(credentials, doc_id):
             close_paragraph(current_paragraph_block, stream_data)
             for img in tag.find_all('img'):
                 image = import_image(img)
-                stream_data.append({'type': 'image', 'value': {'image': image.pk}})
+                if image:
+                    stream_data.append({'type': 'image', 'value': {'image': image.pk}})
 
     close_paragraph(current_paragraph_block, stream_data)
 
