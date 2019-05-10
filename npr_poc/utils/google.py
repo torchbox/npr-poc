@@ -105,6 +105,4 @@ def parse_document(credentials, doc_id):
 
     close_paragraph(current_paragraph_block, stream_data)
 
-    import pdb; pdb.set_trace()
-
     return metadata['name'], stream_data
