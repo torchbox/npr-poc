@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -80,13 +81,10 @@ def close_paragraph(block, stream_data):
 
 
 def import_image(img_tag):
-    # Create the image
-    image = CustomImage(
-        title=img_tag.alt or 'Imported from Google Docs',
-    )
     response = requests.get(img_tag['src'])
     img_content = response.content
-    img_file_name = slugify(image.title)
+    img_title = img_tag['alt']
+    img_file_name = slugify(img_title) if img_title else uuid.uuid4()
     img_content_type = response.headers.get('Content-Type', '')
     if img_content_type.startswith('image/'):
         # TODO we probably want to be a lot more discriminating here
@@ -95,7 +93,14 @@ def import_image(img_tag):
         # Don't mess with what isn't an image
         return
 
-    image.file.save('{}.{}'.format(img_file_name, file_extension), ContentFile(response.content))
+    img_file_name = '{}.{}'.format(img_file_name, file_extension)
+
+    # Create the image
+    image = CustomImage(
+        title=img_title or img_file_name,
+    )
+
+    image.file.save(img_file_name, ContentFile(response.content))
     image.save()
     return image
 
