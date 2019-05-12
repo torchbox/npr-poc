@@ -48,5 +48,5 @@ class MyPageRevisionsAdmin(ModelAdmin):
 
 
 modeladmin_register(NewsPageAdmin)
-modeladmin_register(MyPagesAdmin)
-modeladmin_register(MyPageRevisionsAdmin)
+# modeladmin_register(MyPagesAdmin)
+# modeladmin_register(MyPageRevisionsAdmin)
