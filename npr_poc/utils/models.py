@@ -2,15 +2,18 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.decorators import method_decorator
 
-from wagtail.admin.edit_handlers import (FieldPanel, MultiFieldPanel,
-                                         PageChooserPanel, StreamFieldPanel)
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    MultiFieldPanel,
+    PageChooserPanel,
+    StreamFieldPanel,
+)
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.models import Orderable, Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.models import register_snippet
-from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 from npr_poc.utils.cache import get_default_cache_control_decorator
 
@@ -23,10 +26,7 @@ class LinkFields(models.Model):
     """
 
     link_page = models.ForeignKey(
-        'wagtailcore.Page',
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL
+        "wagtailcore.Page", blank=True, null=True, on_delete=models.SET_NULL
     )
     link_url = models.URLField(blank=True)
     link_text = models.CharField(blank=True, max_length=255)
@@ -36,21 +36,37 @@ class LinkFields(models.Model):
 
     def clean(self):
         if not self.link_page and not self.link_url:
-            raise ValidationError({
-                'link_url': ValidationError("You must specify link page or link url."),
-                'link_page': ValidationError("You must specify link page or link url."),
-            })
+            raise ValidationError(
+                {
+                    "link_url": ValidationError(
+                        "You must specify link page or link url."
+                    ),
+                    "link_page": ValidationError(
+                        "You must specify link page or link url."
+                    ),
+                }
+            )
 
         if self.link_page and self.link_url:
-            raise ValidationError({
-                'link_url': ValidationError("You must specify link page or link url. You can't use both."),
-                'link_page': ValidationError("You must specify link page or link url. You can't use both."),
-            })
+            raise ValidationError(
+                {
+                    "link_url": ValidationError(
+                        "You must specify link page or link url. You can't use both."
+                    ),
+                    "link_page": ValidationError(
+                        "You must specify link page or link url. You can't use both."
+                    ),
+                }
+            )
 
         if not self.link_page and not self.link_text:
-            raise ValidationError({
-                'link_text': ValidationError("You must specify link text, if you use the link url field."),
-            })
+            raise ValidationError(
+                {
+                    "link_text": ValidationError(
+                        "You must specify link text, if you use the link url field."
+                    )
+                }
+            )
 
     def get_link_text(self):
         if self.link_text:
@@ -59,7 +75,7 @@ class LinkFields(models.Model):
         if self.link_page:
             return self.link_page.title
 
-        return ''
+        return ""
 
     def get_link_url(self):
         if self.link_page:
@@ -68,31 +84,42 @@ class LinkFields(models.Model):
         return self.link_url
 
     panels = [
-        MultiFieldPanel([
-            PageChooserPanel('link_page'),
-            FieldPanel('link_url'),
-            FieldPanel('link_text'),
-        ], 'Link'),
+        MultiFieldPanel(
+            [
+                PageChooserPanel("link_page"),
+                FieldPanel("link_url"),
+                FieldPanel("link_text"),
+            ],
+            "Link",
+        )
     ]
 
 
 # Related pages
 class RelatedPage(Orderable, models.Model):
-    page = models.ForeignKey('wagtailcore.Page', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    page = models.ForeignKey(
+        "wagtailcore.Page",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
 
     class Meta:
         abstract = True
-        ordering = ['sort_order']
+        ordering = ["sort_order"]
 
-    panels = [
-        PageChooserPanel('page'),
-    ]
+    panels = [PageChooserPanel("page")]
 
 
 # Generic social fields abstract class to add social image/text to any new content type easily.
 class SocialFields(models.Model):
     social_image = models.ForeignKey(
-        'images.CustomImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+'
+        "images.CustomImage",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
     )
     social_text = models.CharField(max_length=255, blank=True)
 
@@ -100,42 +127,47 @@ class SocialFields(models.Model):
         abstract = True
 
     promote_panels = [
-        MultiFieldPanel([
-            ImageChooserPanel('social_image'),
-            FieldPanel('social_text'),
-        ], 'Social networks'),
+        MultiFieldPanel(
+            [ImageChooserPanel("social_image"), FieldPanel("social_text")],
+            "Social networks",
+        )
     ]
 
 
 # Generic listing fields abstract class to add listing image/text to any new content type easily.
 class ListingFields(models.Model):
     listing_image = models.ForeignKey(
-        'images.CustomImage',
+        "images.CustomImage",
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name='+',
-        help_text="Choose the image you wish to be displayed when this page appears in listings"
+        related_name="+",
+        help_text="Choose the image you wish to be displayed when this page appears in listings",
     )
     listing_title = models.CharField(
-        max_length=255, blank=True,
-        help_text="Override the page title used when this page appears in listings"
+        max_length=255,
+        blank=True,
+        help_text="Override the page title used when this page appears in listings",
     )
     listing_summary = models.CharField(
-        max_length=255, blank=True,
+        max_length=255,
+        blank=True,
         help_text="The text summary used when this page appears in listings. It's also used as "
-                  "the description for search engines if the 'Search description' field above is not defined."
+        "the description for search engines if the 'Search description' field above is not defined.",
     )
 
     class Meta:
         abstract = True
 
     promote_panels = [
-        MultiFieldPanel([
-            ImageChooserPanel('listing_image'),
-            FieldPanel('listing_title'),
-            FieldPanel('listing_summary'),
-        ], 'Listing information'),
+        MultiFieldPanel(
+            [
+                ImageChooserPanel("listing_image"),
+                FieldPanel("listing_title"),
+                FieldPanel("listing_summary"),
+            ],
+            "Listing information",
+        )
     ]
 
 
@@ -143,31 +175,46 @@ class ListingFields(models.Model):
 class CallToActionSnippet(models.Model):
     title = models.CharField(max_length=255)
     summary = RichTextField(blank=True, max_length=255)
-    image = models.ForeignKey('images.CustomImage', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    image = models.ForeignKey(
+        "images.CustomImage",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+    )
 
     link = StreamField(
-        blocks.StreamBlock([
-            (
-                'external_link', blocks.StructBlock([
-                    ('url', blocks.URLBlock()),
-                    ('title', blocks.CharBlock()),
-                ], icon='link')
-            ),
-            (
-                'internal_link', blocks.StructBlock([
-                    ('page', blocks.PageChooserBlock()),
-                    ('title', blocks.CharBlock(required=False)),
-                ], icon='link'),
-            ),
-        ], max_num=1, required=True),
-        blank=True
+        blocks.StreamBlock(
+            [
+                (
+                    "external_link",
+                    blocks.StructBlock(
+                        [("url", blocks.URLBlock()), ("title", blocks.CharBlock())],
+                        icon="link",
+                    ),
+                ),
+                (
+                    "internal_link",
+                    blocks.StructBlock(
+                        [
+                            ("page", blocks.PageChooserBlock()),
+                            ("title", blocks.CharBlock(required=False)),
+                        ],
+                        icon="link",
+                    ),
+                ),
+            ],
+            max_num=1,
+            required=True,
+        ),
+        blank=True,
     )
 
     panels = [
-        FieldPanel('title'),
-        FieldPanel('summary'),
-        ImageChooserPanel('image'),
-        StreamFieldPanel('link'),
+        FieldPanel("title"),
+        FieldPanel("summary"),
+        ImageChooserPanel("image"),
+        StreamFieldPanel("link"),
     ]
 
     def get_link_text(self):
@@ -175,23 +222,23 @@ class CallToActionSnippet(models.Model):
         # an element with index 0
         block = self.link[0]
 
-        title = block.value['title']
-        if block.block_type == 'external_link':
+        title = block.value["title"]
+        if block.block_type == "external_link":
             return title
 
         # Title is optional for internal_link
         # so fallback to page's title, if it's empty
-        return title or block.value['page'].title
+        return title or block.value["page"].title
 
     def get_link_url(self):
         # Link is required, so we should always have
         # an element with index 0
         block = self.link[0]
 
-        if block.block_type == 'external_link':
-            return block.value['url']
+        if block.block_type == "external_link":
+            return block.value["url"]
 
-        return block.value['page'].get_url()
+        return block.value["page"].get_url()
 
     def __str__(self):
         return self.title
@@ -202,59 +249,49 @@ class SocialMediaSettings(BaseSetting):
     twitter_handle = models.CharField(
         max_length=255,
         blank=True,
-        help_text='Your Twitter username without the @, e.g. katyperry',
+        help_text="Your Twitter username without the @, e.g. katyperry",
     )
     facebook_app_id = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text='Your Facebook app ID.',
+        max_length=255, blank=True, help_text="Your Facebook app ID."
     )
     default_sharing_text = models.CharField(
         max_length=255,
         blank=True,
-        help_text='Default sharing text to use if social text has not been set on a page.',
+        help_text="Default sharing text to use if social text has not been set on a page.",
     )
     site_name = models.CharField(
         max_length=255,
         blank=True,
-        default='NPR POC',
-        help_text='Site name, used by Open Graph.',
+        default="NPR POC",
+        help_text="Site name, used by Open Graph.",
     )
 
 
 @register_setting
 class SystemMessagesSettings(BaseSetting):
     class Meta:
-        verbose_name = 'system messages'
+        verbose_name = "system messages"
 
-    title_404 = models.CharField(
-        "Title",
-        max_length=255,
-        default='Page not found',
-    )
+    title_404 = models.CharField("Title", max_length=255, default="Page not found")
     body_404 = RichTextField(
         "Text",
-        default='<p>You may be trying to find a page that doesn&rsquo;t exist or has been moved.</p>'
+        default="<p>You may be trying to find a page that doesn&rsquo;t exist or has been moved.</p>",
     )
 
     panels = [
-        MultiFieldPanel([
-            FieldPanel('title_404'),
-            FieldPanel('body_404'),
-        ], '404 page'),
+        MultiFieldPanel([FieldPanel("title_404"), FieldPanel("body_404")], "404 page")
     ]
 
 
 # Apply default cache headers on this page model's serve method.
-@method_decorator(get_default_cache_control_decorator(), name='serve')
-class BasePage(HeadlessPreviewMixin, SocialFields, ListingFields, Page):
+@method_decorator(get_default_cache_control_decorator(), name="serve")
+class BasePage(SocialFields, ListingFields, Page):
     show_in_menus_default = True
 
     class Meta:
         abstract = True
 
     promote_panels = (
-        Page.promote_panels
-        + SocialFields.promote_panels
-        + ListingFields.promote_panels
+        Page.promote_panels + SocialFields.promote_panels + ListingFields.promote_panels
     )
+

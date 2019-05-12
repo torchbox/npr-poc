@@ -19,118 +19,109 @@ from wagtailmedia.edit_handlers import MediaChooserPanel
 from wagtailmedia.models import AbstractMedia
 
 from npr_poc.utils.models import BasePage
+from wagtail_headless_preview.models import HeadlessPreviewMixin
 
 
 class ShowTag(TaggedItemBase):
     content_object = ParentalKey(
-        'podcasts.Show',
-        on_delete=models.CASCADE,
-        related_name='tagged_items'
+        "podcasts.Show", on_delete=models.CASCADE, related_name="tagged_items"
     )
 
 
 class ShowImage(Orderable, models.Model):
     image = models.ForeignKey(
-        settings.WAGTAILIMAGES_IMAGE_MODEL,
-        models.CASCADE,
-        related_name='+',
+        settings.WAGTAILIMAGES_IMAGE_MODEL, models.CASCADE, related_name="+"
     )
-    show = ParentalKey(
-        'podcasts.Show',
-        on_delete=models.CASCADE,
-        related_name='images',
-    )
+    show = ParentalKey("podcasts.Show", on_delete=models.CASCADE, related_name="images")
 
-    panels = [
-        ImageChooserPanel('image'),
-    ]
+    panels = [ImageChooserPanel("image")]
 
 
-class Show(BasePage):
-    template = 'patterns/pages/podcasts/show_page.html'
-    subpage_types = ['podcasts.Episode']
-    SHOW_TYPE_EPISODIC = 'episodic'
-    SHOW_TYPE_SERLIALIZED = 'serialized'
+class Show(HeadlessPreviewMixin, BasePage):
+    template = "patterns/pages/podcasts/show_page.html"
+    subpage_types = ["podcasts.Episode"]
+    SHOW_TYPE_EPISODIC = "episodic"
+    SHOW_TYPE_SERLIALIZED = "serialized"
     SHOW_TYPES = (
-        (SHOW_TYPE_EPISODIC, 'Episodic'),
-        (SHOW_TYPE_SERLIALIZED, 'Serialized'),
+        (SHOW_TYPE_EPISODIC, "Episodic"),
+        (SHOW_TYPE_SERLIALIZED, "Serialized"),
     )
 
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
-    license = models.CharField(max_length=255, blank=True)      # This should probably be a set of choices later
+    license = models.CharField(
+        max_length=255, blank=True
+    )  # This should probably be a set of choices later
 
     subtitle = models.CharField(max_length=255)
     description = RichTextField()
 
     podcast_type = models.CharField(max_length=255, choices=SHOW_TYPES)
-    language = models.CharField(max_length=6, choices=settings.LANGUAGES, default='en')
+    language = models.CharField(max_length=6, choices=settings.LANGUAGES, default="en")
     tags = ClusterTaggableManager(through=ShowTag, blank=True)
     is_explicit = models.BooleanField(default=False)
 
     search_fields = BasePage.search_fields + [
-        index.SearchField('subtitle'),
-        index.SearchField('description'),
+        index.SearchField("subtitle"),
+        index.SearchField("description"),
     ]
 
     api_fields = [
-        APIField('subtitle'),
-        APIField('description'),
-        APIField('podcast_type'),
-        APIField('language'),
-        APIField('tags'),
-        APIField('is_explicit'),
-        APIField('date_created'),
-        APIField('date_updated'),
-        APIField('license'),
+        APIField("subtitle"),
+        APIField("description"),
+        APIField("podcast_type"),
+        APIField("language"),
+        APIField("tags"),
+        APIField("is_explicit"),
+        APIField("date_created"),
+        APIField("date_updated"),
+        APIField("license"),
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel('subtitle'),
-        FieldPanel('description'),
-        FieldPanel('license'),
-        FieldPanel('podcast_type'),
-        FieldPanel('language'),
-        FieldPanel('tags'),
-        FieldPanel('is_explicit'),
-        InlinePanel('images', label='Images'),
+        FieldPanel("subtitle"),
+        FieldPanel("description"),
+        FieldPanel("license"),
+        FieldPanel("podcast_type"),
+        FieldPanel("language"),
+        FieldPanel("tags"),
+        FieldPanel("is_explicit"),
+        InlinePanel("images", label="Images"),
     ]
 
 
 class EpisodeTag(TaggedItemBase):
     content_object = ParentalKey(
-        'podcasts.Episode',
-        on_delete=models.CASCADE,
-        related_name='tagged_items'
+        "podcasts.Episode", on_delete=models.CASCADE, related_name="tagged_items"
     )
 
 
 class EpisodeImage(Orderable, models.Model):
     image = models.ForeignKey(
-        settings.WAGTAILIMAGES_IMAGE_MODEL,
-        models.CASCADE,
-        related_name='+',
+        settings.WAGTAILIMAGES_IMAGE_MODEL, models.CASCADE, related_name="+"
     )
     episode = ParentalKey(
-        'podcasts.Episode',
-        on_delete=models.CASCADE,
-        related_name='images',
+        "podcasts.Episode", on_delete=models.CASCADE, related_name="images"
     )
 
-    panels = [
-        ImageChooserPanel('image'),
-    ]
+    panels = [ImageChooserPanel("image")]
 
-    api_fields = [
-        APIField('image'),
-    ]
+    api_fields = [APIField("image")]
 
 
 class CustomMedia(AbstractMedia):
-    duration = models.DecimalField(null=True, decimal_places=2, max_digits=10, editable=False)
-    bitrate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
-    sample_rate = models.PositiveIntegerField(null=True, validators=[MinValueValidator(0)], editable=False)
-    channels = models.PositiveSmallIntegerField(null=True, validators=[MinValueValidator(1)], editable=False)
+    duration = models.DecimalField(
+        null=True, decimal_places=2, max_digits=10, editable=False
+    )
+    bitrate = models.PositiveIntegerField(
+        null=True, validators=[MinValueValidator(0)], editable=False
+    )
+    sample_rate = models.PositiveIntegerField(
+        null=True, validators=[MinValueValidator(0)], editable=False
+    )
+    channels = models.PositiveSmallIntegerField(
+        null=True, validators=[MinValueValidator(1)], editable=False
+    )
     mime_type = models.CharField(max_length=20, blank=True, editable=False)
 
     transcript = models.TextField(blank=True)
@@ -151,51 +142,36 @@ class CustomMedia(AbstractMedia):
         self.mime_type = mime_type[0] or None
         return super().save()
 
-    admin_form_fields = (
-        'title',
-        'file',
-        'collection',
-        'tags',
-        'transcript',
-    )
+    admin_form_fields = ("title", "file", "collection", "tags", "transcript")
 
 
 class EpisodeEnclosure(Orderable, models.Model):
     episode = ParentalKey(
-        'podcasts.Episode',
-        on_delete=models.CASCADE,
-        related_name='enclosures',
+        "podcasts.Episode", on_delete=models.CASCADE, related_name="enclosures"
     )
     media = models.ForeignKey(
-        'podcasts.CustomMedia',
-        models.PROTECT,
-        null=True,
-        related_name='+'
+        "podcasts.CustomMedia", models.PROTECT, null=True, related_name="+"
     )
 
-    api_fields = [
-        APIField('media'),
-    ]
+    api_fields = [APIField("media")]
 
-    panels = [
-        MediaChooserPanel('media')
-    ]
+    panels = [MediaChooserPanel("media")]
 
 
-class Episode(BasePage):
-    template = 'patterns/pages/podcasts/episode_page.html'
+class Episode(HeadlessPreviewMixin, BasePage):
+    template = "patterns/pages/podcasts/episode_page.html"
     # Currently assuming that an episode can only be associated with one show.
     # If M2M relationships are allowed then this structure will need to change.
-    parent_page_types = ['podcasts.Show']
+    parent_page_types = ["podcasts.Show"]
     subpage_types = []
     # We probably want to move this to an editable taxonomy
-    EPISODE_TYPE_FULL = 'full'
-    EPISODE_TYPE_TRAILER = 'trailer'
-    EPISODE_TYPE_BONUS = 'bonus'
+    EPISODE_TYPE_FULL = "full"
+    EPISODE_TYPE_TRAILER = "trailer"
+    EPISODE_TYPE_BONUS = "bonus"
     EPISODE_TYPES = (
-        (EPISODE_TYPE_FULL, 'Full'),
-        (EPISODE_TYPE_TRAILER, 'Trailer'),
-        (EPISODE_TYPE_BONUS, 'Bonus'),
+        (EPISODE_TYPE_FULL, "Full"),
+        (EPISODE_TYPE_TRAILER, "Trailer"),
+        (EPISODE_TYPE_BONUS, "Bonus"),
     )
 
     date_created = models.DateTimeField(auto_now_add=True)
@@ -206,39 +182,41 @@ class Episode(BasePage):
 
     episode_type = models.CharField(max_length=255, choices=EPISODE_TYPES)
     tags = ClusterTaggableManager(through=EpisodeTag, blank=True)
-    season_number = models.CharField(max_length=255, blank=True)        # Are seasons always numeric?
+    season_number = models.CharField(
+        max_length=255, blank=True
+    )  # Are seasons always numeric?
     is_explicit = models.BooleanField(default=False)
 
     search_fields = BasePage.search_fields + [
-        index.SearchField('subtitle'),
-        index.SearchField('description'),
-        index.RelatedFields('enclosures', [
-            index.RelatedFields('media', [
-                index.SearchField('transcript'),
-            ]),
-        ]),
+        index.SearchField("subtitle"),
+        index.SearchField("description"),
+        index.RelatedFields(
+            "enclosures",
+            [index.RelatedFields("media", [index.SearchField("transcript")])],
+        ),
     ]
 
     api_fields = [
-        APIField('subtitle'),
-        APIField('description'),
-        APIField('episode_type'),
-        APIField('season_number'),
-        APIField('tags'),
-        APIField('is_explicit'),
-        APIField('date_created'),
-        APIField('date_updated'),
-        APIField('enclosures'),
-        APIField('images'),
+        APIField("subtitle"),
+        APIField("description"),
+        APIField("episode_type"),
+        APIField("season_number"),
+        APIField("tags"),
+        APIField("is_explicit"),
+        APIField("date_created"),
+        APIField("date_updated"),
+        APIField("enclosures"),
+        APIField("images"),
     ]
 
     content_panels = BasePage.content_panels + [
-        FieldPanel('subtitle'),
-        FieldPanel('description'),
-        FieldPanel('episode_type'),
-        FieldPanel('tags'),
-        FieldPanel('season_number'),
-        FieldPanel('is_explicit'),
-        InlinePanel('images', label='Images'),
-        InlinePanel('enclosures', label='Enclosures'),
+        FieldPanel("subtitle"),
+        FieldPanel("description"),
+        FieldPanel("episode_type"),
+        FieldPanel("tags"),
+        FieldPanel("season_number"),
+        FieldPanel("is_explicit"),
+        InlinePanel("images", label="Images"),
+        InlinePanel("enclosures", label="Enclosures"),
     ]
+
