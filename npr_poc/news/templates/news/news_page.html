@@ -1,3 +1,4 @@
+{% load wagtailuserbar %}
 <!DOCTYPE html>
 <html lang="en">
   <title>{{ page.title }}</title>
@@ -21,5 +22,6 @@
       <a class="f6 grow no-underline br-pill ba ph3 pv2 mb mr2 dib purple" href="#0">{{ tag }}</a>
     {% endfor %}
     </article>
+    {% wagtailuserbar %}
   </body>
 </html>
