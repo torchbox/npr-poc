@@ -4,7 +4,7 @@ from .models import Show
 
 class ShowPageAdmin(ModelAdmin):
     model = Show
-    menu_label = "Show Pages"
+    menu_label = "Podcasts"
     menu_icon = "pilcrow"
     menu_order = 300
     exclude_from_explorer = False
