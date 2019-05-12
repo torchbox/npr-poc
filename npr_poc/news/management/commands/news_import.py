@@ -9,6 +9,7 @@ from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory, Au
 from wagtail.core.models import Page
 
 IMPORT_ROOT = settings.IMPORT_ROOT
+NEWS_PARENT_ID = settings.NEWS_PARENT_ID
 
 cleanr = re.compile("<.*?>")
 
@@ -52,7 +53,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         self.news_category = NewsCategory.objects.get(slug="world-news")
-        self.home_page = Page.objects.get(id=3)
+        self.home_page = Page.objects.get(id=NEWS_PARENT_ID)
 
         for file in os.listdir(IMPORT_ROOT):
             if file.endswith(".xml"):

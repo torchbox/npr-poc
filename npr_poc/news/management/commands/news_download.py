@@ -4,9 +4,9 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 PAGE_SIZE = 50
-TOTAL = 30000
+TOTAL = 100000
 NEWS_RSS_ROOT = f"https://www.npr.org/rss/rss.php?id=1001&numResults={PAGE_SIZE}"
-IMPORT_ROOT = settings.IMPORT_ROOT
+IMPORT_ROOT_PATH = settings.IMPORT_ROOT_PATH
 
 
 class Command(BaseCommand):
@@ -16,7 +16,7 @@ class Command(BaseCommand):
         start_at = 0
         while start_at < TOTAL:
             up_to = start_at + PAGE_SIZE
-            output_file = f"{IMPORT_ROOT}/news-{start_at}-{up_to}.xml"
+            output_file = f"{IMPORT_ROOT_PATH}/news-{start_at}-{up_to}.xml"
             if os.path.isfile(output_file):
                 print("found " + output_file + ", skipping")
             else:
