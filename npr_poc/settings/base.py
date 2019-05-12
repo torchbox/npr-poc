@@ -98,6 +98,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "wagtail_headless_preview",
     "wagtailaltgenerator",
+    "wagtailquickcreate",
 ]
 
 
@@ -704,7 +705,11 @@ COMPUTER_VISION_API_KEY = env.get("COMPUTER_VISION_API_KEY")
 COMPUTER_VISION_REGION = env.get("COMPUTER_VISION_REGION")
 
 # location of stories to import on the filesystem
-IMPORT_ROOT_PATH = env.get("IMPORT_ROOT")
+IMPORT_ROOT_PATH = env.get("IMPORT_ROOT_PATH")
 # the ID of the page that news should be imported under
 NEWS_PARENT_ID = env.get("NEWS_PARENT_ID")
 
+WAGTAIL_QUICK_CREATE_PAGE_TYPES = ["news.NewsPage", "podcasts.Episode"]
+WAGTAIL_QUICK_CREATE_REPLACE_SUMMARY_PANEL = False
+WAGTAIL_QUICK_CREATE_DOCUMENTS = False
+WAGTAIL_QUICK_CREATE_IMAGES = False

@@ -26,3 +26,4 @@ scout-apm==2.0.2
 django-basic-auth-ip-whitelist==0.2.1
 django-rq==2.0
 wagtail-react-streamfield==1.2.0
+wagtail-quick-create==1.0.7
