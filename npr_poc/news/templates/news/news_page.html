@@ -5,15 +5,20 @@
   <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
   <body class="w-100 sans-serif bg-white">
     <article class="pa3 pa5-ns">
-    <img src="https://media.npr.org/chrome_svg/npr-logo.svg" width="100" alt="NPR logo"/>
-    <p class="f4 mt5 mb2 black-70"># World News</p>
-    <h1 class="f1 mt0 mb5 w-70">{{ page.title }}</h1>
-    <p class="f5 black-70 mb0">{{ page.author.name }} ~ {{ page.date }}</p>
-    <p class="black-90 f4 f4-m f3-l athelas measure lh-copy mt3">
-        {{ page.summary }}
+    <img src="https://media.npr.org/chrome_svg/npr-logo.svg" class="mb3" width="100" alt="NPR logo"/>
+    <p class="f4 mt4 mb2 black-70"># World News</p>
+    <h1 class="f1 mt0 mb4 w-70">{{ page.title }}</h1>
+    <p class="black-90 f4 f4-m f3-l athelas measure lh-copy mt5">
+        <i>{{ page.summary }}</i>
     </p>
     {% for block in page.body %}
       <section class="black-90 f4 f4-m f3-l athelas measure lh-copy mt3">{{ block }}</section>
+    {% endfor %}
+    <section class="mt0 mb4">
+      <cite class="athelas f6 ttu tracked fs-normal">{{ page.author.name }} ~ {{ page.date }}</cite>
+    </section>
+    {% for tag in page.tags.all %}
+      <a class="f6 grow no-underline br-pill ba ph3 pv2 mb mr2 dib purple" href="#0">{{ tag }}</a>
     {% endfor %}
     </article>
   </body>
