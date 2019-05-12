@@ -8,7 +8,7 @@ Collect realistic data from NPR.org
 
 This downloads news stories as XML files from the NPR RSS feed, in batches of 50 items.
 
-To save future downloads, zip the downloaded files (`zip archive.zip *.xml`) and upload the archive to a publicly available URL. This can be fetched from other machines, e.g. Heroku with `./manage.py fetch_export`.
+To save future downloads, zip the downloaded files (`zip archive.zip *.xml`) and upload the archive to a publicly available URL. This can be fetched from other machines, e.g. Heroku with `./manage.py fetch_export <URL>`.
 
 ## Import into Wagtail stories
 
