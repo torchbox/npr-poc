@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     "npr_poc.standardpages",
     "npr_poc.utils",
     "npr_poc.project_styleguide.apps.ProjectStyleguideConfig",
+    "wagtail_react_streamfield",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.postgres_search",
     "wagtail.contrib.settings",
@@ -704,8 +705,8 @@ COMPUTER_VISION_REGION = env.get("COMPUTER_VISION_REGION")
 
 # location of stories to import on the filesystem
 IMPORT_ROOT_PATH = env.get("IMPORT_ROOT")
-# A public URL containing a zip of previously downloaded stories
+#  A public URL containing a zip of previously downloaded stories
 NPR_EXPORT_URL = env.get("NPR_EXPORT_URL")
 # the ID of the page that news should be imported under
-NEWS_PARENT_ID = env.get("NEWS_PARENT_ID") 
+NEWS_PARENT_ID = env.get("NEWS_PARENT_ID")
 
