@@ -5,9 +5,9 @@ Collect realistic data from NPR.org. Expects two settings as environment variabl
 IMPORT_ROOT_PATH = "/root/to/path/where/downloads/are/stored"
 NEWS_PARENT_ID = "<id of page where news items are imported under>"
 
-## Scrape stories from the RSS feed(s)
+## Scrape 10000 stories from the RSS feed(s)
 
-`./manage.py news_download`
+`./manage.py news_download 10000`
 
 This downloads news stories as XML files from the NPR RSS feed, in batches of 50 items.
 
@@ -17,7 +17,7 @@ To save future downloads, zip the downloaded files (`zip archive.zip *.xml`) and
 
 `./manage.py news_import`
 
-Delete all imported news stories
+## Delete all imported news stories
 
 ```
 from npr_poc.news.models import NewsPage
