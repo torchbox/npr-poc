@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     "npr_poc.standardpages",
     "npr_poc.utils",
     "npr_poc.project_styleguide.apps.ProjectStyleguideConfig",
-    "wagtail_react_streamfield",
+    # "wagtail_react_streamfield",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.postgres_search",
     "wagtail.contrib.settings",
@@ -628,7 +628,7 @@ if env.get("BASIC_AUTH_ENABLED", "false").lower().strip() == "true":
 
 
 # This name is displayed in the Wagtail admin.
-WAGTAIL_SITE_NAME = "NPR POC"
+WAGTAIL_SITE_NAME = "NPR"
 
 
 # This is used by Wagtail's email notifications for constructing absolute
