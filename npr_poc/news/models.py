@@ -1,7 +1,13 @@
 from django.db import models
 
 from wagtail.core.fields import StreamField
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    StreamFieldPanel,
+    InlinePanel,
+    TabbedInterface,
+    ObjectList,
+)
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -88,6 +94,17 @@ class NewsPage(BasePage):
         SnippetChooserPanel("author"),
         FieldPanel("summary"),
         StreamFieldPanel("body"),
-        FieldPanel("tags"),
-        InlinePanel("categories", label="category"),
     ]
+
+    taxonomy_panels = [InlinePanel("categories", label="category"), FieldPanel("tags")]
+
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading="Content"),
+            ObjectList(taxonomy_panels, heading="Taxonomy"),
+            ObjectList(BasePage.promote_panels, heading="Promote"),
+            ObjectList(
+                BasePage.settings_panels, heading="Settings", classname="settings"
+            ),
+        ]
+    )
