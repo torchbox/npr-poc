@@ -1,6 +1,11 @@
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.contrib.modeladmin.options import (
+    ModelAdmin,
+    ModelAdminGroup,
+    modeladmin_register,
+)
 from wagtail.core.models import Page, PageRevision
-from .models import NewsPage
+from .models import NewsPage, NewsCategory
+from taggit.models import Tag as TaggitTag
 
 
 class NewsPageAdmin(ModelAdmin):
@@ -8,9 +13,7 @@ class NewsPageAdmin(ModelAdmin):
     menu_label = "News"  # ditch this to use verbose_name_plural from model
     menu_icon = "fa-quote-left"  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
-    exclude_from_explorer = (
-        False
-    )  # or True to exclude pages of this type from Wagtail's explorer view
+    exclude_from_explorer = False
     list_display = ("title", "date", "author")
     list_filter = ("date",)
     search_fields = ("title",)
@@ -47,6 +50,31 @@ class MyPageRevisionsAdmin(ModelAdmin):
         return qs.filter(user=request.user).order_by("page_id").distinct("page_id")
 
 
+class TagAdmin(ModelAdmin):
+    model = TaggitTag
+    menu_label = "Tags"
+    menu_icon = "fa-quote-left"
+    menu_order = 250
+    exclude_from_explorer = False
+    list_display = ("name", "slug")
+
+
+class CategoryAdmin(ModelAdmin):
+    model = NewsCategory
+    menu_label = "Categories"
+    menu_icon = "fa-quote-left"
+    menu_order = 250
+    exclude_from_explorer = False
+    list_display = ("name", "slug")
+
+
+class TaxonomyGroup(ModelAdminGroup):
+    menu_label = "Taxonomy"
+    menu_icon = "folder-open-inverse"
+    menu_order = 600
+    items = (TagAdmin, CategoryAdmin)
+
+
 modeladmin_register(NewsPageAdmin)
-# modeladmin_register(MyPagesAdmin)
+modeladmin_register(TaxonomyGroup)
 # modeladmin_register(MyPageRevisionsAdmin)

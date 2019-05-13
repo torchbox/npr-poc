@@ -22,13 +22,11 @@ class NewsPageTag(TaggedItemBase):
     content_object = ParentalKey("NewsPage", related_name="news_tags")
 
 
-@register_snippet
 class Tag(TaggitTag):
     class Meta:
         proxy = True
 
 
-@register_snippet
 class NewsCategory(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, max_length=80)
