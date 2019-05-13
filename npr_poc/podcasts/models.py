@@ -6,7 +6,12 @@ from django.db import models
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.admin.edit_handlers import (
+    FieldPanel,
+    InlinePanel,
+    ObjectList,
+    TabbedInterface,
+)
 from wagtail.api import APIField
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable
@@ -81,13 +86,27 @@ class Show(HeadlessPreviewMixin, BasePage):
     content_panels = BasePage.content_panels + [
         FieldPanel("subtitle"),
         FieldPanel("description"),
+        InlinePanel("images", label="Images"),
+    ]
+
+    metadata_panels = [
         FieldPanel("license"),
         FieldPanel("podcast_type"),
         FieldPanel("language"),
         FieldPanel("tags"),
         FieldPanel("is_explicit"),
-        InlinePanel("images", label="Images"),
     ]
+
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading="Content"),
+            ObjectList(metadata_panels, heading="Metadata"),
+            ObjectList(BasePage.promote_panels, heading="Promote"),
+            ObjectList(
+                BasePage.settings_panels, heading="Settings", classname="settings"
+            ),
+        ]
+    )
 
 
 class EpisodeTag(TaggedItemBase):
@@ -219,4 +238,3 @@ class Episode(HeadlessPreviewMixin, BasePage):
         InlinePanel("images", label="Images"),
         InlinePanel("enclosures", label="Enclosures"),
     ]
-
