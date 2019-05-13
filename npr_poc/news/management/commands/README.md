@@ -2,8 +2,10 @@
 
 Collect realistic data from NPR.org. Expects two settings as environment variables or in `local.py`:
 
+```python
 IMPORT_ROOT_PATH = "/root/to/path/where/downloads/are/stored"
 NEWS_PARENT_ID = "<id of page where news items are imported under>"
+```
 
 ## Scrape 10000 stories from the RSS feed(s)
 
@@ -19,7 +21,7 @@ To save future downloads, zip the downloaded files (`zip archive.zip *.xml`) and
 
 ## Delete all imported news stories
 
-```
+```python
 from npr_poc.news.models import NewsPage
 for f in NewsPage.objects.all(): f.delete()
 ```
