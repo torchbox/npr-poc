@@ -713,3 +713,17 @@ WAGTAIL_QUICK_CREATE_PAGE_TYPES = ["news.NewsPage", "podcasts.Episode"]
 WAGTAIL_QUICK_CREATE_REPLACE_SUMMARY_PANEL = False
 WAGTAIL_QUICK_CREATE_DOCUMENTS = False
 WAGTAIL_QUICK_CREATE_IMAGES = False
+
+BONSAI_URL = env.get("BONSAI_URL", False)
+
+if BONSAI_URL:
+    WAGTAILSEARCH_BACKENDS = {
+        "default": {
+            "BACKEND": "wagtail.search.backends.elasticsearch6",
+            "URLS": [BONSAI_URL],
+            "INDEX": "wagtail",
+            "TIMEOUT": 5,
+            "OPTIONS": {},
+            "INDEX_SETTINGS": {},
+        }
+    }
