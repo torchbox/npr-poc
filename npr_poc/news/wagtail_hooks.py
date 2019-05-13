@@ -53,7 +53,7 @@ class MyPageRevisionsAdmin(ModelAdmin):
 class TagAdmin(ModelAdmin):
     model = TaggitTag
     menu_label = "Tags"
-    menu_icon = "fa-quote-left"
+    menu_icon = "fa-tags"
     menu_order = 250
     exclude_from_explorer = False
     list_display = ("name", "slug")
@@ -62,7 +62,7 @@ class TagAdmin(ModelAdmin):
 class CategoryAdmin(ModelAdmin):
     model = NewsCategory
     menu_label = "Categories"
-    menu_icon = "fa-quote-left"
+    menu_icon = "fa-hashtag"
     menu_order = 250
     exclude_from_explorer = False
     list_display = ("name", "slug")
@@ -70,7 +70,7 @@ class CategoryAdmin(ModelAdmin):
 
 class TaxonomyGroup(ModelAdminGroup):
     menu_label = "Taxonomy"
-    menu_icon = "folder-open-inverse"
+    menu_icon = "fa-archive"
     menu_order = 600
     items = (TagAdmin, CategoryAdmin)
 
