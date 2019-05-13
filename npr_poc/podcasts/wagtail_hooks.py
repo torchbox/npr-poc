@@ -8,8 +8,8 @@ class ShowPageAdmin(ModelAdmin):
     menu_icon = "fa-podcast"
     menu_order = 300
     exclude_from_explorer = False
-    list_display = ("title", "date_created")
-    list_filter = ("date_created",)
+    list_display = ("title", "date_created", "is_explicit")
+    list_filter = ("date_created", "is_explicit")
     search_fields = ("title",)
 
 
