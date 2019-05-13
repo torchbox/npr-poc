@@ -1,6 +1,9 @@
-# NPR RSS Importer
+# NPR RSS Importer
 
-Collect realistic data from NPR.org
+Collect realistic data from NPR.org. Expects two settings as environment variables or in `local.py`:
+
+IMPORT_ROOT_PATH = "/root/to/path/where/downloads/are/stored"
+NEWS_PARENT_ID = "<id of page where news items are imported under>"
 
 ## Scrape stories from the RSS feed(s)
 
