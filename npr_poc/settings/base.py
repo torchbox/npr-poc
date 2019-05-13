@@ -99,6 +99,7 @@ INSTALLED_APPS = [
     "wagtail_headless_preview",
     "wagtailaltgenerator",
     "wagtailquickcreate",
+    "wagtailfontawesome",
 ]
 
 
@@ -722,6 +723,7 @@ if BONSAI_URL:
             "BACKEND": "wagtail.search.backends.elasticsearch6",
             "URLS": [BONSAI_URL],
             "INDEX": "wagtail",
+            "AUTO_UPDATE": False,
             "TIMEOUT": 5,
             "OPTIONS": {},
             "INDEX_SETTINGS": {},

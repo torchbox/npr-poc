@@ -6,7 +6,7 @@ from .models import NewsPage
 class NewsPageAdmin(ModelAdmin):
     model = NewsPage
     menu_label = "News"  # ditch this to use verbose_name_plural from model
-    menu_icon = "pilcrow"  # change as required
+    menu_icon = "fa-quote-left"  # change as required
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
     exclude_from_explorer = (
         False

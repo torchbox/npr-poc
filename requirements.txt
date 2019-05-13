@@ -28,3 +28,4 @@ django-rq==2.0
 wagtail-react-streamfield==1.2.0
 wagtail-quick-create==1.0.7
 elasticsearch==6.3.0
+wagtailfontawesome==1.1.4
