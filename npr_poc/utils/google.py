@@ -84,9 +84,15 @@ def close_paragraph(block, stream_data):
 
 
 def import_image(img_tag):
+    if '/tracking/' in img_tag['src']:
+        return
+
     response = requests.get(img_tag['src'])
+    if not response.status_code == 200:
+        return
+
     img_content = response.content
-    img_title = img_tag['alt']
+    img_title = img_tag.get('alt', '')
     img_file_name = slugify(img_title) if img_title else uuid.uuid4()
     img_content_type = response.headers.get('Content-Type', '')
     if img_content_type.startswith('image/'):
@@ -108,11 +114,7 @@ def import_image(img_tag):
     return image
 
 
-def parse_document(credentials, doc_id):
-    # We may want to use the docs API in future, as it provides a much more structured format
-    service = build('drive', 'v3', credentials=google.oauth2.credentials.Credentials(**credentials))
-    html = service.files().export_media(fileId=doc_id, mimeType='text/html').execute()
-    metadata = service.files().get(fileId=doc_id, fields='name').execute()
+def html_to_stream_data(html):
     soup = BeautifulSoup(html)
 
     stream_data = []
@@ -156,4 +158,12 @@ def parse_document(credentials, doc_id):
 
     close_paragraph(current_paragraph_block, stream_data)
 
-    return metadata['name'], stream_data
+    return stream_data
+
+
+def parse_document(credentials, doc_id):
+    # We may want to use the docs API in future, as it provides a much more structured format
+    service = build('drive', 'v3', credentials=google.oauth2.credentials.Credentials(**credentials))
+    html = service.files().export_media(fileId=doc_id, mimeType='text/html').execute()
+    metadata = service.files().get(fileId=doc_id, fields='name').execute()
+    return metadata['name'], html_to_stream_data(html)

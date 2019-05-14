@@ -13,6 +13,7 @@ django-cors-headers==2.5.3
 ffmpeg-python==0.1.17
 wagtail-headless-preview==0.0.4
 wagtailaltgenerator==4.1.0
+feedparser==5.2.1
 
 # Production dependencies
 whitenoise[brotli]==4.1.2

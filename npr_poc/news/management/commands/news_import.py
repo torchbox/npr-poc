@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import sys
@@ -6,6 +7,7 @@ import feedparser
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory, Author
+from npr_poc.utils.google import html_to_stream_data
 from wagtail.core.models import Page
 
 IMPORT_ROOT = settings.IMPORT_ROOT
@@ -37,7 +39,8 @@ def extract(rss_file):
             "published": strftime("%Y-%m-%d", item.published_parsed),
             "summary": item.summary,
             "author": author,
-            "text": cleanhtml(item.content[0]["value"]),
+            # "text": cleanhtml(item.content[0]["value"]),
+            "html": item.content[0]["value"],
             "link": link,
         }
         items.append(d)
@@ -83,6 +86,8 @@ class Command(BaseCommand):
             news_page.source_link = item["link"]
             news_page.date = item["published"]
             news_page.summary = item["summary"]
+            news_page.body = json.dumps(html_to_stream_data(item["html"]))
+
             # TODO: tags, author, streamfield
             parent_page.add_child(instance=news_page)
             npc = NewsPageNewsCategory()
