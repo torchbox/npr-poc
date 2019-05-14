@@ -13,6 +13,7 @@ from wagtail.admin.edit_handlers import (
     TabbedInterface,
 )
 from wagtail.api import APIField
+from wagtail.images.api.fields import ImageRenditionField
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -125,7 +126,13 @@ class EpisodeImage(Orderable, models.Model):
 
     panels = [ImageChooserPanel("image")]
 
-    api_fields = [APIField("image")]
+    api_fields = [
+        APIField("image"),
+        APIField(
+            "image_thumbnail",
+            serializer=ImageRenditionField("fill-798x530", source="image"),
+        ),
+    ]
 
 
 class CustomMedia(AbstractMedia):
