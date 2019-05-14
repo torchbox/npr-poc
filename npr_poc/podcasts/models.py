@@ -206,6 +206,9 @@ class Episode(HeadlessPreviewMixin, BasePage):
     )  # Are seasons always numeric?
     is_explicit = models.BooleanField(default=False)
 
+    def show(self):
+        return self.get_parent().title
+
     search_fields = BasePage.search_fields + [
         index.SearchField("subtitle"),
         index.SearchField("description"),
