@@ -1,11 +1,12 @@
 from django.apps import apps
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import defaults
 from django.views.generic import TemplateView, View
 
 from wagtail.admin.forms.search import SearchForm
+from wagtail.contrib.modeladmin.views import ChooseParentView
 
 from .google import (get_auth_url, save_access_tokens_to_session,
                      search_documents)
@@ -68,3 +69,24 @@ class PageFromGoogleDocSearchView(View):
             'documents': docs,
             'query_string': request.GET.get('q'),
         })
+
+
+class GoogleImportChooseParentView(ChooseParentView):
+    """
+    Custom ChooseParentView that allows the option to create a page from Google Doc.
+    """
+    def form_valid(self, form):
+        if self.request.POST.get('google-doc-import'):
+            return redirect(
+                'npr_utils_page_from_google_doc',
+                self.app_label, self.model_name, form.cleaned_data['parent_page'].pk
+            )
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx.update({
+            'app_label': self.app_label,
+            'model_name': self.model_name,
+        })
+        return ctx

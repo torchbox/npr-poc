@@ -4,8 +4,12 @@ from wagtail.contrib.modeladmin.options import (
     modeladmin_register,
 )
 from wagtail.core.models import Page, PageRevision
-from .models import NewsPage, NewsCategory
+
 from taggit.models import Tag as TaggitTag
+
+from npr_poc.utils.views import GoogleImportChooseParentView
+
+from .models import NewsPage, NewsCategory
 
 
 class NewsPageAdmin(ModelAdmin):
@@ -17,6 +21,8 @@ class NewsPageAdmin(ModelAdmin):
     list_display = ("title", "date", "author")
     list_filter = ("date",)
     search_fields = ("title",)
+    choose_parent_view_class = GoogleImportChooseParentView
+    choose_parent_template_name = 'modeladmin/choose_parent_google_docs.html'
 
 
 class MyPagesAdmin(ModelAdmin):
