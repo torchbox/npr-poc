@@ -14,6 +14,7 @@ ffmpeg-python==0.1.17
 wagtail-headless-preview==0.0.4
 wagtailaltgenerator==4.1.0
 feedparser==5.2.1
+git+git://github.com/wagtail/wagtail-review.git@705056f61dcbcbe8fc4695dd34eb4ac1fa021fef#egg=wagtail-review
 
 # Production dependencies
 whitenoise[brotli]==4.1.2

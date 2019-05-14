@@ -11,6 +11,8 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.utils.urlpatterns import decorate_urlpatterns
 
+from wagtail_review import urls as wagtailreview_urls
+
 from npr_poc.search import views as search_views
 from npr_poc.utils.cache import get_default_cache_control_decorator
 
@@ -24,6 +26,8 @@ private_urlpatterns = [
 
     # Search cache-control headers are set on the view itself.
     path('search/', search_views.search, name='search'),
+
+    path('review/', include(wagtailreview_urls)),
 ]
 
 if settings.USE_REDIS_QUEUE:
