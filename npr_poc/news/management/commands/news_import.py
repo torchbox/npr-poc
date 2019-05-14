@@ -10,7 +10,7 @@ from npr_poc.news.models import NewsPage, NewsCategory, NewsPageNewsCategory, Au
 from npr_poc.utils.google import html_to_stream_data
 from wagtail.core.models import Page
 
-IMPORT_ROOT = settings.IMPORT_ROOT
+IMPORT_ROOT_PATH = settings.IMPORT_ROOT_PATH
 NEWS_PARENT_ID = settings.NEWS_PARENT_ID
 
 cleanr = re.compile("<.*?>")
@@ -58,9 +58,9 @@ class Command(BaseCommand):
         self.news_category = NewsCategory.objects.get(slug="world-news")
         self.home_page = Page.objects.get(id=NEWS_PARENT_ID)
 
-        for file in os.listdir(IMPORT_ROOT):
+        for file in os.listdir(IMPORT_ROOT_PATH):
             if file.endswith(".xml"):
-                for item in extract(os.path.join(IMPORT_ROOT, file)):
+                for item in extract(os.path.join(IMPORT_ROOT_PATH, file)):
                     self.insert(item)
 
     def get_or_create_author(self, author_name):
