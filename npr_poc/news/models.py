@@ -67,6 +67,7 @@ class NewsPageNewsCategory(models.Model):
 
 class NewsPage(BasePage):
     subpage_types = []
+    parent_page_types = ['standardpages.IndexPage']
     can_import_from_google = True
     date = models.DateField("Publish date")
     author = models.ForeignKey(
