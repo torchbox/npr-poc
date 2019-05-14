@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     "npr_poc.standardpages",
     "npr_poc.utils",
     "npr_poc.project_styleguide.apps.ProjectStyleguideConfig",
-    # "wagtail_react_streamfield",
+    "wagtail_react_streamfield",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.postgres_search",
     "wagtail.contrib.settings",

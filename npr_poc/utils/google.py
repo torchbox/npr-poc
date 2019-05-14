@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.utils.text import slugify
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from dateutil.parser import parse
 import google.oauth2.credentials
 import google_auth_oauthlib.flow
@@ -71,12 +71,15 @@ def search_documents(credentials, q=''):
     return files
 
 
+def create_streamfield_block(**kwargs):
+    # Add an ID to the block, because wagtail-react-streamfield borks without one
+    kwargs['id'] = str(uuid.uuid4())
+    return kwargs
+
+
 def close_paragraph(block, stream_data):
     if block:
-        stream_data.append({
-            'type': 'paragraph',
-            'value': ''.join(block)
-        })
+        stream_data.append(create_streamfield_block(type='paragraph', value=''.join(block)))
     block.clear()
 
 
@@ -117,11 +120,17 @@ def parse_document(credentials, doc_id):
     # Run through contents and populate stream
     current_paragraph_block = []
 
+    for tag in soup.body.recursiveChildGenerator():
+        # Remove all inline styles and classes
+        if hasattr(tag, 'attrs'):
+            for attr in ['class', 'style']:
+                tag.attrs.pop(attr, None)
+
     for tag in soup.body.contents:
         if tag.name == 'h1':
             close_paragraph(current_paragraph_block, stream_data)
             # Wagtail will render this as a h2
-            stream_data.append({'type': 'heading', 'value': tag.text})
+            stream_data.append(create_streamfield_block(type='heading', value=tag.text))
         elif tag.name == 'h2':
             close_paragraph(current_paragraph_block, stream_data)
             # h2 > h3
@@ -134,7 +143,7 @@ def parse_document(credentials, doc_id):
             if image:
                 # Break the paragraph and add an image
                 close_paragraph(current_paragraph_block, stream_data)
-                stream_data.append({'type': 'image', 'value': {'image': image.pk}})
+                stream_data.append(create_streamfield_block(type='image', value={'image': image.pk}))
         elif tag.text:
             current_paragraph_block.append(str(tag))
         if tag.find_all('img'):
@@ -143,7 +152,7 @@ def parse_document(credentials, doc_id):
             for img in tag.find_all('img'):
                 image = import_image(img)
                 if image:
-                    stream_data.append({'type': 'image', 'value': {'image': image.pk}})
+                    stream_data.append(create_streamfield_block(type='image', value={'image': image.pk}))
 
     close_paragraph(current_paragraph_block, stream_data)
 
