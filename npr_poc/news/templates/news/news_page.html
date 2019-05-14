@@ -1,4 +1,4 @@
-{% load wagtailuserbar wagtailimages_tags %}
+{% load wagtailuserbar wagtailimages_tags wagtailreview_tags %}
 <!DOCTYPE html>
 <html lang="en">
   <title>{{ page.title }}</title>
@@ -35,5 +35,6 @@
     {% endfor %}
     </article>
     {% wagtailuserbar %}
+    {% wagtailreview %}
   </body>
 </html>
