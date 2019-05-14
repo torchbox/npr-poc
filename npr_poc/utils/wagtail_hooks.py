@@ -82,5 +82,13 @@ def insert_editor_css():
             border: 1px solid #606060;
             border-radius: 3px;
         }
+        .Draftail-ToolbarGroup:before {
+            content: "";
+            display: inline-block;
+            width: 0px !important;
+            height: 0 !important;
+            vertical-align: middle;
+            margin: 0 !important;
+        }
     </style>"""
 
