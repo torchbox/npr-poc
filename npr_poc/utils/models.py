@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
 
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -295,3 +296,24 @@ class BasePage(SocialFields, ListingFields, Page):
         Page.promote_panels + SocialFields.promote_panels + ListingFields.promote_panels
     )
 
+
+BasePage._meta.get_field("title").help_text = mark_safe(
+    """
+    The page title as you'd like it to be seen by the public. 
+    <a href='https://moz.com/learn/seo/title-tag' target='_blank'>
+    Advice on writing good titles</a>."""
+)
+
+BasePage._meta.get_field("seo_title").help_text = mark_safe(
+    """
+    Search Engine Friendly title. 
+    <a href ='https://moz.com/learn/seo/title-tag' target='_blank'>
+    How to write a good title</a>."""
+)
+
+BasePage._meta.get_field("search_description").help_text = mark_safe(
+    """
+    Search Engine Friendly description of this page. 
+    <a href ='https://moz.com/learn/seo/meta-description' target='_blank'>
+    Writing effective meta descriptions</a>."""
+)
