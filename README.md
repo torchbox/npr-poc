@@ -34,6 +34,7 @@ To set up a new build:
 git clone [URL TO GIT REMOTE]
 cd npr_poc
 vagrant up
+cp npr_poc/settings/local.py.example npr_poc/settings/local.py
 vagrant ssh
 ```
 
@@ -53,11 +54,12 @@ This will make the site available on the host machine at: http://127.0.0.1:8000/
 To build front-end assets you will additionally need to run the following commands:
 
  ```bash
+cd npr_poc/static_src/
 npm install
-npm run build:prod
+npm run build
 ```
 
-After any change to the CSS or Javascript you will need to run the build command again, either in the vm or on your host machine. See the [Front-end tooling docs](npr_poc/npr_poc/static_src/README.md) for further details.
+After any change to the CSS or Javascript you will need to run the build command again, either in the vm or on your host machine. See the [Front-end tooling docs](npr_poc/static_src/README.md) for further details.
 
 
 ## Deployment
