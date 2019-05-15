@@ -12,7 +12,7 @@ git+git://github.com/solarissmoke/wagtailmedia.git@wagtail25#egg=wagtailmedia
 django-cors-headers==2.5.3
 ffmpeg-python==0.1.17
 wagtail-headless-preview==0.0.4
-wagtailaltgenerator==4.1.0
+wagtailaltgenerator==4.1.1
 feedparser==5.2.1
 git+git://github.com/wagtail/wagtail-review.git@24e8efdd172994d34a809070a5434380c215a5b2#egg=wagtail-review
 
