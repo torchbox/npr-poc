@@ -89,6 +89,8 @@ class NewsPage(BasePage):
     source_link = models.URLField(blank=True, db_index=True)
     tags = ClusterTaggableManager(through="news.NewsPageTag", blank=True)
 
+    legacy_id = models.CharField(blank=True, max_length=10)
+
     search_fields = BasePage.search_fields + [
         index.SearchField("summary"),
         index.SearchField("body"),
