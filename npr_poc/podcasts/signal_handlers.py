@@ -12,4 +12,4 @@ if settings.USE_REDIS_QUEUE:
     @receiver(post_save, sender=CustomMedia)
     def queue_transcription(sender, instance, **kwargs):
         if not instance.is_transcribed:
-            django_rq.enqueue(call_command, 'transcribe_new_media')
+            django_rq.enqueue(call_command, 'transcribe_new_media', instance.pk)

@@ -7,9 +7,14 @@ from npr_poc.podcasts.utils import transcribe_audio
 class Command(BaseCommand):
     help = 'Transcribe newly uploaded media'
 
+    def add_arguments(self, parser):
+        parser.add_argument('media_id', nargs='?', type=int)
+
     def handle(self, *args, **options):
-        # For now, we just run this on all media with empty transcript.
         media = CustomMedia.objects.filter(type='audio', is_transcribed=False)
+        if options['media_id']:
+            media = media.filter(pk=options['media_id'])
+
         for media_obj in media:
             if not media_obj.transcript:
                 transcript_parts = transcribe_audio(media_obj.file)
