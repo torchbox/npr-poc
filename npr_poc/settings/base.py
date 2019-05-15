@@ -190,7 +190,7 @@ if env.get("USE_REDIS_QUEUE", "false") == "true":
     RQ_QUEUES = {
         "default": {
             "URL": env.get("REDISTOGO_URL", "redis://localhost:6379/0"),
-            "DEFAULT_TIMEOUT": 500,
+            "DEFAULT_TIMEOUT": 900,
         }
     }
 else:
