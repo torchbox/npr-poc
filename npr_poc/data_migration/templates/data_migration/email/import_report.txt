@@ -1,0 +1,13 @@
+Hello,
+
+The {{ description }} (pages {{ start_page }}–{{ end_page }}) import {{ success|yesno:"finished,failed" }}.
+
+Start: {{ start_time|date:"j F Y" }} {{ start_time|time:"H:i:s e" }}
+End: {{ end_time|date:"j F Y" }} {{ end_time|time:"H:i:s e" }}
+Duration: {{ duration }}
+
+{% if error_msg %}{{ error_msg }}{% else %}Please find the output log attached.{% endif %}
+
+Regards,
+
+{{ site_name }}

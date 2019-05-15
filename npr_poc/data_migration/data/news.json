@@ -1,0 +1,12 @@
+[
+    {
+    "nid": "1",
+    "title": "News page 1",
+    "slug": "news-page-1",
+    "body": "<p>Worm much otter this far dug far hound sensitively toucan hey altruistically nutria unscrupulously when esoteric upon and much jeez more aboard and alas jeez ferociously and private ate.</p>",
+    "created": "2013-10-22 10:10:16",
+    "image_id": "1",
+    "image": "http://docs.wagtail.io/en/latest/_static/logo.png",
+    "url": "http://www.example.com/news-page-1/"
+  }
+]
