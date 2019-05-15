@@ -79,7 +79,7 @@ def insert_editor_css():
         .Draftail-Toolbar {
             background-color: white !important; 
             color: #606060 !important;
-            border: 1px solid #606060;
+            border: 1px solid #606060!important;
             border-radius: 3px;
         }
         .Draftail-ToolbarGroup:before {
@@ -89,6 +89,12 @@ def insert_editor_css():
             height: 0 !important;
             vertical-align: middle;
             margin: 0 !important;
+        }
+        
+        .Draftail-ToolbarButton:hover,
+        .Draftail-ToolbarButton--active {
+            background-color: #eee!important;
+            border: 1px solid #ddd!important;
         }
     </style>"""
 
