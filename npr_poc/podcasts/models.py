@@ -42,6 +42,14 @@ class ShowImage(Orderable, models.Model):
 
     panels = [ImageChooserPanel("image")]
 
+    api_fields = [
+        APIField("image"),
+        APIField(
+            "image_thumbnail",
+            serializer=ImageRenditionField("fill-798x530", source="image"),
+        ),
+    ]
+
 
 class Show(HeadlessPreviewMixin, BasePage):
     template = "patterns/pages/podcasts/show_page.html"
@@ -82,6 +90,7 @@ class Show(HeadlessPreviewMixin, BasePage):
         APIField("date_created"),
         APIField("date_updated"),
         APIField("license"),
+        APIField("images"),
     ]
 
     content_panels = BasePage.content_panels + [
