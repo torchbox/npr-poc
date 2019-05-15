@@ -2,15 +2,11 @@ from invoke import run as local
 from invoke.exceptions import Exit
 from invoke.tasks import task
 
-PRODUCTION_APP_INSTANCE = 'npr_poc-production'
+PRODUCTION_APP_INSTANCE = 'npr-poc'
 
 STAGING_APP_INSTANCE = 'npr_poc-staging'
 STAGING_APP_DB_INSTANCE = 'npr_poc-staging-db'
 STAGING_REMOTE = 'dokku@staging.torchbox.com'
-
-DEV_APP_INSTANCE = 'npr_poc-dev'
-DEV_APP_DB_INSTANCE = 'npr_poc-dev'
-DEV_REMOTE = 'dokku@staging.torchbox.com'
 
 LOCAL_MEDIA_FOLDER = '/vagrant/media'
 LOCAL_IMAGES_FOLDER = '/vagrant/media/original_images'
@@ -104,50 +100,6 @@ def deploy_staging(c):
 @task
 def staging_shell(c):
     open_dokku_shell(c, STAGING_REMOTE, STAGING_APP_INSTANCE)
-
-
-#####
-# Dev
-#####
-
-@task
-def pull_dev_data(c):
-    pull_database_from_dokku(c, DEV_REMOTE, DEV_APP_DB_INSTANCE)
-
-
-@task
-def pull_dev_media(c):
-    pull_media_from_s3_dokku(c, DEV_REMOTE, DEV_APP_INSTANCE)
-
-
-@task
-def pull_dev_images(c):
-    pull_images_from_s3_dokku(c, DEV_REMOTE, DEV_APP_INSTANCE)
-
-
-@task
-def push_dev_data(c):
-    raise RuntimeError('Please check the configuration of the fabfile before using it.')
-    push_database_to_dokku(c, DEV_REMOTE, DEV_APP_INSTANCE,
-                           DEV_APP_DB_INSTANCE)
-
-
-@task
-def push_dev_media(c):
-    raise RuntimeError('Please check the configuration of the fabfile before using it.')
-    push_media_to_s3_dokku(c, DEV_REMOTE, DEV_APP_INSTANCE)
-
-
-@task
-def deploy_dev(c):
-    raise RuntimeError('Please check the configuration of the fabfile before using it.')
-    deploy_to_dokku(c, DEV_REMOTE, DEV_APP_INSTANCE,
-                    local_branch='develop', remote_branch='develop')
-
-
-@task
-def dev_shell(c):
-    open_dokku_shell(c, DEV_REMOTE, DEV_APP_INSTANCE)
 
 
 #######
