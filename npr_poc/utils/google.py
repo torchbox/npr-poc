@@ -12,6 +12,7 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
 import requests
+from requests.exceptions import MissingSchema
 
 from npr_poc.images.models import CustomImage
 
@@ -87,7 +88,11 @@ def import_image(img_tag):
     if '/tracking/' in img_tag['src'] or '__utm.gif' in img_tag['src']:
         return
 
-    response = requests.get(img_tag['src'])
+    try:
+        response = requests.get(img_tag['src'])
+    except MissingSchema:
+        return
+
     if not response.status_code == 200:
         return
 
