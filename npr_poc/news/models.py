@@ -1,5 +1,6 @@
 from django.db import models
 
+from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import (
     FieldPanel,
@@ -65,9 +66,14 @@ class NewsPageNewsCategory(models.Model):
         unique_together = ("page", "category")
 
 
+class NewsIndexPage(Page):
+    subpage_types = ["news.NewsPage"]
+    parent_page_types = ["home.HomePage"]
+
+
 class NewsPage(BasePage):
     subpage_types = []
-    parent_page_types = ['standardpages.IndexPage']
+    parent_page_types = ["news.NewsIndexPage"]
     can_import_from_google = True
     date = models.DateField("Publish date")
     author = models.ForeignKey(
