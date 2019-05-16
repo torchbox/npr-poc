@@ -14,6 +14,7 @@ from wagtail.admin.edit_handlers import (
 )
 from wagtail.api import APIField
 from wagtail.images.api.fields import ImageRenditionField
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.fields import RichTextField
 from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -26,6 +27,8 @@ from wagtailmedia.models import AbstractMedia
 
 from npr_poc.utils.models import BasePage
 from wagtail_headless_preview.models import HeadlessPreviewMixin
+
+from .feeds import ShowFeed
 
 
 class ShowTag(TaggedItemBase):
@@ -51,7 +54,7 @@ class ShowImage(Orderable, models.Model):
     ]
 
 
-class Show(HeadlessPreviewMixin, BasePage):
+class Show(HeadlessPreviewMixin, RoutablePageMixin, BasePage):
     template = "patterns/pages/podcasts/show_page.html"
     subpage_types = ["podcasts.Episode"]
     SHOW_TYPE_EPISODIC = "episodic"
@@ -91,6 +94,7 @@ class Show(HeadlessPreviewMixin, BasePage):
         APIField("date_updated"),
         APIField("license"),
         APIField("images"),
+        APIField("feed_url"),
     ]
 
     content_panels = BasePage.content_panels + [
@@ -117,6 +121,14 @@ class Show(HeadlessPreviewMixin, BasePage):
             ),
         ]
     )
+
+    @route(r'^feed/$')
+    def feed(self, request):
+        return ShowFeed()(request, show_id=self.pk)
+
+    @property
+    def feed_url(self):
+        return self.full_url + self.reverse_subpage('feed')
 
 
 class EpisodeTag(TaggedItemBase):
