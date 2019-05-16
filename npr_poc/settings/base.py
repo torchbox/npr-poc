@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     "wagtailquickcreate",
     "wagtailfontawesome",
     "wagtail_review",
+    "experiments",
 ]
 
 
