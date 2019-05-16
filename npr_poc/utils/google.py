@@ -84,7 +84,7 @@ def close_paragraph(block, stream_data):
 
 
 def import_image(img_tag):
-    if '/tracking/' in img_tag['src']:
+    if '/tracking/' in img_tag['src'] or '__utm.gif' in img_tag['src']:
         return
 
     response = requests.get(img_tag['src'])
