@@ -115,3 +115,8 @@ class NewsPage(BasePage):
             ),
         ]
     )
+
+    def get_template(self, request, *args, **kwargs):
+        if not self.get_site().is_default_site:
+            return 'news/station_news_page.html'
+        return 'news/news_page.html'

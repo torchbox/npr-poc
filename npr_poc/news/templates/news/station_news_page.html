@@ -1,0 +1,40 @@
+{% load wagtailuserbar wagtailimages_tags wagtailreview_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <title>{{ page.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
+  <body class="w-100 sans-serif bg-white">
+    <article class="pa3 pa5-ns">
+    <img src="https://serendipity.drupal.publicbroadcasting.net/sites/serendipity/files/201812/RRR.png" class="mb3" width="300" alt="Red River logo"/>
+    <p class="f4 mt4 mb2 black-70">{{ page.category }}</p>
+    <h1 class="f1 mt0 mb4 w-70">{{ page.title }}</h1>
+    <section class="mt0 mb4">
+      By <cite class="athelas f6 ttu tracked fs-normal">{{ page.author.name }} ~ {{ page.date }}</cite>
+    </section>
+    <p class="black-90 f4 f4-m f3-l athelas measure lh-copy mt5">
+        <i>{{ page.summary }}</i>
+    </p>
+    {% for block in self.body %}
+      {% if block.block_type == 'image' %}
+        {% if block.value.width > block.value.height %}
+            {% image block.value.image width-1600 as tmp_photo %}
+        {% else %}
+            {% image block.value.image width-1200 as tmp_photo %}
+        {% endif %}
+        <img src="{{ tmp_photo.url }}" 
+            width="{% widthratio tmp_photo.width 2 1 %}"
+            alt="{{ tmp_photo.title }}"
+            class = "br1" />
+      {% else %}
+      <section class="black-90 f4 f4-m f3-l athelas measure lh-copy mt3">{{ block }}</section>
+      {% endif %}
+    {% endfor %}
+    {% for tag in page.tags.all %}
+      <a class="f6 grow no-underline br-pill ba ph3 pv2 mb mr2 dib purple" href="#0">{{ tag }}</a>
+    {% endfor %}
+    </article>
+    {% wagtailuserbar %}
+    {% wagtailreview %}
+  </body>
+</html>
