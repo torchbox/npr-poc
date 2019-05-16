@@ -9,7 +9,7 @@ from wagtail.api.v2.serializers import PageSerializer, StreamField
 from wagtail.documents.api.v2.endpoints import DocumentsAPIEndpoint
 from wagtail.images.api.v2.endpoints import ImagesAPIEndpoint
 
-from npr_poc.news.models import NewsPage
+from npr_poc.news.models import NewsPage, NewsIndexPage, Author
 from npr_poc.utils.api import PagePreviewAPIEndpoint
 from npr_poc.podcasts.api.endpoints import MediaAPIEndpoint
 from npr_poc.utils.google import html_to_stream_data
@@ -23,21 +23,32 @@ api_router.register_endpoint('media', MediaAPIEndpoint)
 api_router.register_endpoint('page_preview', PagePreviewAPIEndpoint)
 
 
-class FancyStreamFieldSerializer(StreamField):
+class CrudStreamField(StreamField):
     def to_internal_value(self, data):
         body = html_to_stream_data(data)
         return json.dumps(body)
 
 
+class SnippetRelatedField(serializers.RelatedField):
+
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, value):
+        instance, created = self.get_queryset().get_or_create(name=value)
+        return instance
+
+
 class NewsPageSerializer(PageSerializer):
-    author = serializers.StringRelatedField()
+    author = SnippetRelatedField(queryset=Author.objects.get_queryset())
+    body = CrudStreamField()
     categories = serializers.StringRelatedField()
-    body = FancyStreamFieldSerializer()
     tags = serializers.StringRelatedField()
 
     class Meta:
         model = NewsPage
-        fields = ('title', 'date', 'body', 'summary', 'author', 'categories', 'tags')
+        fields = ('id', 'title', 'date', 'body', 'summary', 'author', 'categories', 'tags')
+        read_only_fields = ('id', )
 
     meta_fields = []
     child_serializer_classes = {}
@@ -65,6 +76,7 @@ class StorifyAPIEndpoint(ListCreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         instance = serializer.save()
+
         parent = self.get_parent()
         parent.add_child(instance=instance)
 
@@ -72,4 +84,8 @@ class StorifyAPIEndpoint(ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_parent(self):
-        return NewsPage.objects.descendant_of(self.request.site.root_page, inclusive=True).first().get_parent()
+        qs = NewsPage.objects.descendant_of(self.request.site.root_page, inclusive=True)
+        if qs.exists():
+            return qs.first().get_parent()
+
+        return NewsIndexPage.objects.descendant_of(self.request.site.root_page).first()
