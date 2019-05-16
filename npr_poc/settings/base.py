@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # According to the official docs, it's important that Scout is listed
     # first - http://help.apm.scoutapp.com/#django.
     "scout_apm.django",
+    "npr_poc.data_migration",
     "npr_poc.documents",
     "npr_poc.forms",
     "npr_poc.home",

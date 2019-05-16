@@ -33,3 +33,4 @@ wheels/
 *.egg
 
 */downloads/*.xml
+npr_poc/data_migration/data/*

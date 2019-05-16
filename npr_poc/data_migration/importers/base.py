@@ -7,6 +7,7 @@ from urllib import parse
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.utils.html import strip_tags
+from django.utils.text import slugify
 
 
 class PageTypeException(TypeError):
@@ -84,7 +85,7 @@ class BaseImporter(object):
             try:
                 formatted_data = self.format_data(data)
 
-                formatted_data['imported_at'] = timezone.localtime(timezone=self.timezone)
+                # formatted_data['imported_at'] = timezone.localtime(timezone=self.timezone)
 
                 try:
                     instance = self.content_model.objects.get(
@@ -170,3 +171,74 @@ class BaseImporter(object):
 
     def post_process(self, instance, data):
         return instance
+
+
+class BasePageImporter(BaseImporter):
+
+    parent_page = None
+
+    def format_data(self, data):
+        """
+        Format the basic page fields. Extend in child classes for more fields.
+        Amend keys as required.
+        """
+        formatted_data = super().format_data(data)
+
+        slug = self.get_slug_from_title(data['title'])
+
+        formatted_data.update({
+            'slug': slug,
+        })
+        return formatted_data
+
+    def create_content_item(self, data, page=None):
+        """ Create a page content item """
+        """ Create or update the content item """
+        if page:
+            for key, value in data.items():
+                setattr(page, key, value)
+        else:
+            page = self.content_model(**data)
+
+            # Add page to parent
+            self.parent_page.add_child(instance=page)
+
+        # Save a revision
+        revision = page.save_revision()
+        revision.publish()
+
+        # create a redirect
+        # self.create_redirect(page)
+
+        return page
+
+    def get_slug_from_data(self, data, slug_field):
+        return self._find_available_page_slug(
+            self.get_value(data, slug_field), self.parent_page
+        )
+
+    def get_slug_from_url(self, url):
+        """ Return the slug from the supplied URL """
+        parsed_url = parse.urlparse(url)
+        path = parsed_url.path
+        path_components = [
+            component for component in path.split('/') if component
+        ]
+        requested_slug = slugify(parse.unquote(path_components[-1]))
+        return self._find_available_page_slug(requested_slug, self.parent_page)
+
+    def get_slug_from_title(self, title):
+        return self._find_available_page_slug(slugify(title), self.parent_page)
+
+    def _find_available_page_slug(self, requested_slug, parent_page):
+        """ Find a slug for page content type. """
+        existing_slugs = set(parent_page.get_children().filter(
+            slug__startswith=requested_slug).values_list('slug', flat=True))
+        slug = requested_slug
+        number = 1
+
+        while slug in existing_slugs:
+            slug = requested_slug + '-' + str(number)
+            number += 1
+
+        return slug
