@@ -9,6 +9,7 @@ from wagtail.admin.edit_handlers import (
     TabbedInterface,
     ObjectList,
 )
+from wagtail.api import APIField
 from wagtail.search import index
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -99,6 +100,8 @@ class NewsPage(BasePage):
         index.SearchField("summary"),
         index.SearchField("body"),
     ]
+
+    api_fields = [APIField("date"), APIField("summary"), APIField("syndicate")]
 
     content_panels = BasePage.content_panels + [
         FieldPanel("date"),
