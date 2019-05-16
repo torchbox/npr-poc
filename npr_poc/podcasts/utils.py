@@ -82,3 +82,9 @@ def transcribe_audio(media_file: File):
 
     results = [result.alternatives[0].transcript for result in response.results]
     return results
+
+
+def absurl(url):
+    if url.startswith('/'):
+        return settings.BASE_URL + url
+    return url
