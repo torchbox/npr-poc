@@ -129,32 +129,36 @@ def html_to_stream_data(html):
                 tag.attrs.pop(attr, None)
 
     for tag in soup.body.contents:
-        if tag.name == 'h1':
-            close_paragraph(current_paragraph_block, stream_data)
-            # Wagtail will render this as a h2
-            stream_data.append(create_streamfield_block(type='heading', value=tag.text))
-        elif tag.name == 'h2':
-            close_paragraph(current_paragraph_block, stream_data)
-            # h2 > h3
-            current_paragraph_block = ['<h3>{}</h3>'.format(tag.text)]
-        elif tag.name in ['h3', 'h4', 'h5', 'h6']:
-            # Rich text field only allows h3 and h4 by default, so we just set to h4
-            current_paragraph_block.append('<h4>{}</h4>'.format(tag.text))
-        elif tag.name == 'img':
-            image = import_image(tag)
-            if image:
-                # Break the paragraph and add an image
+        if isinstance(tag, NavigableString):
+            stream_data.append(create_streamfield_block(type='paragraph', value=str(tag)))
+        else:
+            if tag.name == 'h1':
                 close_paragraph(current_paragraph_block, stream_data)
-                stream_data.append(create_streamfield_block(type='image', value={'image': image.pk}))
-        elif tag.text:
-            current_paragraph_block.append(str(tag))
-        if tag.find_all('img'):
-            # Break the paragraph and add images
-            close_paragraph(current_paragraph_block, stream_data)
-            for img in tag.find_all('img'):
-                image = import_image(img)
+                # Wagtail will render this as a h2
+                stream_data.append(create_streamfield_block(type='heading', value=tag.text))
+            elif tag.name == 'h2':
+                close_paragraph(current_paragraph_block, stream_data)
+                # h2 > h3
+                current_paragraph_block = ['<h3>{}</h3>'.format(tag.text)]
+            elif tag.name in ['h3', 'h4', 'h5', 'h6']:
+                # Rich text field only allows h3 and h4 by default, so we just set to h4
+                current_paragraph_block.append('<h4>{}</h4>'.format(tag.text))
+            elif tag.name == 'img':
+                image = import_image(tag)
                 if image:
+                    # Break the paragraph and add an image
+                    close_paragraph(current_paragraph_block, stream_data)
                     stream_data.append(create_streamfield_block(type='image', value={'image': image.pk}))
+            elif tag.text:
+                current_paragraph_block.append(str(tag))
+
+            if tag.find_all('img'):
+                # Break the paragraph and add images
+                close_paragraph(current_paragraph_block, stream_data)
+                for img in tag.find_all('img'):
+                    image = import_image(img)
+                    if image:
+                        stream_data.append(create_streamfield_block(type='image', value={'image': image.pk}))
 
     close_paragraph(current_paragraph_block, stream_data)
 
