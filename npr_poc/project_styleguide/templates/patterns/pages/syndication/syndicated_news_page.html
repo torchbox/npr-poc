@@ -1,0 +1,11 @@
+{% extends "patterns/base_page.html" %}
+{% load wagtailcore_tags wagtailimages_tags navigation_tags static %}
+
+{% block content %}
+<div class="wrapper">
+    <section class="section section--main">
+        {{ story.html|safe }}
+
+    </section>
+</div>
+{% endblock %}

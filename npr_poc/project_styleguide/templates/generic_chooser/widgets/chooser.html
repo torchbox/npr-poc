@@ -1,0 +1,6 @@
+{% extends "generic_chooser/widgets/chooser.html" %}
+{% load syndication_tags %}
+
+{% block chosen_state_view %}
+    <div class="title" style="margin-bottom: 10px;">{% story_summary item %}</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "modeladmin/index.html" %}
+
+
+{% block header_extra %}
+    {{ block.super }}
+    {% if user_can_create %}
+        <div class="right">
+            <div class="col">
+                <div class="addbutton">
+                    <a href="{% url 'npr_syndication_browse' %}" class="button bicolor icon icon-site">Browse network news</a>
+                 </div>
+             </div>
+         </div>
+     {% endif %}
+{% endblock %}
