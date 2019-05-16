@@ -1,0 +1,15 @@
+
+
+<div class="row">
+    {% if image %}
+    <div class="col3">
+        <img src="{{ image }}" alt="" style="max-width: 100%; height: auto;">
+    </div>
+    {% endif %}
+
+    <div class="col9">
+        <h2 style="margin-top: 0"><a href="{{ url }}" target="_blank">{{ title }}</a></h2>
+        <p><small>{{ org }} - {{ date }}</small></p>
+        <p>{{ teaser|striptags }}</p>
+    </div>
+</div>

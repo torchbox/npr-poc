@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     "npr_poc.news",
     "npr_poc.search",
     "npr_poc.standardpages",
+    "npr_poc.syndication",
     "npr_poc.utils",
     "npr_poc.project_styleguide.apps.ProjectStyleguideConfig",
     "wagtail_react_streamfield",
@@ -104,6 +105,7 @@ INSTALLED_APPS = [
     "wagtailfontawesome",
     "wagtail_review",
     "experiments",
+    "generic_chooser",
 ]
 
 
@@ -733,3 +735,5 @@ if BONSAI_URL:
             "INDEX_SETTINGS": {},
         }
     }
+
+NPR_API_KEY = env.get('NPR_API_KEY', '')

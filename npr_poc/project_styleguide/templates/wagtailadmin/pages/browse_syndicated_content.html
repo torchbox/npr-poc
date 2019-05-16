@@ -6,9 +6,9 @@
     {{ block.super }}
     <script>
         window.headerSearch = {
-            url: "{% url 'npr_utils_google_doc_search' %}",
+            url: "{% url 'npr_syndication_search' %}",
             termInput: "#id_q",
-            targetOutput: "#document-results"
+            targetOutput: "#story-results"
         };
     </script>
 {% endblock %}
@@ -20,7 +20,7 @@
             <div class="left">
                 <div class="col">
                     <h1 class="icon icon-doc-full-inverse">
-                    Documents
+                    News
                     </h1>
                 </div>
                 <form class="col search-form" action="./{% if query_parameters %}?{{ query_parameters }}{% endif %}" method="get" novalidate>
@@ -35,9 +35,15 @@
         </div>
     </header>
 
-    <div class="nice-padding">
-        <div id="document-results">
-            {% include 'wagtailadmin/pages/google_doc_results.html' %}
+    <div>
+        <div class="row">
+            <div class="col12">
+                <div class="nice-padding">
+                    <div id="story-results">
+                        {% include 'wagtailadmin/pages/syndicated_content_results.html' %}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
