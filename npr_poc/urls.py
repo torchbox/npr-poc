@@ -16,7 +16,7 @@ from wagtail_review import urls as wagtailreview_urls
 from npr_poc.search import views as search_views
 from npr_poc.utils.cache import get_default_cache_control_decorator
 
-from .api import api_router
+from .api import api_router, StorifyAPIEndpoint
 
 # Private URLs are not meant to be cached.
 private_urlpatterns = [
@@ -86,6 +86,7 @@ urlpatterns = decorate_urlpatterns(
 urlpatterns = private_urlpatterns + urlpatterns + [
     # Add Wagtail URLs at the end.
     path('api/v2/', api_router.urls),
+    path('api/storify/', StorifyAPIEndpoint.as_view()),
     # Wagtail cache-control is set on the page models's serve methods.
     path('', include(wagtail_urls)),
 ]
