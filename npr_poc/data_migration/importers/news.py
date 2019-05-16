@@ -1,11 +1,7 @@
 import json
-from datetime import datetime
-
 import pytz
-from django.utils import timezone
 
-from npr_poc.news.models import NewsPage, Author, NewsCategory, NewsPageNewsCategory, NewsPageTag
-from npr_poc.standardpages.models import IndexPage
+from npr_poc.news.models import Author, NewsCategory, NewsIndexPage, NewsPage, NewsPageNewsCategory
 from npr_poc.utils.google import html_to_stream_data
 
 from .base import BasePageImporter
@@ -16,7 +12,7 @@ class NewsImporter(BasePageImporter):
     Example use of the BasePageImporter for importing a specific page type
     """
 
-    parent_page_model = IndexPage
+    parent_page_model = NewsIndexPage
     content_model = NewsPage
     legacy_id_field = 'nid'
     source_str_field = 'title'
@@ -84,6 +80,11 @@ class NewsImporter(BasePageImporter):
 
         if data['category']:
             self.add_category(instance, data['category'])
+
+        if data['tags']:
+            tags = data['tags'].split(',')
+            instance.tags.add(*tags)
+            save = True
 
         if save:
             instance.save()
