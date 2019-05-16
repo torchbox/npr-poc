@@ -91,6 +91,10 @@ class NewsPage(BasePage):
 
     legacy_id = models.CharField(blank=True, max_length=10)
 
+    syndicate = models.BooleanField(
+        default=False, help_text="Allow this story to be shared across NPR stations"
+    )
+
     search_fields = BasePage.search_fields + [
         index.SearchField("summary"),
         index.SearchField("body"),
@@ -105,18 +109,18 @@ class NewsPage(BasePage):
 
     taxonomy_panels = [InlinePanel("categories", label="category"), FieldPanel("tags")]
 
+    settings_panels = BasePage.settings_panels + [FieldPanel("syndicate")]
+
     edit_handler = TabbedInterface(
         [
             ObjectList(content_panels, heading="Content"),
             ObjectList(taxonomy_panels, heading="Taxonomy"),
             ObjectList(BasePage.promote_panels, heading="Promote"),
-            ObjectList(
-                BasePage.settings_panels, heading="Settings", classname="settings"
-            ),
+            ObjectList(settings_panels, heading="Settings", classname="settings"),
         ]
     )
 
     def get_template(self, request, *args, **kwargs):
         if not self.get_site().is_default_site:
-            return 'news/station_news_page.html'
-        return 'news/news_page.html'
+            return "news/station_news_page.html"
+        return "news/news_page.html"
