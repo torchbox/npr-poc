@@ -4,9 +4,10 @@ from argparse import ArgumentTypeError
 from django.core.exceptions import ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.core.validators import validate_email
+from django.utils.module_loading import import_string
 
-from ...data_migration.tasks import import_from_url
-from ...data_migration.utils import LineBreakWriter, is_valid_url
+from npr_poc.data_migration.tasks import import_from_url
+from npr_poc.data_migration.utils import LineBreakWriter, is_valid_url
 
 
 def email_type(recipient):
@@ -67,23 +68,34 @@ class BaseImporterCommand(BaseCommand):
         )
         self.stdout.write('Done!')
 
-
     def import_from_file(self, options):
         data = self._get_source_data_from_file(options['source'])
-        parent_page = self.importer.parent_page_model.objects.get(
-            id=options['parent_page_id']
-        )
+
         importer_options = self.get_importer_options(**options)
         if options['outfile']:
             importer_options['stdout'] = LineBreakWriter(self.outfile)
         else:
             importer_options['stdout'] = LineBreakWriter(self.stdout)
-        importer = self.importer(data, **importer_options)
-        importer.process()
+
+        importer_class = import_string(self.importer_class)
+        self.importer = importer_class(data, **importer_options)
+
+        if options.get('parent_page_id'):
+            self.importer.parent_page = self.importer.parent_page_model.objects.get(
+                id=options['parent_page_id']
+            )
+
+        self.importer.process()
 
     def _get_source_data_from_file(self, source):
+        if source.endswith(".csv"):
+            return self._get_source_data_from_csv(source)
+        elif source.endswith(".xml"):
+            return self._get_source_data_from_xml(source)
+
         with open(source, 'rb') as f:
             data = f.read()
+
         return json.loads(data)
 
     def get_importer_options(self, **options):
@@ -92,6 +104,25 @@ class BaseImporterCommand(BaseCommand):
             'verbosity': options['verbosity'],
             'plaintext': options['plaintext'],
         }
+
+    def _get_source_data_from_xml(self, source):
+        import xml.etree.ElementTree as ET
+        tree = ET.parse(source)
+        nodes = tree.getroot()
+
+        items = []
+        for node in nodes:
+            d = {child.tag: child.text for child in node}
+            items.append(d)
+
+        return items
+
+    def _get_source_data_from_csv(self, source):
+        with open(source, 'r') as f:
+            import csv
+            reader = csv.DictReader(f)
+            data = [row for row in reader]
+        return data
 
 
 class BasePageImporterCommand(BaseImporterCommand):
@@ -103,11 +134,3 @@ class BasePageImporterCommand(BaseImporterCommand):
         )
         super().add_arguments(parser)
 
-    def get_importer_options(self, **options):
-        importer_options = super().get_importer_options(**options)
-        parent_page = self.importer.parent_page_model.objects.get(
-            id=options['parent_page_id']
-        )
-        # keep as an ID for serialisation
-        importer_options['parent_page_id'] = parent_page.id
-        return importer_options
