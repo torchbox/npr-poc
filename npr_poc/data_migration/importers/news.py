@@ -42,6 +42,7 @@ class NewsImporter(BasePageImporter):
 
         date = self.get_date(formatted_data, 'date')
         formatted_data['date'] = date.strftime('%Y-%m-%d')
+        formatted_data['first_published_at'] = self.get_date(formatted_data, 'first_published_at')
 
         return formatted_data
 
