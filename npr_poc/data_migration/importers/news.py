@@ -39,7 +39,8 @@ class NewsImporter(BasePageImporter):
         if data.get('image_gallery'):
             body = data['image_gallery'] + body
 
-        body = html_to_stream_data(body)
+        if body:
+            body = html_to_stream_data(body)
         formatted_data['body'] = json.dumps(body)
 
         date = self.get_date(formatted_data, 'date')
