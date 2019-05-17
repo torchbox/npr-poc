@@ -5,14 +5,34 @@
     margin-bottom: ($grid * 2.5);
     color: $color--tertiary;
 
+    &--thanks {
+        max-width: 500px;
+        margin: 0 auto;
+
+        p {
+            margin: 0;
+        }
+        
+    }
+
     // Torchbox
     .theme-2 & {
         color: $color--tertiary;
+
+        &--thanks {
+            color: rgba($color--white, 0.7);
+        }
+
     }
 
     // WBGO
     .theme-3 & {
         color: $color--off-black;
+
+        &--thanks {
+            color: rgba($color--white, 0.7);
+        }
+
     }
 
 }

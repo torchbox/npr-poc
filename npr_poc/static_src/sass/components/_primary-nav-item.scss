@@ -34,6 +34,16 @@
             &:hover {
                 color: $color--hover;
             }
+
+            &--active {
+                color: $color--hover;
+
+                &:hover {
+                    color: $color--hover;
+                }
+
+            }
+
         }
 
         &--button {
@@ -62,6 +72,15 @@
 
             &:hover {
                 color: $color--wbgo-red;
+            }
+
+            &--active {
+                color: $color--wbgo-red;
+
+                &:hover {
+                    color: $color--wbgo-red;
+                }
+
             }
 
         }

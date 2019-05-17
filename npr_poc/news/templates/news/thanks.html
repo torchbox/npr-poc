@@ -42,7 +42,7 @@
                                 <a href="#" class="primary-nav-item__link">Shows</a>/
                             </li>
                             <li class="primary-nav-item">
-                                <a href="#" class="primary-nav-item__link primary-nav-item__link--active">News</a>/
+                                <a href="#" class="primary-nav-item__link">News</a>/
                             </li>
                             <li class="primary-nav-item">
                                 <a href="#" class="primary-nav-item__link">Topics</a>/
@@ -59,57 +59,23 @@
             </div>
         </header>
 
-        <main class="layout">
+        <main class="layout layout--no-space">
 
-            <article class="layout__single-col layout__single-col--center">
+            <article class="layout__full">
 
-                <p class="heading heading--meta"># World News</p>
+                <div class="thanks">
+                    <div class="thanks__container">
+                        <div class="thanks__feature-box">
 
-                <h1 class="heading heading--primary">{{ page.title }}</h1>
+                            <h1 class="heading heading--primary heading--thanks">{{ page.title }}</h1>
 
-                <div class="introduction">
-                    <p>{{ page.summary }}</p>
-                </div>
+                            <div class="introduction introduction--thanks">
+                                <p>{{ page.thanks_body }}</p>
+                            </div>
 
-                {% for block in self.body %}
-                    {% if block.block_type == 'image' %}
-                        {% if block.value.width > block.value.height %}
-                            {% image block.value.image width-1600 as tmp_photo %}
-                        {% else %}
-                            {% image block.value.image width-1200 as tmp_photo %}
-                        {% endif %}
-                        <img src="{{ tmp_photo.url }}"
-                        width="{% widthratio tmp_photo.width 2 1 %}"
-                        alt="{{ tmp_photo.title }}"
-                        class="streamfield__image" />
-                    {% elif block.block_type == 'quote' %}
-                        <blockquote class="streamfield__quote">
-                            <p class="streamfield__quote-text">{{ block.value.quote }}</p>
-                            {% if block.value.attribution %}
-                                <cite class="streamfield__quote-author">{{ block.value.attribution }}</cite>
-                            {% endif %}
-                        </blockquote>
-                    {% else %}
-                        <section>{{ block }}</section>
-                    {% endif %}
-                {% endfor %}
-
-                <section class="author-details">
-                    <div class="author-details__container">
-                        <div class="author-details__item">
-                            <h2 class="author-details__heading">Author</h2>
-                            <div class="author-details__info">{{ page.author.name }}</div>
-                        </div>
-                        <div class="author-details__item">
-                            <h2 class="author-details__heading">Published</h2>
-                            <div class="author-details__info">{{ page.date }}</div>
                         </div>
                     </div>
-                </section>
-
-                {% for tag in page.tags.all %}
-                    <a href="#0">{{ tag }}</a>
-                {% endfor %}
+                </div>
 
             </article>
 
