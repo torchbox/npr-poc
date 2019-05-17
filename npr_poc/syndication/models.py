@@ -9,7 +9,7 @@ from .widgets import SyndicatedContentChooser
 
 
 class SyndicatedNewsPage(BasePage):
-    parent_page_types = ['standardpages.IndexPage']
+    parent_page_types = ['news.NewsIndexPage']
     subpage_types = []
     template = "patterns/pages/syndication/syndicated_news_page.html"
     story = models.CharField(max_length=255)
@@ -28,3 +28,6 @@ class SyndicatedNewsPage(BasePage):
         ctx = super().get_context(request)
         ctx['story'] = get_story(self.story)
         return ctx
+
+    class Meta:
+        verbose_name_plural = "Syndicated News"
