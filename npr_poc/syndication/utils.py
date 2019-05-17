@@ -39,13 +39,16 @@ def get_story(id):
 
 
 @lru_cache(maxsize=500)
-def search_stories(search_term):
+def search_stories(search_term, org=None):
     params = {'apiKey': settings.NPR_API_KEY}
     if search_term:
         params['searchTerm'] = search_term
         params['sort'] = 'relevance'
     else:
         params['sort'] = 'date'
+
+    if org:
+        params['orgId'] = org
 
     response = requests.get(API_URL, params=params)
     if response.status_code == 200:

@@ -2,6 +2,11 @@
 {% load i18n %}
 {% load wagtailadmin_tags %}
 
+{% block css %}
+    {{ block.super }}
+    {{ view.media.css }}
+{% endblock %}
+
 {% block extra_js %}
     {{ block.super }}
     <script>
@@ -37,12 +42,23 @@
 
     <div>
         <div class="row">
-            <div class="col12">
+            <div class="col9">
                 <div class="nice-padding">
                     <div id="story-results">
                         {% include 'wagtailadmin/pages/syndicated_content_results.html' %}
                     </div>
                 </div>
+            </div>
+
+            <div class="changelist-filter col3">
+                <h2>Filter</h2>
+                By Organization
+                <ul>
+                    <li {% if not selected_org %}class="selected"{% endif %}><a href="?q={{ search_form.q.value|default:'' }}">Any</a></li>
+                    {% for id, name in orgs.items %}
+                    <li {% if selected_org == id %}class="selected"{% endif %}><a href="?q={{ search_form.q.value|default:'' }}&amp;org={{ id }}">{{ name }}</a></li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

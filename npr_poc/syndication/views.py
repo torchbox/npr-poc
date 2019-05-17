@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+from django import forms
 from django.shortcuts import redirect, render
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -9,6 +12,17 @@ from wagtail.contrib.modeladmin.views import ChooseParentView
 from generic_chooser.views import ChooseView, ChosenView
 
 from .utils import get_story, render_snippet, search_stories, story_to_dict
+
+
+# Hard-coded list of stations, for demo purposes
+ORGS = OrderedDict([
+    ('1', 'NPR'),
+    ('552', 'WNYC'),
+    ('704', 'WGUC'),
+    ('4788725', 'American Public Media'),
+    ('172', 'Jefferson PUblic Radio'),
+    ('156', 'Northwest Public Radio'),
+])
 
 
 class ChooseSyndicatedContentView(ChooseView):
@@ -53,16 +67,22 @@ class BrowseSyndicatedContentView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        stories = search_stories(search_term=self.request.GET.get('q'))
+        stories = search_stories(search_term=self.request.GET.get('q'), org=self.request.GET.get('org'))
         ctx['stories'] = [story_to_dict(story) for story in stories]
         ctx['search_form'] = SearchForm(self.request.GET or None, placeholder='Search for news')
+        ctx['orgs'] = ORGS
+        ctx['selected_org'] = self.request.GET.get('org', '')
         return ctx
+
+    @property
+    def media(self):
+        return forms.Media(css={'all': ['wagtailmodeladmin/css/index.css']})
 
 
 class SyndicatedContentSearchView(View):
 
     def get(self, request, *args, **kwargs):
-        stories = search_stories(search_term=request.GET.get('q'))
+        stories = search_stories(search_term=request.GET.get('q'), org=request.GET.get('org'))
         return render(request, 'wagtailadmin/pages/syndicated_content_results.html', {
             'stories': [story_to_dict(story) for story in stories],
             'query_string': request.GET.get('q'),
