@@ -3,7 +3,7 @@
     width: 120px;
     height: 35px;
     transition: opacity $default-transition 0s;
-    margin-top: ($grid * 0.75);
+    margin-top: ($grid);
 
     &:hover {
         opacity: 0.6;

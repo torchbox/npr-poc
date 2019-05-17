@@ -2,14 +2,13 @@
     $root: &;
     @include font-size(s);
     color: rgba($color--white, 0.9);
-    padding-right: ($grid * 0.75);
-    font-weight: 300;
+    padding-right: 30px;
+    font-weight: 600;
 
     &__link {
         display: inline-block;
         color: $color--white;
-        padding-right: ($grid * 0.75);
-        font-weight: 600;
+        padding-right: 30px;
         transition: color $default-transition 0s;
 
         &:hover {
@@ -19,12 +18,15 @@
     }
 
     &--button {
+        padding-right: 0;
+        margin-left: -30px;
 
         #{$root}__link {
             background-color: $color--primary;
             border-radius: $default-border-radius;
             color: $color--white;
-            padding: ($grid / 4) ($grid);
+            padding: 7px 25px;
+            line-height: 1.1;
             transition: background-color $default-transition 0s;
 
             &:hover {

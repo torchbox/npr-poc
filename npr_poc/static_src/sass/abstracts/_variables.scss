@@ -4,9 +4,14 @@ $color--pink:           #fd5865;
 $color--dark-blue:      #251657;
 $color--blue:           #2f138d;
 $color--turquoise:      #3beccd;
-$color--black:          #141414;
-$color--border:         rgba($color--black, 0.2);
+$color--off-black:      #141414;
 $color--background:     #f2f2f2;
+$color--grey:           #777;
+
+// --------------------------------- Theme 2 (Torchbox) -------------------------------------
+
+// --------------------------------- Theme 3 (WBGO) -------------------------------------
+
 
 $color--primary:        $color--pink;
 $color--secondary:      $color--blue;
@@ -16,7 +21,8 @@ $color--hover:          $color--turquoise;
 $color--white:          #fff;
 $color--black:          #333;
 
-$color--default:        $color--black;
+$color--border:         rgba($color--black, 0.2);
+$color--default:        $color--off-black;
 
 // Button colours
 $button-colours: (
@@ -46,7 +52,7 @@ $font-sizes: (
     xl:         30px,
     l:          21px,
     m:          18px,
-    s:          15px,
+    s:          16px,
     xs:         14px,
     xxs:        12px
 );
@@ -68,7 +74,7 @@ $breakpoints: (
 // --------------------------------- Grid Dimensions --------------------------------------
 
 // Wrappers
-$site-width:            1280px;
+$site-width:            1300px;
 $wrapper--small:        790px;
 
 // Grid setup

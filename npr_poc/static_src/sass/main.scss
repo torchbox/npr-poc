@@ -1,6 +1,5 @@
 // Vendor
 @import 'vendor/normalize';
-@import 'node_modules/@glidejs/glide/src/assets/sass/glide.core';
 
 // Abstracts
 @import 'abstracts/variables';
@@ -13,19 +12,6 @@
 @import 'base/typography';
 
 // Components
-// @import 'components/button';
-// @import 'components/blockquote';
-// @import 'components/card';
-// @import 'components/call-to-action';
-// @import 'components/form';
-// @import 'components/form-item';
-// @import 'components/grid';
-// @import 'components/icon';
-// @import 'components/nav';
-// @import 'components/responsive-object';
-// @import 'components/rich-text';
-// @import 'components/section';
-// @import 'components/wrapper';
 @import 'components/global-header';
 @import 'components/global-footer';
 @import 'components/logo';
@@ -35,6 +21,6 @@
 @import 'components/primary-nav-item';
 @import 'components/layout';
 @import 'components/legal-stuff';
+@import 'components/legal-stuff-item';
 @import 'components/streamfield';
-
-// Pages
+@import 'components/author-details';

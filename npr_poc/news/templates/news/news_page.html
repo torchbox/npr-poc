@@ -80,7 +80,14 @@
 
                 <section class="author-details">
                     <div class="author-details__container">
-                        <cite>{{ page.author.name }} ~ {{ page.date }}</cite>
+                        <div class="author-details__item">
+                            <h2 class="author-details__heading">Author</h2>
+                            <div class="author-details__info">{{ page.author.name }}</div>
+                        </div>
+                        <div class="author-details__item">
+                            <h2 class="author-details__heading">Published</h2>
+                            <div class="author-details__info">{{ page.date }}</div>
+                        </div>
                     </div>
                 </section>
 
@@ -95,30 +102,34 @@
         <div class="global-footer">
             <div class="global-footer__container">
                 <div class="global-footer__about">
-                    <h2 class="global-footer__heading">Torchbox Radio</h2>
-                    <p class="global-footer__description">Listener-supported Torchbox Radio is the home for independent journalism and courageous conversation on air and online. Broadcasting live from New York City on 93.9 FM and AM 820 and available online and on the go.</p>
-                    <a href="#" class="global-footer__donate-button">Make a Donation</a>
+                    <div class="global-footer__about-container">
+                        <h2 class="global-footer__heading">Torchbox Radio</h2>
+                        <p class="global-footer__description">Listener-supported Torchbox Radio is the home for independent journalism and courageous conversation on air and online. Broadcasting live from New York City on 93.9 FM and AM 820 and available online and on the go.</p>
+                        <a href="#" class="global-footer__donate-button">Make a donation</a>
+                    </div>
                 </div>
                 <div class="global-footer__sitemap">
-                    <h2 class="global-footer__heading global-footer__heading--light">Torchbox Radio</h2>
-                    <ul class="global-footer__sitemap-links">
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">All streams</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">About us</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Schedule</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Contact us</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Shows</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Become a sponsor</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Topics</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Careers</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Discover</a></li>
-                        <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Press</a></li>
-                    </ul>
+                    <div class="global-footer__sitemap-container">
+                        <h2 class="global-footer__heading global-footer__heading--light">Navigate</h2>
+                        <ul class="global-footer__sitemap-links">
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">All streams</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">About us</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Schedule</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Contact us</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Shows</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Become a sponsor</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Topics</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Careers</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Discover</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Press</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="global-footer__legal-stuff">
                     <ul class="legal-stuff">
-                        <li class="legal-stuff-item">© Torchbox Radio 2019 /</li>
-                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Terms of Use</a> /</li>
-                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Privacy Policy</a> /</li>
+                        <li class="legal-stuff-item">© Torchbox Radio 2019 <div class="legal-stuff-item__divider">/</div></li>
+                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Terms of Use</a>/</li>
+                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Privacy Policy</a>/</li>
                         <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Cookies</a></li>
                     </ul>
                 </div>

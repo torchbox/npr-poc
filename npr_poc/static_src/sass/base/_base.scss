@@ -21,6 +21,7 @@ html {
 body {
     overflow-x: hidden;
     background-color: $color--background;
+    -webkit-font-smoothing: antialiased;
 
     &.no-scroll {
         overflow-y: hidden;
