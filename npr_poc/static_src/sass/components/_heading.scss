@@ -1,0 +1,19 @@
+.heading {
+    font-weight: 700;
+
+    &--primary {
+        @include font-size(xxl);
+        line-height: 1.2;
+        margin-bottom: ($grid * 1);
+        color: $color--secondary;
+    }
+
+    &--meta {
+        @include font-size(s);
+        text-transform: uppercase;
+        color: $color--primary;
+        margin-bottom: ($grid);
+        font-weight: 500;
+    }
+
+}

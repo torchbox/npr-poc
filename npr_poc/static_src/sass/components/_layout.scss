@@ -1,0 +1,39 @@
+.layout {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: ($grid * 2);
+    padding-left: ($grid);
+    padding-right: ($grid);
+
+    @include media-query(tablet-portrait) {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    &__primary-col {
+        flex-basis: 70%;
+        max-width: 70%;
+        min-width: 70%;
+
+        &--center {
+            margin: 0 auto;
+        }
+
+    }
+
+    &__single-col {
+        padding-top: ($grid * 2);
+
+        @include media-query(tablet-portrait) {
+            flex-basis: 50%;
+            max-width: 50%;
+            min-width: 700px;
+        }
+
+        &--center {
+            margin: 0 auto;
+        }
+
+    }
+
+}

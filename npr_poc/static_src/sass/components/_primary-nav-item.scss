@@ -1,0 +1,36 @@
+.primary-nav-item {
+    $root: &;
+    @include font-size(s);
+    color: rgba($color--white, 0.9);
+    padding-right: ($grid * 0.75);
+    font-weight: 300;
+
+    &__link {
+        display: inline-block;
+        color: $color--white;
+        padding-right: ($grid * 0.75);
+        font-weight: 600;
+        transition: color $default-transition 0s;
+
+        &:hover {
+            color: $color--hover;
+        }
+
+    }
+
+    &--button {
+
+        #{$root}__link {
+            background-color: $color--primary;
+            border-radius: $default-border-radius;
+            color: $color--white;
+            padding: ($grid / 4) ($grid);
+            transition: background-color $default-transition 0s;
+
+            &:hover {
+                background-color: $color--hover;
+            }
+        }
+
+    }
+}

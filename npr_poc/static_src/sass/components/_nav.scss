@@ -157,7 +157,7 @@
     &__link {
         color: rgba($color--black, 0.7);
         border-bottom: 1px solid transparent;
-        transition: color, border $transition;
+        transition: color, border $default-transition;
 
         &:hover {
             cursor: pointer;

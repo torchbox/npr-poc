@@ -7,7 +7,7 @@
 */
 html {
     font-size: ($base-font-size / 16px) * 100%;
-    line-height: $base-line-height / $base-font-size;
+    line-height: $base-line-height;
     color: $color--default;
 }
 
@@ -63,3 +63,7 @@ h1 { @include font-size(xl); }
 h2 { @include font-size(l); }
 h3, h4, h5, h6 { @include font-size(m); }
 small { @include font-size(xxs); }
+
+p {
+    margin: 0 0 ($grid * 2);
+}

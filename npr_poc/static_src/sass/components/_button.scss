@@ -19,7 +19,7 @@
     background: transparent;
     border: 0;
     transform: rotate(0deg);
-    transition: $transition;
+    transition: $default-transition;
 
     &__line {
         position: absolute;
@@ -30,7 +30,7 @@
         background: $color--white;
         opacity: 1;
         transform: rotate(0deg);
-        transition: top, width, opacity, transform, left, $transition;
+        transition: top, width, opacity, transform, left, $default-transition;
 
         &:nth-child(1) {
             top: 0;

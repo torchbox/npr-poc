@@ -1,0 +1,10 @@
+.primary-nav {
+    $root: &;
+    padding: ($grid * 1.25) 0 ($grid);
+
+    &__container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+}

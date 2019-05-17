@@ -1,0 +1,40 @@
+.streamfield {
+
+    &__image {
+        display: block;
+        position: relative;
+        left: -5%;
+        width: 110%;
+        max-width: 110%;
+        height: auto;
+        margin-bottom: ($grid * 2);
+        margin-top: ($grid);
+    }
+
+    &__quote {
+        position: relative;
+        left: -5%;
+        width: 110%;
+        max-width: 110%;
+        padding: 0;
+        margin: 0 0 ($grid * 2);
+        font-style: normal;
+    }
+
+    &__quote-text {
+        @include font-size(xl);
+        color: $color--tertiary;
+        line-height: 1.4;
+        margin-bottom: ($grid * 0.75);
+    }
+
+    &__quote-author {
+        @include font-size(xxs);
+        text-transform: uppercase;
+        color: $color--primary;
+        font-style: normal;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
+
+}

@@ -1,7 +1,7 @@
 .card {
     padding: 20px;
     background-color: $color--tertiary;
-    transition: background-color $transition;
+    transition: background-color $default-transition;
 
     &:hover {
         background-color: darken($color--tertiary, 10%);

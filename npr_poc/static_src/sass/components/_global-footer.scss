@@ -1,0 +1,10 @@
+.global-footer {
+    background-color: $color--white;
+    padding: ($grid * 2) 0;
+
+    &__container {
+        margin: 0 auto;
+        max-width: $site-width;
+    }
+
+}

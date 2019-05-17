@@ -1,0 +1,13 @@
+.global-header {
+    background-color: rgba($color--black, 0.9);
+
+    &__container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: $site-width;
+        padding: 0 ($grid);
+    }
+
+}
