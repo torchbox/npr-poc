@@ -26,6 +26,10 @@
             color: $color--primary;
         }
 
+        &--thanks {
+            color: $color--white;
+        }
+
     }
 
     // WBGO
@@ -37,6 +41,10 @@
 
         &--meta {
             color: $color--wbgo-purple;
+        }
+
+        &--thanks {
+            color: $color--white;
         }
 
     }

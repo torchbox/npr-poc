@@ -1,0 +1,30 @@
+.thanks {
+    $root: &;
+
+    &__container {
+        margin: 0 auto;
+        padding: ($grid * 5) 0 ($grid * 6);
+        max-width: $site-width;
+        color: $color--white; 
+        text-align: center;
+
+    }
+
+    &__feature-box {
+        border: 1px solid $color--white;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: ($grid * 2);
+    }
+
+    // Torchbox
+    .theme-2 & {
+        background-color: $color--tertiary;
+    }
+
+    // WBGO
+    .theme-3 & {
+        background-color: $color--wbgo-blue;
+    }
+
+}
