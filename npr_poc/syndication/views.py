@@ -63,7 +63,11 @@ class ChosenSyndicatedContentView(ChosenView):
 
 
 class BrowseSyndicatedContentView(TemplateView):
+    model_admin = None
     template_name = 'wagtailadmin/pages/browse_syndicated_content.html'
+
+    def __init__(self, model_admin=None):
+        super().__init__()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

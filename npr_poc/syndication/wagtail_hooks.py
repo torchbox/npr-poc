@@ -49,8 +49,8 @@ class SyndicatedNewsAdmin(ModelAdmin):
     list_display = ("title", "date")
     list_filter = ("date",)
     search_fields = ("title", "date")
-    choose_parent_view_class = views.SyndicatedContentChooseParentView
-    index_template_name = 'modeladmin/syndicated_news_index.html'
+    index_view_class = views.BrowseSyndicatedContentView
+    # index_template_name = 'modeladmin/syndicated_news_index.html'
 
 
 modeladmin_register(SyndicatedNewsAdmin)
