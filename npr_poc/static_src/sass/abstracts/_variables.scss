@@ -8,15 +8,31 @@ $color--off-black:      #141414;
 $color--background:     #f2f2f2;
 $color--grey:           #777;
 
-// --------------------------------- Theme 2 (Torchbox) -------------------------------------
-
-// --------------------------------- Theme 3 (WBGO) -------------------------------------
-
-
 $color--primary:        $color--pink;
 $color--secondary:      $color--blue;
 $color--tertiary:       $color--dark-blue;
 $color--hover:          $color--turquoise;
+
+// --------------------------------- WBGO specific -------------------------------------
+
+$color--wbgo-purple:    #9d3293;
+$color--wbgo-orange:    #f15622;
+$color--wbgo-blue:      #234090;
+$color--wbgo-red:       #d2232b;
+$color--wbgo-border:    #d5d5d5;
+
+// --------------------------------- Theme 2 (Torchbox) -----------------------------------
+
+$color--theme2-primary:     $color--primary;
+$color--theme2-secondary:   $color--secondary;
+$color--theme2-tertiary:    $color--tertiary;
+
+// --------------------------------- Theme 3 (WBGO) -------------------------------------
+
+$color--theme3-primary:     $color--primary;
+$color--theme3-secondary:   $color--secondary;
+$color--theme3-tertiary:    $color--tertiary;
+
 
 $color--white:          #fff;
 $color--black:          #333;

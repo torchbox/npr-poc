@@ -1,4 +1,5 @@
 .streamfield {
+    $root: &;
 
     &__image {
         display: block;
@@ -23,18 +24,34 @@
 
     &__quote-text {
         @include font-size(xl);
-        color: $color--tertiary;
         line-height: 1.4;
         margin-bottom: ($grid * 0.75);
+
+        .theme-2 & {
+            color: $color--tertiary;
+        }
+
+        .theme-3 & {
+            color: $color--off-black;
+        }
+        
     }
 
     &__quote-author {
         @include font-size(xxs);
         text-transform: uppercase;
-        color: $color--primary;
         font-style: normal;
         font-weight: 700;
         letter-spacing: 2px;
+
+        .theme-2 & {
+            color: $color--primary;
+        }
+
+        .theme-3 & {
+            color: $color--wbgo-purple;
+        }
+
     }
 
 }
