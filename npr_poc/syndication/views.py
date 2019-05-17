@@ -71,9 +71,10 @@ class BrowseSyndicatedContentView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        stories = search_stories(search_term=self.request.GET.get('q'), org=self.request.GET.get('org'))
+        search_query = self.request.GET.get('q')
+        stories = search_stories(search_term=search_query, org=self.request.GET.get('org'))
         ctx['stories'] = [story_to_dict(story) for story in stories]
-        ctx['search_form'] = SearchForm(self.request.GET or None, placeholder='Search for a story, podcast or station')
+        ctx['search_form'] = SearchForm(self.request.GET if search_query else None, placeholder='Search for a story, podcast or station')
         ctx['orgs'] = ORGS
         ctx['selected_org'] = self.request.GET.get('org', '')
         return ctx
