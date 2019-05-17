@@ -59,7 +59,7 @@ rules:
   no-color-keywords: 0
   no-color-literals: 0
   property-sort-order:
-    - 1
+    - 0
     -
       order: recess
   empty-args:

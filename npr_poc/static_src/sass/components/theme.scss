@@ -1,0 +1,17 @@
+span.theme-2-content {
+    display: none;
+
+    .theme-2 & {
+        display: inline;
+    }
+
+}
+
+span.theme-3-content {
+    display: none;
+
+    .theme-3 & {
+        display: inline;
+    }
+
+}

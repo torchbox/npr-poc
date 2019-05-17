@@ -1,0 +1,39 @@
+.logo {
+    $root: &;
+    display: block;
+    width: 120px;
+    height: 35px;
+    transition: opacity $default-transition 0s;
+    margin-top: ($grid);
+
+    &:hover {
+        opacity: 0.6;
+    }
+
+    &__image {
+        width: 120px;
+        height: 35px;
+
+        &--theme2,
+        &--theme3 {
+            display: none;
+        }
+
+    }
+
+    .theme-2 & {
+
+        #{$root}__image--theme2 {
+            display: block;
+        }
+    }
+
+    .theme-3 & {
+
+        #{$root}__image--theme3 {
+            display: block;
+        }
+
+    }
+
+}

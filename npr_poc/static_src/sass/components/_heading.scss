@@ -1,0 +1,44 @@
+.heading {
+    $root: &;
+    font-weight: 700;
+
+    &--primary {
+        @include font-size(xxl);
+        line-height: 1.1;
+        margin-bottom: ($grid * 1);
+    }
+
+    &--meta {
+        @include font-size(s);
+        text-transform: uppercase;
+        margin-bottom: ($grid);
+        font-weight: 600;
+    }
+
+    // Torchbox
+    .theme-2 & {
+
+        &--primary {
+            color: $color--secondary;
+        }
+
+        &--meta {
+            color: $color--primary;
+        }
+
+    }
+
+    // WBGO
+    .theme-3 & {
+
+        &--primary {
+            color: $color--black;
+        }
+
+        &--meta {
+            color: $color--wbgo-purple;
+        }
+
+    }
+
+}

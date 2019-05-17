@@ -1,0 +1,17 @@
+.legal-stuff-item {
+    @include font-size(xs);
+    display: flex;
+    flex-direction: row;
+    padding-right: ($grid * 0.75);
+    color: $color--grey;
+
+    &__link {
+        padding-right: ($grid * 0.75);
+        color: $color--off-black;
+    }
+
+    &__divider {
+        padding-left: ($grid * 0.75);
+    }
+
+}

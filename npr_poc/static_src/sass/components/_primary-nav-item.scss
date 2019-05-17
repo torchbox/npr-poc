@@ -1,0 +1,86 @@
+.primary-nav-item {
+    $root: &;
+    @include font-size(s);
+    padding-right: 30px;
+    font-weight: 600;
+
+    &__link {
+        display: inline-block;
+        padding-right: 30px;
+        transition: color $default-transition 0s;
+    }
+
+    &--button {
+        padding-right: 0;
+        margin-left: -30px;
+
+        #{$root}__link {
+            border-radius: $default-border-radius;
+            padding: 7px 25px;
+            line-height: 1.1;
+            transition: background-color $default-transition 0s;
+        }
+
+    }
+
+
+    // Torchbox
+    .theme-2 & {
+        color: rgba($color--white, 0.9);
+
+        #{$root}__link {
+            color: $color--white;
+
+            &:hover {
+                color: $color--hover;
+            }
+        }
+
+        &--button {
+
+            #{$root}__link {
+                background-color: $color--primary;
+                color: $color--white;
+
+                &:hover {
+                    color: $color--white;
+                    background-color: $color--hover;
+                }
+
+            }
+
+        }
+
+    }
+
+    // WBGO
+    .theme-3 & {
+        color: $color--wbgo-border;
+
+        #{$root}__link {
+            color: $color--wbgo-blue;
+
+            &:hover {
+                color: $color--wbgo-red;
+            }
+
+        }
+
+        &--button {
+
+            #{$root}__link {
+                background-color: $color--wbgo-purple;
+                color: $color--white;
+
+                &:hover {
+                    color: $color--white;
+                    background-color: $color--wbgo-red;
+                }
+
+            }
+
+        }
+
+    }
+
+}

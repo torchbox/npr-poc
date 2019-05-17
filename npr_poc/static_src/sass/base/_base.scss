@@ -20,7 +20,8 @@ html {
 
 body {
     overflow-x: hidden;
-    background-color: $color--tertiary;
+    background-color: $color--background;
+    -webkit-font-smoothing: antialiased;
 
     &.no-scroll {
         overflow-y: hidden;
@@ -48,7 +49,7 @@ button, input, select, textarea {
 a {
     color: $color--primary;
     text-decoration: none;
-    transition: color $transition;
+    transition: color $default-transition;
 
     &:hover {
         color: darken($color--primary, 20%);

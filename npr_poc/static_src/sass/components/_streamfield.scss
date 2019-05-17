@@ -1,0 +1,57 @@
+.streamfield {
+    $root: &;
+
+    &__image {
+        display: block;
+        position: relative;
+        left: -10%;
+        width: 120%;
+        max-width: 120%;
+        height: auto;
+        margin-bottom: ($grid * 2);
+        margin-top: ($grid);
+    }
+
+    &__quote {
+        position: relative;
+        left: -5%;
+        width: 110%;
+        max-width: 110%;
+        padding: 0;
+        margin: 0 0 ($grid * 2);
+        font-style: normal;
+    }
+
+    &__quote-text {
+        @include font-size(xl);
+        line-height: 1.4;
+        margin-bottom: ($grid * 0.75);
+
+        .theme-2 & {
+            color: $color--tertiary;
+        }
+
+        .theme-3 & {
+            color: $color--off-black;
+        }
+        
+    }
+
+    &__quote-author {
+        @include font-size(xxs);
+        text-transform: uppercase;
+        font-style: normal;
+        font-weight: 700;
+        letter-spacing: 2px;
+
+        .theme-2 & {
+            color: $color--primary;
+        }
+
+        .theme-3 & {
+            color: $color--wbgo-purple;
+        }
+
+    }
+
+}

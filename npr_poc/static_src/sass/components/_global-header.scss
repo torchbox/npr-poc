@@ -1,0 +1,21 @@
+.global-header {
+    $root: &;
+    
+    &__container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 0 auto;
+        max-width: $site-width;
+        padding: 0 ($grid);
+    }
+
+    .theme-2 & {
+        background-color: rgba($color--off-black, 0.9);
+    }
+
+    .theme-3 & {
+        background-color: rgba($color--white, 0.9);
+    }
+
+}

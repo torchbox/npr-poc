@@ -1,0 +1,81 @@
+.global-footer {
+    background-color: $color--white;
+    padding: ($grid * 4) 0 ($grid * 3);
+
+    &__container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        padding: 0 ($grid);
+        max-width: $site-width;
+    }
+
+    &__about,
+    &__sitemap {
+        flex-basis: 45%;
+        max-width: 45%;
+        min-width: 45%;
+    }
+
+    &__sitemap {
+        flex-basis: 30%;
+        max-width: 30%;
+        min-width: 30%;
+    }
+
+    &__description {
+        @include font-size(s);
+        margin-bottom: ($grid * 1.5);
+        color: $color--grey;
+    }
+
+    &__sitemap-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    &__sitemap-item {
+        @include font-size(s);
+        font-weight: 600;
+        flex-basis: 50%;
+        min-width: 50%;
+        max-width: 50%;
+    }
+
+    &__about-container {
+        padding-right: ($grid * 4);
+    }
+
+    &__legal-stuff {
+        flex-basis: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        padding-top: ($grid * 2.5);
+    }
+
+    &__heading {
+        @include font-size(s);
+        text-transform: uppercase;
+        margin-bottom: ($grid);
+        letter-spacing: 2px;
+        font-weight: 600;
+        color: $color--tertiary;
+
+        &--light {
+            color: $color--grey;
+        }
+
+    }
+
+    &__donate-button {
+        @include font-size(s);
+        font-weight: 600;
+        border: 2px solid $color--primary;
+        border-radius: $default-border-radius;
+        padding: ($grid / 2);
+        line-height: 1;
+    }
+
+}
