@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('wagtailcore', '0042_auto_20190516_1132'),
+        ('wagtailcore', '0041_group_collection_permissions_verbose_name_plural'),
         ('images', '0002_customimage_file_hash'),
     ]
 
