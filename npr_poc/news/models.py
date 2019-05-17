@@ -127,3 +127,15 @@ class NewsPage(BasePage):
         if not self.get_site().is_default_site:
             return "news/station_news_page.html"
         return "news/news_page.html"
+
+
+class Thanks(BasePage):
+    subpage_types = []
+    parent_page_types = ["news.NewsIndexPage"]
+    thanks_heading = models.CharField(max_length=255)
+    thanks_body = models.TextField(blank=True)
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel("thanks_heading"),
+        FieldPanel("thanks_body"),
+    ]
