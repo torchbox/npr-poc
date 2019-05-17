@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load wagtailcore_tags %}
 {% if stories %}
     <form method="post">
     {% csrf_token %}
@@ -18,7 +18,11 @@
                         <a href="{{ story.url }}" target="_blank" style="font-size: 115%">{{ story.title }}</a><br>{{ story.org }}<br>{{ story.date }}
                     </div>
                     <div class="col2" style="text-align:right">
+                        {% if story.syndicated_page %}
+                        <a class="button bicolor icon icon-view" href="{% pageurl story.syndicated_page %}" target="_blank">View story</a>
+                        {% else %}
                         <a class="button bicolor icon icon-plus" href="{% url 'syndication_syndicatednewspage_modeladmin_choose_parent' %}?story={{ story.id }}">Use this story</a>
+                        {% endif %}
                     </div>
                 </div>
             </li>

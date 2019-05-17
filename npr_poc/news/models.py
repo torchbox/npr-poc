@@ -68,7 +68,7 @@ class NewsPageNewsCategory(models.Model):
 
 
 class NewsIndexPage(Page):
-    subpage_types = ["news.NewsPage"]
+    subpage_types = ["news.NewsPage", "syndication.SyndicatedNewsPage"]
     parent_page_types = ["home.HomePage"]
 
 

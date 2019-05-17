@@ -12,7 +12,7 @@ class SyndicatedNewsPage(BasePage):
     parent_page_types = ['news.NewsIndexPage']
     subpage_types = []
     template = "patterns/pages/syndication/syndicated_news_page.html"
-    story = models.CharField(max_length=255)
+    story = models.CharField(max_length=255, db_index=True)
     date = models.DateField("Publish date")
 
     content_panels = [

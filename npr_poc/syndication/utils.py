@@ -12,6 +12,8 @@ API_URL = 'http://api.npr.org/query'
 
 
 def story_to_dict(story):
+    from .models import SyndicatedNewsPage      # Avoid circular import
+
     try:
         image = story.find('image', {'type': 'primary'})['src']
     except (AttributeError, TypeError):
@@ -22,10 +24,11 @@ def story_to_dict(story):
         'title': story.title.text,
         'url': story.find('link', {'type': 'html'}).text,
         'org': story.organization.find('name', ).text,
-        'date': parse(story.storyDate.text),
+        'date': parse(story.storyDate.text).date(),
         'teaser': story.teaser.text,
         'image': image,
         'html': story.fullText.text,
+        'syndicated_page': SyndicatedNewsPage.objects.filter(story=story['id']).first(),
     }
 
 
