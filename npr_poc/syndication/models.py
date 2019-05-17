@@ -19,11 +19,10 @@ class SyndicatedNewsPage(BasePage):
         FieldPanel('story', widget=SyndicatedContentChooser)
     ]
 
-    def save(self, **kwargs):
+    def clean(self):
         story = get_story(self.story)
         self.title = story['title']
         self.date = story['date']
-        super().save(**kwargs)
 
     def get_context(self, request):
         ctx = super().get_context(request)
