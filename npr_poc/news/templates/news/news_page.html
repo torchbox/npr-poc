@@ -1,8 +1,9 @@
-{% load wagtailuserbar wagtailimages_tags wagtailreview_tags %}
+{% load static wagtailuserbar wagtailimages_tags wagtailreview_tags %}
 <!DOCTYPE html>
 <html lang="en">
     <title>{{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="https://unpkg.com/tachyons/css/tachyons.min.css">
     <body class="w-100 sans-serif bg-white">
 
@@ -48,7 +49,7 @@
         </header>
 
         <article class="pa3 pa5-ns">
-            <img src="https://media.npr.org/chrome_svg/npr-logo.svg" class="mb3" width="100" alt="NPR logo"/>
+
             <p class="f4 mt4 mb2 black-70"># World News</p>
             <h1 class="f1 mt0 mb4 w-70">{{ page.title }}</h1>
             <p class="black-90 f4 f4-m f3-l athelas measure lh-copy mt5">
