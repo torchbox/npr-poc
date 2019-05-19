@@ -44,7 +44,7 @@ class NewsCategory(models.Model):
 
 
 @register_snippet
-class Author(models.Model):
+class Author(index.Indexed, models.Model):
     name = models.CharField(max_length=255)
 
     panels = [FieldPanel("name")]
