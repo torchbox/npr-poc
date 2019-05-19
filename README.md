@@ -155,3 +155,12 @@ When you set up a server you should make sure the following scheduled tasks are 
 * `django-admin publish_scheduled_pages` - every 10 minutes or more often. This is necessary to make publishing scheduled pages work.
 * `django-admin clearsessions` - once a day (not necessary, but useful).
 * `django-admin update_index` - once a day  (not necessary, but useful to make sure search index stays intact).
+
+## Delete reviews
+
+`heroku run python manage.py shell -a npr-poc`
+
+```
+from wagtail_review.models import Review
+for r in Review.objects.all(): r.delete()
+```
