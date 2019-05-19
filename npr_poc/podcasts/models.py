@@ -268,6 +268,8 @@ class Episode(HeadlessPreviewMixin, BasePage):
         APIField("date_updated"),
         APIField("enclosures"),
         APIField("images"),
+        APIField("share_with_npr"),
+        APIField("share_with_member_stations"),
     ]
 
     content_panels = BasePage.content_panels + [
