@@ -92,16 +92,12 @@ class NewsPage(BasePage):
 
     legacy_id = models.CharField(blank=True, max_length=10)
 
-    syndicate = models.BooleanField(
-        default=False, help_text="Allow this story to be shared across NPR stations"
-    )
-
     search_fields = BasePage.search_fields + [
         index.SearchField("summary"),
         index.SearchField("body"),
     ]
 
-    api_fields = [APIField("date"), APIField("summary"), APIField("syndicate")]
+    api_fields = [APIField("date"), APIField("summary")]
 
     content_panels = BasePage.content_panels + [
         FieldPanel("date"),
@@ -112,7 +108,7 @@ class NewsPage(BasePage):
 
     taxonomy_panels = [InlinePanel("categories", label="category"), FieldPanel("tags")]
 
-    settings_panels = BasePage.settings_panels + [FieldPanel("syndicate")]
+    settings_panels = BasePage.settings_panels
 
     edit_handler = TabbedInterface(
         [
