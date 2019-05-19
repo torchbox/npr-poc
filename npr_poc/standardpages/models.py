@@ -86,6 +86,6 @@ class RichTextPage(BasePage):
     )
 
     content_panels = BasePage.content_panels + [
-        FieldPanel("quite_rich_text"),
         FieldPanel("very_rich_text"),
+        FieldPanel("quite_rich_text"),
     ]
