@@ -122,13 +122,13 @@ class Show(HeadlessPreviewMixin, RoutablePageMixin, BasePage):
         ]
     )
 
-    @route(r'^feed/$')
+    @route(r"^feed/$")
     def feed(self, request):
         return ShowFeed()(request, show_id=self.pk)
 
     @property
     def feed_url(self):
-        return self.full_url + self.reverse_subpage('feed')
+        return self.full_url + self.reverse_subpage("feed")
 
 
 class EpisodeTag(TaggedItemBase):
@@ -246,6 +246,17 @@ class Episode(HeadlessPreviewMixin, BasePage):
         ),
     ]
 
+    share_with_npr = models.BooleanField(
+        default=False,
+        help_text="Allow this content to be published on NPR.org",
+        verbose_name="Share with NPR.org",
+    )
+    share_with_member_stations = models.BooleanField(
+        default=False,
+        help_text="Allow this content to be published by NPR member stations",
+        verbose_name="Share with NPR member stations",
+    )
+
     api_fields = [
         APIField("subtitle"),
         APIField("description"),
@@ -269,3 +280,19 @@ class Episode(HeadlessPreviewMixin, BasePage):
         InlinePanel("images", label="Images"),
         InlinePanel("enclosures", label="Enclosures"),
     ]
+
+    syndication_panels = [
+        FieldPanel("share_with_npr"),
+        FieldPanel("share_with_member_stations"),
+    ]
+
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(content_panels, heading="Content"),
+            ObjectList(BasePage.promote_panels, heading="Promote"),
+            ObjectList(syndication_panels, heading="Syndication"),
+            ObjectList(
+                BasePage.settings_panels, heading="Settings", classname="settings"
+            ),
+        ]
+    )
