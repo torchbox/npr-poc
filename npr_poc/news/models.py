@@ -49,6 +49,8 @@ class Author(models.Model):
 
     panels = [FieldPanel("name")]
 
+    search_fields = [index.SearchField("name", partial_match=True)]
+
     def __str__(self):
         return self.name
 
