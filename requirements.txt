@@ -14,7 +14,7 @@ ffmpeg-python==0.1.17
 wagtail-headless-preview==0.0.4
 wagtailaltgenerator==4.1.1
 feedparser==5.2.1
-git+git://github.com/wagtail/wagtail-review.git@5413c848a100260b9173fc08bf1006756d1f2298#egg=wagtail-review
+git+git://github.com/wagtail/wagtail-review.git@23b81d7e5699ecb843a99da1aa207775a8b85bd6#egg=wagtail-review
 git+git://github.com/gasman/wagtail-generic-chooser.git#egg=wagtail-generic-chooser
 lxml==4.3.3
 # Pinned because pip cannot handle proper dependency resolution between the packages that require urllib3
