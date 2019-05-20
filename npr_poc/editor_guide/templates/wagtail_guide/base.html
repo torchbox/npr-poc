@@ -8,25 +8,27 @@
     {% trans "Editor Guide" as title_trans %}
     {% include "wagtailadmin/shared/header.html" with title=title_trans %}
 
-    <div class="nice-padding">
+    <div class="nice-padding editor-guide">
         {% if content.information_text %}
             <div class="help-block help-info">
-                  {{ content.information_text }} dfggfffggdfggfdffgdfggfffggdfggfdffg 
+                  {{ content.information_text }}
             </div>
         {% endif %}
         {% if nav %}
-        <h2>Contents</h2>
-            <ul class="in-page-nav js-in-page-nav js-sticky">
-                {% for block in content.sections %}
-                    {% if block.block_type == 'heading' %}
-                        <li><a class="in-page-nav__item" href="#section-{{ block.value|slugify }}">
-                            {{ block.value }}
-                        </a></li>
-                    {% endif %}
-                {% endfor %}
-            </ul>
+            <div class="editor-guide__contents">
+                <h2>Contents</h2>
+                <ul class="in-page-nav js-in-page-nav js-sticky">
+                    {% for block in content.sections %}
+                        {% if block.block_type == 'heading' %}
+                            <li><a class="in-page-nav__item" href="#section-{{ block.value|slugify }}">
+                                {{ block.value }}
+                            </a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
         {% endif %}
-        <div class="guide-content">
+        <div class="editor-guide__guide-content guide-content">
             {% if content.sections %}
                 {% for block in content.sections %}
                     {% if block.block_type == 'heading' %}
@@ -43,4 +45,8 @@
             {% endif %}
         </div>
     </div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/editor_guide.css' %}">
 {% endblock %}
