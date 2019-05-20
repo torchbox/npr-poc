@@ -88,5 +88,7 @@ class NewsImporter(BasePageImporter):
 
         if save:
             instance.save()
+            revision = instance.save_revision()
+            revision.publish()
 
         return instance
