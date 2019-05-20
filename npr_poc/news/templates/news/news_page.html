@@ -62,10 +62,15 @@
         <main class="layout">
 
             <article class="layout__single-col layout__single-col--center">
-
                 {% block content %}
 
-                <p class="heading heading--meta"># World News</p>
+                <p class="heading heading--meta">#
+                {% if self.categories.all %}
+                    {% for category in self.categories.all %}
+                        {{ category.category }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                {% else %}# World News{% endif %}
+                </p>
 
                 <h1 class="heading heading--primary">{{ page.title }}</h1>
 
@@ -110,7 +115,7 @@
                 </section>
 
                 {% for tag in page.tags.all %}
-                    <a href="#0">{{ tag }}</a>
+                    <a href="#">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
                 {% endfor %}
 
                 {% endblock content %}
