@@ -1,0 +1,34 @@
+.syndicated-content {
+    .share-tools,
+    .byline__social-handle,
+    .dateblock {
+        display: none;
+    }
+}
+
+.storytitle h1 {
+    $root: &;
+    font-weight: 700;
+
+    @include font-size(xxl);
+    line-height: 1.1;
+    margin-bottom: ($grid * 1);
+
+    &--meta {
+        @include font-size(s);
+        text-transform: uppercase;
+        margin-bottom: ($grid);
+        font-weight: 600;
+    }
+
+    // Torchbox
+    .theme-2 & {
+        color: $color--secondary;
+    }
+
+    // WBGO
+    .theme-3 & {
+        color: $color--black;
+    }
+
+}
