@@ -197,7 +197,7 @@ class EpisodeEnclosure(Orderable, models.Model):
         "podcasts.Episode", on_delete=models.CASCADE, related_name="enclosures"
     )
     media = models.ForeignKey(
-        "podcasts.CustomMedia", models.PROTECT, null=True, related_name="+"
+        "podcasts.CustomMedia", models.CASCADE, null=True, related_name="+"
     )
 
     api_fields = [APIField("media")]
