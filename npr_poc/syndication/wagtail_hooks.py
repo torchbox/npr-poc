@@ -4,10 +4,7 @@ from django.utils.text import slugify
 
 from wagtail.admin.action_menu import PageActionMenu
 from wagtail.admin.views.pages import get_valid_next_url_from_request
-from wagtail.contrib.modeladmin.options import (
-    ModelAdmin,
-    modeladmin_register,
-)
+from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 from wagtail.core import hooks
 
 from . import models, views
@@ -20,12 +17,12 @@ def register_admin_urls():
         path(
             "choose-syndicated-content/",
             views.ChooseSyndicatedContentView.as_view(),
-            name="npr_syndication_choose_content"
+            name="npr_syndication_choose_content",
         ),
         re_path(
             "chosen-syndicated-content/([^/]+)/",
             views.ChosenSyndicatedContentView.as_view(),
-            name="npr_syndication_chosen_content"
+            name="npr_syndication_chosen_content",
         ),
         path(
             "browse-syndicated-content/",
@@ -53,18 +50,35 @@ class SyndicatedNewsAdmin(ModelAdmin):
     choose_parent_view_class = views.SyndicatedContentChooseParentView
 
 
+class SyndicatedShowsAdmin(ModelAdmin):
+    model = models.SyndicatedNewsPage
+    menu_label = "Syndicated Shows"
+    menu_icon = "fa-quote-left"  # change as required
+    menu_order = 210
+    exclude_from_explorer = False
+    list_display = ("title", "date")
+    list_filter = ("date",)
+    search_fields = ("title", "date")
+    index_view_class = views.BrowseSyndicatedContentView
+    choose_parent_view_class = views.SyndicatedContentChooseParentView
+
+
 modeladmin_register(SyndicatedNewsAdmin)
+modeladmin_register(SyndicatedShowsAdmin)
 
 
 @hooks.register("before_create_page")
 def create_syndicated_content(request, parent_page, page_class):
     if "story" in request.GET and request.method == "GET":
-        story = get_story(request.GET['story'])
+        story = get_story(request.GET["story"])
         if not story:
             return
 
         page = page_class(
-            title=story['title'], story=story['id'], slug=slugify(story['title']), owner=request.user
+            title=story["title"],
+            story=story["id"],
+            slug=slugify(story["title"]),
+            owner=request.user,
         )
         edit_handler = page_class.get_edit_handler()
         edit_handler = edit_handler.bind_to(request=request, instance=page)
