@@ -2,6 +2,7 @@ import json
 
 from django.shortcuts import render
 from django.urls import path
+from django.utils.text import slugify
 from django.utils.html import format_html
 
 from wagtail.admin.action_menu import PageActionMenu
@@ -42,7 +43,12 @@ def create_from_google_doc(request, parent_page, page_class):
         title, body = parse_document(
             request.session["google_oauth_credentials"], request.GET["google-doc-id"]
         )
-        page = page_class(title=title, body=json.dumps(body), owner=request.user)
+        page = page_class(
+            title=title,
+            slug=slugify(title),
+            body=json.dumps(body),
+            owner=request.user,
+        )
         edit_handler = page_class.get_edit_handler()
         edit_handler = edit_handler.bind_to(request=request, instance=page)
         form_class = edit_handler.get_form_class()
@@ -77,7 +83,7 @@ def create_from_google_doc(request, parent_page, page_class):
 def insert_editor_css():
     return """<style>
         .Draftail-Toolbar {
-            background-color: white !important; 
+            background-color: white !important;
             color: #606060 !important;
             border: 1px solid #606060!important;
             border-radius: 3px;
@@ -90,11 +96,10 @@ def insert_editor_css():
             vertical-align: middle;
             margin: 0 !important;
         }
-        
+
         .Draftail-ToolbarButton:hover,
         .Draftail-ToolbarButton--active {
             background-color: #eee!important;
             border: 1px solid #ddd!important;
         }
     </style>"""
-

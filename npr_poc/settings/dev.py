@@ -34,8 +34,6 @@ AUTH_PASSWORD_VALIDATORS = []
 
 # Enable Wagtail's style guide in Wagtail's settings menu.
 # http://docs.wagtail.io/en/stable/contributing/styleguide.html
-INSTALLED_APPS += ['wagtail.contrib.styleguide']  # noqa
-
 
 # Adds django-extensions into installed apps
 INSTALLED_APPS += ['django_extensions']  # noqa

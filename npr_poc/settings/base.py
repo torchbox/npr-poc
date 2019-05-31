@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "npr_poc.syndication",
     "npr_poc.utils",
     "npr_poc.project_styleguide.apps.ProjectStyleguideConfig",
+    "npr_poc.editor_guide",
     "wagtail_guide",
     "wagtail_react_streamfield",
     "wagtail.contrib.modeladmin",
@@ -74,6 +75,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.contrib.routable_page",
+    "wagtail.contrib.styleguide",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -743,4 +745,3 @@ if BONSAI_URL:
     }
 
 NPR_API_KEY = env.get("NPR_API_KEY", "")
-

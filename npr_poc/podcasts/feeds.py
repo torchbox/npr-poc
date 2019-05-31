@@ -136,7 +136,7 @@ class ShowFeed(Feed):
     def item_enclosures(self, item):
         enclosures = []
         for enc in item.enclosures.all():
-            if "http" in enc.media.file.url:
+            if enc.media.file.url.startswith("http"):
                 url = enc.media.file.url
             else:
                 url = "{}{}".format(

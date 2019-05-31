@@ -63,6 +63,8 @@
 
             <article class="layout__single-col layout__single-col--center">
 
+                {% block content %}
+
                 <p class="heading heading--meta"># World News</p>
 
                 <h1 class="heading heading--primary">{{ page.title }}</h1>
@@ -110,6 +112,8 @@
                 {% for tag in page.tags.all %}
                     <a href="#0">{{ tag }}</a>
                 {% endfor %}
+
+                {% endblock content %}
 
             </article>
 
