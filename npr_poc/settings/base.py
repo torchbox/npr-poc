@@ -206,7 +206,10 @@ else:
 # https://docs.wagtail.io/en/latest/topics/search/backends.html
 
 WAGTAILSEARCH_BACKENDS = {
-    "default": {"BACKEND": "wagtail.contrib.postgres_search.backend"}
+    "default": {
+        "BACKEND": "wagtail.contrib.postgres_search.backend",
+        "AUTO_UPDATE": True,
+    }
 }
 
 
