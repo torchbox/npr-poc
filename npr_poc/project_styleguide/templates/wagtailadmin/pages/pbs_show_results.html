@@ -7,14 +7,8 @@
         {% for show in shows %}
             <li>
                 <div class="row row-flush">
-                    <div class="col2">
-                        {% if show.image %}
-                        <img src="{{ show.image }}" style="max-width: 100%; height: auto" alt="">
-                        {% else %}
-                        &nbsp;
-                        {% endif %}
-                    </div>
-                    <div class="col8">
+                    
+                    <div class="col10">
                         <a href="{{ story.url }}" target="_blank" style="font-size: 115%">{{ show.title }}</a><br>{{ show.updated_at }}
                     </div>
                     <div class="col2" style="text-align:right">
