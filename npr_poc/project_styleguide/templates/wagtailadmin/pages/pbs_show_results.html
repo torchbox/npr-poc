@@ -1,0 +1,32 @@
+{% load wagtailcore_tags %}
+{% if shows %}
+    <form method="post">
+    {% csrf_token %}
+    <ul class="listing">
+
+        {% for show in shows %}
+            <li>
+                <div class="row row-flush">
+                    <div class="col2">
+                        {% if show.image %}
+                        <img src="{{ show.image }}" style="max-width: 100%; height: auto" alt="">
+                        {% else %}
+                        &nbsp;
+                        {% endif %}
+                    </div>
+                    <div class="col8">
+                        <a href="{{ story.url }}" target="_blank" style="font-size: 115%">{{ show.title }}</a><br>{{ show.org }}<br>{{ show.date }}
+                    </div>
+                    <div class="col2" style="text-align:right">
+                        {% if story.syndicated_page %}
+                        <a class="button bicolor icon icon-view" href="{% pageurl story.syndicated_page %}" target="_blank">View story</a>
+                        {% else %}
+                        <a class="button bicolor icon icon-plus" href="{% url 'syndication_syndicatednewspage_modeladmin_choose_parent' %}?story={{ story.id }}">Use this show</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    </form>
+{% endif %}

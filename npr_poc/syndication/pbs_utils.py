@@ -10,8 +10,14 @@ from requests.auth import HTTPBasicAuth
 STAGING_ENDPOINT = "https://media-staging.services.pbs.org/api/v1"
 
 
+def show_to_dict(show):
+    return {"id": show["id"], "title": show["attributes"]["title"]}
+
+
 @lru_cache(maxsize=500)
 def search_shows(search_term):
+    if not search_term:
+        return []
     response = requests.get(
         STAGING_ENDPOINT + "/shows/search/?query=" + search_term,
         auth=HTTPBasicAuth(settings.PBS_API_KEY, settings.PBS_API_SECRET),

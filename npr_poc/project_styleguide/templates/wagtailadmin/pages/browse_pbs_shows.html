@@ -1,0 +1,54 @@
+{% extends "wagtailadmin/pages/add_subpage.html" %}
+{% load i18n %}
+{% load wagtailadmin_tags %}
+
+{% block css %}
+    {{ block.super }}
+    {{ view.media.css }}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script>
+        window.headerSearch = {
+            url: "{% url 'pbs_show_search' %}",
+            termInput: "#id_q",
+            targetOutput: "#show-results"
+        };
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <header class="nice-padding">
+        <div class="row">
+            <div class="left">
+                <div class="col">
+                    <h1 class="icon icon-doc-full-inverse">
+                    PBS Shows
+                    </h1>
+                </div>
+                <form class="col search-form" action="./{% if query_parameters %}?{{ query_parameters }}{% endif %}" method="get" novalidate>
+                    <ul class="fields">
+                        {% for field in search_form %}
+                            {% include "wagtailadmin/shared/field_as_li.html" with field=field field_classes="field-small iconfield" input_classes="icon-search" %}
+                        {% endfor %}
+                        <li class="submit visuallyhidden"><input type="submit" value="Search" class="button" /></li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <div>
+        <div class="row">
+            <div class="col9">
+                <div class="nice-padding">
+                    <div id="show-results">
+                        {% include 'wagtailadmin/pages/pbs_show_results.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

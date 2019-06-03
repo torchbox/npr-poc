@@ -34,6 +34,14 @@ def register_admin_urls():
             views.SyndicatedContentSearchView.as_view(),
             name="npr_syndication_search",
         ),
+        path(
+            "search-pbs-content/", views.PBSSearchView.as_view(), name="pbs_show_search"
+        ),
+        path(
+            "browse-pbs-content/",
+            views.BrowsePBSContentView.as_view(),
+            name="pbs_browse",
+        ),
     ]
 
 
@@ -50,21 +58,20 @@ class SyndicatedNewsAdmin(ModelAdmin):
     choose_parent_view_class = views.SyndicatedContentChooseParentView
 
 
-class SyndicatedShowsAdmin(ModelAdmin):
-    model = models.SyndicatedNewsPage
-    menu_label = "Syndicated Shows"
+class PBSShowsAdmin(ModelAdmin):
+    model = models.PBSShowPage
+    menu_label = "PBS Shows"
     menu_icon = "fa-quote-left"  # change as required
     menu_order = 210
     exclude_from_explorer = False
     list_display = ("title", "date")
     list_filter = ("date",)
     search_fields = ("title", "date")
-    index_view_class = views.BrowseSyndicatedContentView
-    choose_parent_view_class = views.SyndicatedContentChooseParentView
+    index_view_class = views.BrowsePBSContentView
 
 
 modeladmin_register(SyndicatedNewsAdmin)
-modeladmin_register(SyndicatedShowsAdmin)
+modeladmin_register(PBSShowsAdmin)
 
 
 @hooks.register("before_create_page")
