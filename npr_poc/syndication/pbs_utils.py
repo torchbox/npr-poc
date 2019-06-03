@@ -1,4 +1,5 @@
 from functools import lru_cache
+from dateutil.parser import parse
 
 from django.conf import settings
 
@@ -11,7 +12,11 @@ STAGING_ENDPOINT = "https://media-staging.services.pbs.org/api/v1"
 
 
 def show_to_dict(show):
-    return {"id": show["id"], "title": show["attributes"]["title"]}
+    return {
+        "id": show["id"],
+        "title": show["attributes"]["title"],
+        "updated_at": parse(show["attributes"]["updated_at"]).date(),
+    }
 
 
 @lru_cache(maxsize=500)
