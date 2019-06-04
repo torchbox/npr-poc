@@ -10,4 +10,4 @@ run:
 release:
   image: web
   command:
-    - django-admin collectstatic && django-admin migrate --noinput
+    - django-admin collectstatic --noinput && django-admin migrate --noinput
