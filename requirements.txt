@@ -37,7 +37,7 @@ wagtail-quick-create==1.0.7
 elasticsearch==6.3.0
 wagtailfontawesome==1.1.4
 wagtail-experiments==0.2
-wagtail_guide
+wagtail_guide==1.0.5
 
 # Migration
 cryptography==2.6.1
