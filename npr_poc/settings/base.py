@@ -747,3 +747,5 @@ if BONSAI_URL:
 NPR_API_KEY = env.get("NPR_API_KEY", "")
 PBS_API_KEY = env.get("PBS_API_KEY", "")
 PBS_API_SECRET = env.get("PBS_API_SECRET", "")
+
+WAGTAIL_USAGE_COUNT_ENABLED = True
