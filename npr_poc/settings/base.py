@@ -106,7 +106,7 @@ INSTALLED_APPS = [
     "wagtailmedia",
     "corsheaders",
     "wagtail_headless_preview",
-    #"wagtailaltgenerator",
+    "wagtailaltgenerator",
     "wagtailquickcreate",
     "wagtailfontawesome",
     "wagtail_review",

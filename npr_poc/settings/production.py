@@ -18,3 +18,7 @@ SESSION_COOKIE_SECURE = True
 # Ensure that the CSRF cookie is only sent by browsers under an HTTPS connection.
 # https://docs.djangoproject.com/en/stable/ref/settings/#csrf-cookie-secure
 CSRF_COOKIE_SECURE = True
+
+GOOGLE_PICKER_API_KEY = os.getenv('GOOGLE_PICKER_API_KEY', '')
+GOOGLE_OAUTH_CLIENT_CONFIG = os.getenv('GOOGLE_OAUTH_CLIENT_CONFIG', '')
+MICROSOFT_CLIENT_ID = os.getenv('MICROSOFT_CLIENT_ID', '')
