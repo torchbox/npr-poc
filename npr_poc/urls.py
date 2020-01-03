@@ -12,6 +12,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.utils.urlpatterns import decorate_urlpatterns
 
 from wagtail_review import urls as wagtailreview_urls
+from wagtail_content_import import urls as wagtail_content_import_urls
 
 from npr_poc.search import views as search_views
 from npr_poc.utils.cache import get_default_cache_control_decorator
@@ -85,6 +86,7 @@ urlpatterns = decorate_urlpatterns(
 # Join private and public URLs.
 urlpatterns = private_urlpatterns + urlpatterns + [
     # Add Wagtail URLs at the end.
+    path('import/', include(wagtail_content_import_urls)),
     path('api/v2/', api_router.urls),
     path('api/storify/', StorifyAPIEndpoint.as_view()),
     # Wagtail cache-control is set on the page models's serve methods.

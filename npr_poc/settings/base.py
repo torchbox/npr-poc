@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "scout_apm.django",
     "wagtail_content_import",
     "wagtail_content_import.pickers.google",
-    #"wagtail_content_import.pickers.microsoft",
+    "wagtail_content_import.pickers.microsoft",
     "npr_poc.data_migration",
     "npr_poc.documents",
     "npr_poc.forms",
