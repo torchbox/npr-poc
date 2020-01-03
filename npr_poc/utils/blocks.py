@@ -3,6 +3,7 @@ from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
 from wagtail.images.blocks import ImageChooserBlock
 from wagtail.snippets.blocks import SnippetChooserBlock
+from wagtail_personalisation.blocks import PersonalisedStructBlock
 
 
 class ImageBlock(blocks.StructBlock):
@@ -34,6 +35,9 @@ class QuoteBlock(blocks.StructBlock):
 
 # Main streamfield block to be inherited by Pages
 class StoryBlock(blocks.StreamBlock):
+    personalised_paragraph = PersonalisedStructBlock(
+        [('paragraph', blocks.RichTextBlock())],
+        icon='pilcrow')
     heading = blocks.CharBlock(
         classname='full title', icon='title',
         template='patterns/molecules/streamfield/blocks/heading_block.html'
