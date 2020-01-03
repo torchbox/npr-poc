@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     # According to the official docs, it's important that Scout is listed
     # first - http://help.apm.scoutapp.com/#django.
     "scout_apm.django",
+    "wagtail_content_import",
+    "wagtail_content_import.pickers.google",
+    #"wagtail_content_import.pickers.microsoft",
     "npr_poc.data_migration",
     "npr_poc.documents",
     "npr_poc.forms",
@@ -103,7 +106,7 @@ INSTALLED_APPS = [
     "wagtailmedia",
     "corsheaders",
     "wagtail_headless_preview",
-    "wagtailaltgenerator",
+    #"wagtailaltgenerator",
     "wagtailquickcreate",
     "wagtailfontawesome",
     "wagtail_review",
@@ -749,3 +752,5 @@ PBS_API_KEY = env.get("PBS_API_KEY", "")
 PBS_API_SECRET = env.get("PBS_API_SECRET", "")
 
 WAGTAIL_USAGE_COUNT_ENABLED = True
+
+WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = 'npr_poc.utils.mappers.StoryMapper'
