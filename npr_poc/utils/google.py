@@ -1,75 +1,13 @@
-import json
 import uuid
 
-from django.conf import settings
 from django.core.files.base import ContentFile
-from django.urls import reverse
 from django.utils.text import slugify
 
 from bs4 import BeautifulSoup, NavigableString
-from dateutil.parser import parse
-import google.oauth2.credentials
-import google_auth_oauthlib.flow
-from googleapiclient.discovery import build
 import requests
 from requests.exceptions import MissingSchema
 
 from npr_poc.images.models import CustomImage
-
-
-def get_flow():
-    flow = google_auth_oauthlib.flow.Flow.from_client_config(
-        json.loads(settings.GOOGLE_OAUTH_CLIENT_CONFIG),
-        scopes=[
-            'https://www.googleapis.com/auth/drive.readonly',
-            'https://www.googleapis.com/auth/documents.readonly'
-        ]
-    )
-    flow.redirect_uri = settings.BASE_URL + reverse('npr_utils_google_oauth_complete')
-    return flow
-
-
-def get_auth_url():
-    flow = get_flow()
-    # We trigger consent prompt every time. This is a hack to get around
-    # some rather stupid behaviour from Google's API, that only returns a refresh_token
-    # when consent is first provided. See https://github.com/googleapis/google-api-python-client/issues/213 .
-    # Later we will need to persist this refresh_token in the DB rather than in the session.
-    authorization_url, state = flow.authorization_url(access_type='offline', prompt='consent')
-    return authorization_url
-
-
-def save_access_tokens_to_session(request, redirect_uri):
-    flow = get_flow()
-    flow.fetch_token(authorization_response=request.build_absolute_uri())
-    credentials = flow.credentials
-    request.session['google_oauth_credentials'] = {
-        'token': credentials.token,
-        'refresh_token': credentials.refresh_token,
-        'token_uri': credentials.token_uri,
-        'client_id': credentials.client_id,
-        'client_secret': credentials.client_secret,
-        'scopes': credentials.scopes
-    }
-
-
-def search_documents(credentials, q=''):
-    service = build('drive', 'v3', credentials=google.oauth2.credentials.Credentials(**credentials))
-    name_query = 'and name contains "{}"'.format(q) if q else ''
-    query = 'mimeType="application/vnd.google-apps.document" {}'.format(name_query)
-    results = service.files().list(
-        pageSize=10,
-        orderBy='modifiedTime desc',
-        fields="nextPageToken, files(id, name, webViewLink, modifiedTime)",
-        q=query,
-    ).execute()
-
-    files = results.get('files', [])
-    # Convert modifiedTime to a datetime object
-    for f in files:
-        f['modifiedTime'] = parse(f['modifiedTime'])
-
-    return files
 
 
 def create_streamfield_block(**kwargs):
@@ -168,11 +106,3 @@ def html_to_stream_data(html):
     close_paragraph(current_paragraph_block, stream_data)
 
     return stream_data
-
-
-def parse_document(credentials, doc_id):
-    # We may want to use the docs API in future, as it provides a much more structured format
-    service = build('drive', 'v3', credentials=google.oauth2.credentials.Credentials(**credentials))
-    html = service.files().export_media(fileId=doc_id, mimeType='text/html').execute()
-    metadata = service.files().get(fileId=doc_id, fields='name').execute()
-    return metadata['name'], html_to_stream_data(html)
