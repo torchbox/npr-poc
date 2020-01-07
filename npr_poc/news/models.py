@@ -18,6 +18,7 @@ from modelcluster.tags import ClusterTaggableManager
 from npr_poc.utils.models import BasePage
 from npr_poc.utils.blocks import StoryBlock
 from taggit.models import TaggedItemBase, Tag as TaggitTag
+from wagtail_content_import.models import ContentImportMixin
 
 
 class NewsPageTag(TaggedItemBase):
@@ -75,10 +76,9 @@ class NewsIndexPage(Page):
     parent_page_types = ["home.HomePage"]
 
 
-class NewsPage(BasePage):
+class NewsPage(ContentImportMixin, BasePage):
     subpage_types = []
     parent_page_types = ["news.NewsIndexPage"]
-    can_import_from_google = True
     date = models.DateField("Publish date")
     author = models.ForeignKey(
         "news.Author",
