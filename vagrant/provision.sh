@@ -9,13 +9,6 @@ VIRTUALENV_DIR=/home/vagrant/.virtualenvs/$PROJECT_NAME
 PYTHON=$VIRTUALENV_DIR/bin/python
 PIP=$VIRTUALENV_DIR/bin/pip
 
-
-# Create database (let it fail because database may exist)
-set +e
-su - vagrant -c "createdb $PROJECT_NAME"
-set -e
-
-
 # Virtualenv setup for project
 su - vagrant -c "virtualenv --python=python3 $VIRTUALENV_DIR"
 
@@ -69,6 +62,34 @@ source $VIRTUALENV_DIR/bin/activate
 export PS1="[$PROJECT_NAME \W]\\$ "
 cd $PROJECT_DIR
 EOF
+
+# POSTGRES UPGRADE:
+# Once buster box develepment complete, this can be removed.
+# https://github.com/wagtail/vagrant-wagtail-base/tree/buster64
+PG_VERSION=$(pg_config --version)
+if [[ $PG_VERSION == "PostgreSQL 11"* ]] ;
+then
+    echo "$PG_VERSION already installed"
+else
+    # Upgrade to postgres 11
+    echo "$PG_VERSION found, uninstalling";
+    service postgresql stop
+    apt-get remove -y --force-yes --purge "^postgresql-.*"
+
+    # https://wiki.postgresql.org/wiki/Apt
+    apt-get install -y curl ca-certificates gnupg
+    curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+    sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+
+    apt-get install -y postgresql-11 postgresql-client-11 postgresql-contrib-11
+    su - postgres -c "createuser -s vagrant"
+fi
+
+# Create database (let it fail because database may exist)
+set +e
+su - vagrant -c "createdb $PROJECT_NAME"
+set -e
+
 
 # Install node.js and npm
 curl -sSL https://deb.nodesource.com/setup_8.x | bash -
