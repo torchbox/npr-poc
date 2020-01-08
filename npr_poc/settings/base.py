@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     "wagtail_review",
     "experiments",
     "generic_chooser",
+    "skyapi",
 ]
 
 

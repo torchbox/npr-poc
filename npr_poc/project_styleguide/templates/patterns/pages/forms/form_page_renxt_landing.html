@@ -1,0 +1,13 @@
+{% extends "patterns/base_page.html" %}
+{% load wagtailcore_tags wagtailimages_tags static %}
+
+{% block content %}
+
+    <div class="intro">
+        <div class="container">
+            <h1>Thank you</h1>
+            <p>Constituent added with ID <a href="https://renxt.blackbaud.com/constituents/{{ constituent_id }}">{{ constituent_id }}</a></p>
+        </div>
+    </div>
+
+{% endblock %}

@@ -44,3 +44,5 @@ wagtail_guide==1.0.5
 
 # Migration
 cryptography==2.6.1
+
+requests==2.22.0
