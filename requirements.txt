@@ -18,6 +18,7 @@ git+git://github.com/wagtail/wagtail-review.git@23b81d7e5699ecb843a99da1aa207775
 git+git://github.com/gasman/wagtail-generic-chooser.git@e4946df3aae9ec22adfe4964a2dee0ddd766a8b6#egg=wagtail-generic-chooser
 lxml==4.3.3
 wagtail-content-import==0.2.0
+wagtail-accessibility==0.2.0
 # Pinned because pip cannot handle proper dependency resolution between the packages that require urllib3
 # (elasticsearch, botocore, requests)
 urllib3>=1.21.1,<1.25
