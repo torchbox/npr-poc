@@ -84,7 +84,7 @@
                         {% endif %}
                         <img src="{{ tmp_photo.url }}"
                         width="{% widthratio tmp_photo.width 2 1 %}"
-                        alt="{{ tmp_photo.title }}"
+                        alt="{{ block.value.alt }}"
                         class="streamfield__image" />
                     {% elif block.block_type == 'quote' %}
                         <blockquote class="streamfield__quote">

@@ -8,6 +8,7 @@ from wagtail.snippets.blocks import SnippetChooserBlock
 class ImageBlock(blocks.StructBlock):
     image = ImageChooserBlock()
     caption = blocks.CharBlock(required=False)
+    alt = blocks.CharBlock(required=False, help_text="Leave blank if the image is only decorative")
 
     class Meta:
         icon = "image"
