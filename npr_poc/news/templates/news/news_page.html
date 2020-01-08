@@ -2,7 +2,8 @@
 {% tota11y %}
 <!DOCTYPE html>
 <html lang="en">
-    <title>{{ page.title }}</title>
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | Torchbox Radio </title>
+    <meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% endif %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <body class="theme-{{ request.site.id }}">

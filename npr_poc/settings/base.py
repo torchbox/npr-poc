@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # first - http://help.apm.scoutapp.com/#django.
     "scout_apm.django",
     "wagtailaccessibility",
+    "wagtail_marketing",
     "wagtail_content_import",
     "wagtail_content_import.pickers.google",
     "wagtail_content_import.pickers.microsoft",
