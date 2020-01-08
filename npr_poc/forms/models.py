@@ -1,17 +1,21 @@
 from django.db import models
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+from django import forms
+from django.shortcuts import render
 
 from modelcluster.fields import ParentalKey
 from wagtail.admin.edit_handlers import (FieldPanel, FieldRowPanel,
                                          InlinePanel, MultiFieldPanel)
-from wagtail.contrib.forms.models import AbstractFormField
+from wagtail.contrib.forms.models import AbstractForm, AbstractFormField
 from wagtail.core.fields import RichTextField
 from wagtail.search import index
 
 from wagtailcaptcha.models import WagtailCaptchaEmailForm
 
-from npr_poc.utils.models import BasePage
+from npr_poc.utils.models import BasePage, SkyAPISettings
+
+from skyapi.utils import add_constituent
 
 
 class FormField(AbstractFormField):
@@ -50,3 +54,40 @@ class FormPage(WagtailCaptchaEmailForm, BasePage):
             FieldPanel('subject'),
         ], "Email"),
     ]
+
+
+class ConstituentForm(forms.Form):
+    first_name = forms.CharField(label='First name')
+    last_name = forms.CharField(label='Last name')
+    email = forms.EmailField(label='Email')
+
+
+class ConstituentFormPage(BasePage):
+    template = 'patterns/pages/forms/form_page_renxt.html'
+    landing_page_template = 'patterns/pages/forms/form_page_renxt_landing.html'
+
+    def serve(self, request):
+        self.form = ConstituentForm(request.POST or None)
+        if request.method == 'POST' and self.form.is_valid():
+            constituent_data = {
+                'title': '',
+                'first_name': self.form.data.get('first_name'),
+                'last_name': self.form.data.get('last_name'),
+                'email': self.form.data.get('email'),
+            }
+            access_token = SkyAPISettings.for_site(request.site).access_token
+            res = add_constituent(constituent_data, access_token)
+
+            if not res.ok:
+                print(res.text)
+            else:
+                context = self.get_context(request)
+                context['constituent_id'] = res.json()['id']
+                return render(request, self.landing_page_template, context)
+
+        return super().serve(request)
+
+    def get_context(self, *args, **kwargs):
+        context = super().get_context(*args, **kwargs)
+        context['form'] = self.form
+        return context

@@ -317,3 +317,8 @@ BasePage._meta.get_field("search_description").help_text = mark_safe(
     <a href ='https://moz.com/learn/seo/meta-description' target='_blank'>
     Writing effective meta descriptions</a>."""
 )
+
+
+@register_setting
+class SkyAPISettings(BaseSetting):
+    access_token = models.TextField(default="")
