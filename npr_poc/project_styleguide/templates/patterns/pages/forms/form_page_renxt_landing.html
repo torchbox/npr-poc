@@ -1,13 +1,119 @@
-{% extends "patterns/base_page.html" %}
-{% load wagtailcore_tags wagtailimages_tags static %}
+{% load wagtailcore_tags util_tags static wagtailuserbar wagtailimages_tags wagtailreview_tags wagtailaccessibility_tags %}
+{% tota11y %}
+<!DOCTYPE html>
+<html lang="en">
+    <title>{% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %} | Torchbox Radio </title>
+    <meta name="description" content="{% if self.search_description %}{{ self.search_description }}{% endif %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <body class="theme-{{ request.site.id }}">
 
-{% block content %}
+        <header class="global-header">
+            <div class="global-header__container">
+                <div class="global-header__branding">
+                    <a href="#" class="logo">
+                        <svg class="logo__image logo__image--theme2" viewBox="0 0 1000 291.2" fill="white"><path d="M55.3 150.5H0v-34h149.1v34h-55v136.6H55.3V150.5z"></path><path d="M117.6 227c0-8.9 1.6-17.2 4.7-24.9 3.2-7.8 7.5-14.5 13.2-20.3 5.6-5.8 12.4-10.4 20.3-13.7 7.9-3.3 16.7-5 26.2-5s18.2 1.7 26.1 5c7.8 3.3 14.6 7.9 20.2 13.7 5.6 5.8 10 12.6 13.2 20.3 3.2 7.8 4.7 16.1 4.7 24.9 0 8.9-1.6 17.2-4.7 24.9-3.2 7.8-7.5 14.5-13.2 20.3-5.6 5.8-12.4 10.4-20.2 13.8-7.8 3.4-16.5 5.1-26.1 5.1-9.6 0-18.3-1.7-26.2-5.1s-14.7-8-20.3-13.8c-5.6-5.8-10-12.6-13.2-20.3-3.1-7.8-4.7-16.1-4.7-24.9zm64.5 32.2c4.6 0 8.7-.9 12.3-2.7 3.6-1.8 6.6-4.2 9.1-7.3 2.5-3.1 4.3-6.5 5.5-10.4 1.2-3.8 1.8-7.8 1.8-11.9s-.6-8.1-1.8-11.9c-1.2-3.8-3-7.2-5.5-10.2-2.5-3-5.5-5.4-9.1-7.2-3.6-1.8-7.7-2.7-12.3-2.7-4.6 0-8.7.9-12.4 2.7-3.7 1.8-6.7 4.2-9.1 7.2-2.4 3-4.2 6.4-5.5 10.2-1.3 3.8-1.9 7.8-1.9 11.9s.6 8.1 1.9 11.9c1.3 3.8 3.1 7.3 5.5 10.4 2.4 3.1 5.4 5.5 9.1 7.3 3.7 1.8 7.8 2.7 12.4 2.7zm79.6-92.1H297l1.3 15.1c3.1-4.1 7.3-8 12.7-11.8 5.4-3.7 12.3-5.6 20.8-5.6 3.2 0 6 .2 8.3.5 2.3.3 4.6.9 6.8 1.8l-5.9 32.5c-3.8-1.2-8.2-1.8-13.3-1.8-8.7 0-15.7 2.6-21.1 7.8-5.4 5.2-8.1 12.6-8.1 22.1V287h-36.8V167.1zm199.8 104.1c-4.9 5.5-11.5 10.1-19.6 14.1-8.1 3.9-17.7 5.9-28.8 5.9-9.7 0-18.5-1.6-26.5-4.7-7.9-3.2-14.7-7.6-20.3-13.3-5.6-5.7-10-12.5-13.2-20.3-3.2-7.8-4.7-16.5-4.7-25.8 0-8.9 1.6-17.2 4.9-24.9 3.2-7.8 7.7-14.5 13.4-20.3 5.7-5.8 12.5-10.4 20.5-13.7 7.9-3.3 16.6-5 26-5 10.9 0 20.4 1.8 28.4 5.4 8 3.6 14.7 8.4 20.2 14.3l-22.3 24c-2.7-3.1-6.1-5.8-10-8.2-3.9-2.4-9.1-3.6-15.6-3.6-4.4 0-8.4.9-11.9 2.7-3.5 1.8-6.5 4.1-9 7-2.5 2.9-4.3 6.3-5.6 10.1-1.3 3.8-1.9 7.9-1.9 12.2 0 3.9.6 7.8 1.9 11.6 1.3 3.8 3.2 7.3 5.6 10.2 2.5 3 5.5 5.4 9 7.3 3.5 1.9 7.5 2.8 11.9 2.8 6.3 0 11.6-1.2 15.9-3.7 4.3-2.5 7.7-5.2 10.2-8.1l21.5 24zm10.3-154.8h36.6v62.2c3.9-4.6 9.1-8.1 15.6-10.6s13-3.7 19.7-3.7c13.8 0 24.9 4.1 33.1 12.3 8.3 8.2 12.4 20.3 12.4 36.3v74.2h-36.6v-68.6c0-7-1.8-12.4-5.4-16.4-3.6-3.9-8.4-5.9-14.3-5.9-3.9 0-7.4.7-10.5 2.2-3.1 1.4-5.6 3.4-7.7 5.8-2 2.4-3.6 5.2-4.6 8.3-1 3.2-1.5 6.5-1.5 10.1v64.5h-36.8V116.4zm138.5 0h36.8V176c3.4-3.6 8.1-6.4 13.9-8.4 5.9-2 11.7-3.1 17.5-3.1 8.5 0 16.1 1.6 22.8 4.9 6.7 3.2 12.2 7.6 16.8 13.2 4.5 5.5 8 11.9 10.4 19.2 2.4 7.3 3.6 15 3.6 23.1 0 9.7-1.6 18.7-4.7 26.9-3.2 8.2-7.7 15.2-13.7 21-6 5.8-13.3 10.3-22 13.6-8.7 3.2-18.6 4.9-29.7 4.9-10.2 0-19.9-.9-29-2.8-9.1-1.9-16.7-3.8-22.6-5.9V116.4zm36.8 141.5c2 .9 4.3 1.5 6.8 1.9 2.5.4 5.9.6 10.4.6 9.7 0 17.3-3.2 22.6-9.5 5.4-6.3 8.1-14.6 8.1-24.8 0-3.8-.5-7.4-1.4-11-.9-3.6-2.3-6.8-4.2-9.6-1.9-2.8-4.3-5.1-7.3-6.9-3-1.8-6.6-2.7-10.9-2.7-8.2 0-14.2 2.3-18.2 6.8-3.9 4.5-5.9 10.5-5.9 18v37.2zM742 227c0-8.9 1.6-17.2 4.7-24.9 3.2-7.8 7.5-14.5 13.2-20.3 5.6-5.8 12.4-10.4 20.3-13.7 7.9-3.3 16.7-5 26.2-5s18.2 1.7 26.1 5c7.8 3.3 14.6 7.9 20.2 13.7 5.6 5.8 10 12.6 13.2 20.3 3.2 7.8 4.7 16.1 4.7 24.9 0 8.9-1.6 17.2-4.7 24.9-3.2 7.8-7.5 14.5-13.2 20.3-5.6 5.8-12.4 10.4-20.2 13.8-7.8 3.4-16.5 5.1-26.1 5.1-9.6 0-18.3-1.7-26.2-5.1s-14.7-8-20.3-13.8c-5.6-5.8-10-12.6-13.2-20.3-3.1-7.8-4.7-16.1-4.7-24.9zm64.5 32.2c4.6 0 8.7-.9 12.3-2.7 3.6-1.8 6.6-4.2 9.1-7.3 2.5-3.1 4.3-6.5 5.5-10.4 1.2-3.8 1.8-7.8 1.8-11.9s-.6-8.1-1.8-11.9c-1.2-3.8-3-7.2-5.5-10.2-2.5-3-5.5-5.4-9.1-7.2-3.6-1.8-7.7-2.7-12.3-2.7-4.6 0-8.7.9-12.4 2.7-3.7 1.8-6.7 4.2-9.1 7.2-2.4 3-4.2 6.4-5.5 10.2-1.3 3.8-1.9 7.8-1.9 11.9s.6 8.1 1.9 11.9c1.3 3.8 3.1 7.3 5.5 10.4 2.4 3.1 5.4 5.5 9.1 7.3 3.6 1.8 7.8 2.7 12.4 2.7z"></path><path d="M912.5 227l-43.7-59.9h44l21.5 32 21.7-32h40.2L954 224.4l46 62.7h-44l-23.8-34.5-24 34.5H868l44.5-60.1z"></path><path fill="#3BECCD" d="M998.5 82.8c-.2-1.6-2.3-2-3.1-.6-4.7 8.4-11.3 15.6-15.9 17.8v-.9C978.7 41 936.7 9.5 921.9.3c-1.4-.9-3.1.6-2.4 2.1 9.7 20.1 6.1 39.1-10.2 57.6-3.1 3.4-6.5 7.8-9.4 12.2 0 0-3.5 5.1-6.8 12.1l-.2-.2c-6.7-10.2-8.2-22.4-8.5-29.1-.1-1.6-2.1-2.2-3-1-4.2 5.8-11.4 17.6-12.5 30.5-2.6 31.2 15.9 63.1 47.7 71.6 1.5.4 2.6-1.2 1.7-2.5-2.8-4.4-4.5-10.6-4.5-18.6 0-18.5 20-46.6 20-46.6s20 28.1 20 46.6c0 8.1-1.7 14.3-4.5 18.7-.8 1.3.3 2.9 1.7 2.5 30.9-8 45.4-36.5 47.6-54 1-7.7.4-14.8-.1-19.4z"></path></svg>
+                        <svg class="logo__image logo__image--theme3" viewBox="0 0 560 198.7">
+                          <style>
+                            .st4{clip-path:url(#SVGID_2_)}
+                          </style>
+                          <path fill="#25408f" d="M81.8 192.7h31l25.6-73.8 25.8 73.8h30.9l42.8-129h-36.7l-22.4 74.1-24.7-74.5h-30.6l-24.7 74.5-22.3-74.1H39z"/>
+                          <defs>
+                            <path id="SVGID_1_" d="M0 0h560v198.7H0z"/>
+                          </defs>
+                          <clipPath id="SVGID_2_">
+                            <use xlink:href="#SVGID_1_" overflow="visible"/>
+                          </clipPath>
+                          <path d="M219.9 147.3H286c30.6 0 48.5-13.4 48.5-35.3v-.4c0-17.4-9.9-26.2-25.4-31.3 11.3-4.9 19.8-13.7 19.8-28.6v-.4c0-8.8-3.1-15.6-8.2-20.7-7.5-7.5-18.9-11.5-35-11.5H220v128.2zm34.6-77.1V47.7h23.1c10.6 0 16.1 4 16.1 11v.3c0 7.5-6 11.2-16.8 11.2h-22.4zm0 48.5V95.1h27.1c11.9 0 17.4 4.6 17.4 11.5v.4c0 7.5-6.2 11.7-17 11.7h-27.5z" clip-path="url(#SVGID_2_)" fill="#f15822"/>
+                          <path d="M423.3 122c31.6 0 54.1-23.2 54.1-50.3v-.4c0-27.1-22.3-49.9-53.8-49.9-31.6 0-54.1 23.2-54.1 50.3v.4c.1 27.1 22.4 49.9 53.8 49.9m.4-33.2c-8.8 0-15.8-7.6-15.8-17v-.4c0-9.1 6.5-16.7 15.5-16.7 8.8 0 15.8 7.6 15.8 17v.4c-.1 9.2-6.6 16.7-15.5 16.7" clip-path="url(#SVGID_2_)" fill="#9d3393"/>
+                          <path d="M365.2 198.7c18.6 0 33.7-6.9 44.5-15.8v-46.1h-47.2v20.8h20.2V170c-4.2 2.8-9.5 4.2-16.4 4.2-16.3 0-27.8-11.9-27.8-28.4v-.3c0-15.7 11.4-28.1 26.2-28.1 10.1 0 17.4 3.5 24.7 9.7l16.7-20.1c-10.8-9.4-23.6-14.9-41.6-14.9-31.8 0-55.2 23.4-55.2 53.3v.3c.1 31 24 53 55.9 53m-69.9-78.5v-.3m4.6 48.4v-.3" clip-path="url(#SVGID_2_)" fill="#d2232a"/>
+                          <path class="st4" d="M449.5 132.5h11v-10.9h-11v10.9zm27.5.8c11.4 0 19.8-8.5 19.8-19v-.1c0-10.5-8.4-18.9-19.7-18.9-11.4 0-19.8 8.5-19.8 19v.1c.1 10.5 8.4 18.9 19.7 18.9m.2-8.9c-5.7 0-9.6-4.7-9.6-10.1v-.1c0-5.4 3.5-9.9 9.5-9.9 5.7 0 9.6 4.7 9.6 10.1v.1c0 5.3-3.6 9.9-9.5 9.9m21.7 8.1h10.4V119c0-8.7 4.2-12.9 11.1-12.9h.5V95.3c-6.1-.3-9.5 3-11.7 8V96h-10.4v36.5zm40.8 11c7.1 0 12.3-1.5 15.7-4.9 3.1-3.1 4.6-7.8 4.6-14.4V96h-10.4v4.8c-2.8-3.1-6.1-5.4-11.8-5.4-8.4 0-16.2 6.1-16.2 17v.1c0 10.8 7.7 17 16.2 17 5.5 0 8.9-2.2 11.9-5.9v1.8c0 6.5-3.3 9.9-10.4 9.9-4.8 0-8.6-1.2-12.3-3.3l-3.5 7.8c4.6 2.4 10.2 3.7 16.2 3.7m1.2-22.6c-5 0-8.9-3.4-8.9-8.4v-.1c0-5 3.8-8.4 8.9-8.4 5 0 8.9 3.5 8.9 8.4v.1c0 5-3.9 8.4-8.9 8.4M22.6 56.7c13.2 0 22.6-6.3 22.6-16.1v-.2c0-6.8-3.8-10.5-9.4-13.1 4.2-2.3 7.5-6 7.5-11.9v-.2C43.2 6.5 34.9 0 22.6 0 10.3 0 1.9 6.5 1.9 15.3v.2c0 6 3.3 9.6 7.5 11.9C3.5 29.9 0 33.8 0 40.5v.2c0 9.5 9.4 16 22.6 16m0-33.5c-4.1 0-6.7-2.6-6.7-6V17c0-3.1 2.6-5.7 6.7-5.7s6.7 2.7 6.7 5.8v.2c0 3.4-2.7 5.9-6.7 5.9m0 22.2c-5.1 0-7.9-2.9-7.9-6.2V39c0-3.5 3.3-6 7.9-6 4.6 0 7.9 2.4 7.9 6v.2c0 3.3-2.8 6.2-7.9 6.2m43.1 11.3c13.2 0 22.6-6.3 22.6-16.1v-.2c0-6.8-3.8-10.5-9.4-13.1 4.2-2.3 7.5-6 7.5-11.9v-.2C86.3 6.5 78 0 65.7 0 53.4 0 45 6.5 45 15.3v.2c0 6 3.3 9.6 7.5 11.9-5.9 2.5-9.4 6.5-9.4 13.2v.2c0 9.4 9.4 15.9 22.6 15.9m0-33.5c-4.1 0-6.7-2.6-6.7-6V17c0-3.1 2.6-5.7 6.7-5.7 4.2 0 6.7 2.7 6.7 5.8v.2c0 3.4-2.7 5.9-6.7 5.9m0 22.2c-5.1 0-7.9-2.9-7.9-6.2V39c0-3.5 3.3-6 7.9-6 4.6 0 7.9 2.4 7.9 6v.2c0 3.3-2.9 6.2-7.9 6.2m17 10.4h15.5V40.5H82.7v15.3zm35.1 1.1c12.2 0 21.2-7.1 21.2-18.3v-.2c0-9.3-6.3-13.7-14.2-15.4l13.1-11.2V.9H98.2v12.3h21l-12.6 11.4 2.2 7.9h6.4c5.7 0 8.9 2.1 8.9 5.6v.2c0 3.4-2.7 5.6-7.1 5.6-5 0-9.2-2.3-13.1-6.3l-9.6 9.6c5.4 5.8 12.9 9.7 23.5 9.7m29.2-1.1h10.7V33.7h6.9v-8.3h-7v-.7c0-2 1.1-2.9 3.1-2.9 1.5 0 2.8.2 4 .6v-7.6c-1.7-.5-3.8-.9-7-.9-3.6 0-6.1.8-8 2.7-1.8 1.8-2.6 4.4-2.6 7.9v.7h-3.6v8.5h3.6v22.1zm16.5 0h10.8V39.1c0-3.3 1.8-5.1 4.4-5.1 2.6 0 4.2 1.8 4.2 5.1v16.7h10.8V39.1c0-3.3 1.9-5.1 4.4-5.1 2.6 0 4.2 1.8 4.2 5.1v16.7H213V35.6c0-7.2-4-11.2-10.5-11.2-4.5 0-7.6 1.9-10.3 5-1.6-3.2-4.8-5-8.9-5-4.3 0-7.2 2.3-9.1 4.9v-4.2h-10.8v30.7z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="global-header__nav">
+                    <div class="primary-nav">
+                        <ul class="primary-nav__container">
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link">All Streams</a>/
+                            </li>
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link">Schedule</a>/
+                            </li>
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link">Shows</a>/
+                            </li>
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link primary-nav-item__link--active">News</a>/
+                            </li>
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link">Topics</a>/
+                            </li>
+                            <li class="primary-nav-item">
+                                <a href="#" class="primary-nav-item__link">Discover</a>
+                            </li>
+                            <li class="primary-nav-item primary-nav-item--button">
+                                <a href="#" class="primary-nav-item__link">Donate</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-    <div class="intro">
-        <div class="container">
-            <h1>Thank you</h1>
-            <p>Constituent added with ID <a href="https://renxt.blackbaud.com/constituents/{{ constituent_id }}">{{ constituent_id }}</a></p>
+        <main class="layout">
+
+            <article class="layout__single-col layout__single-col--center">
+
+                {% block content %}
+
+                <h1 class="heading heading--primary">Thank you</h1>
+
+                <p>Constituent added with ID <a href="https://renxt.blackbaud.com/constituents/{{ constituent_id }}">{{ constituent_id }}</a></p>
+
+                {% endblock content %}
+
+            </article>
+
+        </main>
+
+        <div class="global-footer">
+            <div class="global-footer__container">
+                <div class="global-footer__about">
+                    <div class="global-footer__about-container">
+                        <h2 class="global-footer__heading"><span class="theme-2-content">Torchbox</span><span class="theme-3-content">WBGO</span> Radio</h2>
+                        <p class="global-footer__description">Listener-supported <span class="theme-2-content">Torchbox</span><span class="theme-3-content">WBGO</span> Radio is the home for independent journalism and courageous conversation on air and online. Broadcasting live from New York City on 93.9 FM and AM 820 and available online and on the go.</p>
+                        <a href="#" class="global-footer__donate-button">Make a donation</a>
+                    </div>
+                </div>
+                <div class="global-footer__sitemap">
+                    <div class="global-footer__sitemap-container">
+                        <h2 class="global-footer__heading global-footer__heading--light">Navigate</h2>
+                        <ul class="global-footer__sitemap-links">
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">All streams</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">About us</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Schedule</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Contact us</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Shows</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Become a sponsor</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Topics</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Careers</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Discover</a></li>
+                            <li class="global-footer__sitemap-item"><a class="global-footer__sitemap-link" href="#">Press</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="global-footer__legal-stuff">
+                    <ul class="legal-stuff">
+                        <li class="legal-stuff-item">© <span class="theme-2-content">Torchbox Radio 2020</span><span class="theme-3-content">WBGO Radio 2019</span> <div class="legal-stuff-item__divider">/</div></li>
+                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Terms of Use</a>/</li>
+                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Privacy Policy</a>/</li>
+                        <li class="legal-stuff-item"><a href="#" class="legal-stuff-item__link">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
-
-{% endblock %}
+        {% wagtailuserbar %}
+        {% wagtailreview %}
+    </body>
+</html>
