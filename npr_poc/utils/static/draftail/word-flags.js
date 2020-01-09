@@ -167,7 +167,6 @@ const wordiness = {
     "hear the sound of": "hear",
     "heat up": "heat",
     "I myself": "i",
-    "clear and concise": "[concisely] concise",
     "a situation in which": "eperienced",
     "in a very real sense": "delete,",
     "in a way that is clear": "clearly or clear way",
