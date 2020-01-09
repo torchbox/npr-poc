@@ -1,15 +1,7 @@
-import json
+from django.conf import settings
+from django.utils.html import format_html_join
 
-from django.shortcuts import render
-from django.urls import path
-from django.utils.text import slugify
-from django.utils.html import format_html
-
-from wagtail.admin.action_menu import PageActionMenu
-from wagtail.admin.views.pages import get_valid_next_url_from_request
 from wagtail.core import hooks
-
-from . import views
 
 
 @hooks.register("insert_editor_css")
@@ -35,4 +27,25 @@ def insert_editor_css():
             background-color: #eee!important;
             border: 1px solid #ddd!important;
         }
+
+        .Draftail-ToolbarButton[name="READABILITY"] {
+            font-weight: 500;
+        }
     </style>"""
+
+
+@hooks.register("insert_editor_js")
+def editor_js():
+    """ Adds additional JavaScript files or code snippets to the page editor. """
+    js_files = [
+        "wagtailadmin/js/draftail.js",
+        "draftail/api-monkeypatch.js",
+        "draftail/readability.js",
+        "draftail/word-flags.js",
+    ]
+    js_includes = format_html_join(
+        "\n",
+        '<script src="{0}{1}"></script>',
+        ((settings.STATIC_URL, filename) for filename in js_files),
+    )
+    return js_includes

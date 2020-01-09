@@ -1,4 +1,5 @@
 {% load wagtailimages_tags %}
 
-{% image value.image width-1000 %}
+{% image value.image width-1000 as tmp_photo %}
+<img src="{{ tmp_photo.url }}" width="{{ tmp_photo.width }}" height="{{ tmp_photo.height }}" alt="{{ value.alt }}" />
 <p>{{ value.caption }}</p>
