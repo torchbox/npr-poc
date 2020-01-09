@@ -174,7 +174,17 @@ const wordiness = {
     "in actuality": "delete,",
     "in all probability": "probably/likely",
     "in close proximity": "near",
-    "in light of the fact that": "because"
+    "in light of the fact that": "because",
+    // Example of bad copy / trigger words
+    "the right direction": "",
+    "eye candy": "",
+    "mind over matter": "",
+    "absolutely crackers": "",
+    "hand in hand": "",
+    "welcome home": "",
+    "happy hours": "",
+    "young parents": "",
+    "mental illness": "",
 };
 
 const unusalWords = {
