@@ -106,6 +106,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "pattern_library",
     "wagtailmedia",
+    "wagtailnhsukfrontend",
     "corsheaders",
     "wagtail_headless_preview",
     "wagtailaltgenerator",

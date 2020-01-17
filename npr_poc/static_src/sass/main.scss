@@ -1,5 +1,13 @@
 // Vendor
 @import 'vendor/normalize';
+// Styles for service manual patterns
+// https://github.com/nhsuk/nhsuk-frontend/blob/master/docs/installation/installing-with-npm.md#importing-styles
+// https://beta.nhs.uk/service-manual/styles-components-patterns
+@import 'node_modules/nhsuk-frontend/packages/core/all';
+@import 'node_modules/nhsuk-frontend/packages/components/do-dont-list/do-dont-list';
+@import 'node_modules/nhsuk-frontend/packages/components/inset-text/inset-text';
+@import 'vendor/nhsukfrontend';
+
 
 // Abstracts
 @import 'abstracts/variables';

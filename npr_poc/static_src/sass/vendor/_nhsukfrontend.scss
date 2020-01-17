@@ -1,0 +1,8 @@
+// Overrides for the service manual components
+
+.nhsuk-do-dont-list,
+.nhsuk-inset-text {
+    .rich-text:last-child p {
+        margin-bottom: 0;
+    }
+}

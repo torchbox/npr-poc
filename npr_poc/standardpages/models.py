@@ -10,6 +10,8 @@ from wagtail.search import index
 from npr_poc.utils.blocks import StoryBlock
 from npr_poc.utils.models import BasePage, RelatedPage
 
+from .blocks import HealthStoryBlock
+
 
 class InformationPageRelatedPage(RelatedPage):
     source_page = ParentalKey("InformationPage", related_name="related_pages")
@@ -30,6 +32,23 @@ class InformationPage(BasePage):
         FieldPanel("introduction"),
         StreamFieldPanel("body"),
         InlinePanel("related_pages", label="Related pages"),
+    ]
+
+
+class HealthInformationPage(BasePage):
+    template = "patterns/pages/standardpages/health_information_page.html"
+
+    introduction = models.TextField(blank=True)
+    body = StreamField(HealthStoryBlock())
+
+    search_fields = BasePage.search_fields + [
+        index.SearchField("introduction"),
+        index.SearchField("body"),
+    ]
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel("introduction"),
+        StreamFieldPanel("body"),
     ]
 
 
