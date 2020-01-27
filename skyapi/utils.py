@@ -21,7 +21,20 @@ def add_constituent(details, access_token):
         'first': details['first_name'],
         'last': details['last_name'],
         'title': details['title'],
-        'type': 'Individual'
+        'type': 'Individual',
+        "phone": {
+            "number": details['phone']['number'],
+            "type": details['phone']['type'],
+            "do_not_call": details['phone']['consent'],
+        },
+        "address": {
+            "address_lines": details['address']['address_lines'],
+            "city": details['address']['city'],
+            "country": details['address']['country'],
+            "county": details['address']['county'],
+            "postal_code": details['address']['postal_code'],
+            "type": "Home",
+        },
     }
 
     res = requests.post(

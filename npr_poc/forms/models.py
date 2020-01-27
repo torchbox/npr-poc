@@ -57,9 +57,29 @@ class FormPage(WagtailCaptchaEmailForm, BasePage):
 
 
 class ConstituentForm(forms.Form):
+    title = forms.ChoiceField(choices=[
+        ('Miss','Miss'),
+        ('Mr','Mr'),
+        ('Mrs','Mrs'),
+        ('Ms','Ms'),
+        ('Prof','Prof'),
+        ])
     first_name = forms.CharField(label='First name')
     last_name = forms.CharField(label='Last name')
     email = forms.EmailField(label='Email')
+    phone_number = forms.CharField(label="Phone number")
+    phone_number_type = forms.ChoiceField(choices=[
+        ("Mobile","Mobile"),
+        ("Home","Home"),
+        ("Business","Business"),
+    ])
+    phone_consent = forms.BooleanField(label="May we contact you by phone?", required=False)
+    address_line_one = forms.CharField(label="Address line one, E.G 123 Main street")
+    city = forms.CharField(label="City")
+    country = forms.CharField(label="County")
+    county = forms.CharField(label="county")
+    postal_code = forms.CharField(label="Postcode")
+
 
 
 class ConstituentFormPage(BasePage):
@@ -70,16 +90,31 @@ class ConstituentFormPage(BasePage):
         self.form = ConstituentForm(request.POST or None)
         if request.method == 'POST' and self.form.is_valid():
             constituent_data = {
-                'title': '',
                 'first_name': self.form.data.get('first_name'),
                 'last_name': self.form.data.get('last_name'),
                 'email': self.form.data.get('email'),
+                'title': self.form.data.get('title'),
+                "phone": {
+                    "number": self.form.data.get('phone_number'),
+                    "type": self.form.data.get('phone_number_type'),
+                    "consent": not self.form.data.get('phone_consent'),
+                },
+                "address": {
+                    "address_lines": self.form.data.get('address_line_one'),
+                    "city": self.form.data.get('city'),
+                    "country": self.form.data.get('country'),
+                    "county": self.form.data.get('county'),
+                    "postal_code": self.form.data.get('postal_code'),
+                    "type": "Home",
+                }
             }
+
+
             access_token = SkyAPISettings.for_site(request.site).access_token
             res = add_constituent(constituent_data, access_token)
 
             if not res.ok:
-                print(res.text)
+                print(res)
             else:
                 context = self.get_context(request)
                 context['constituent_id'] = res.json()['id']
@@ -89,5 +124,6 @@ class ConstituentFormPage(BasePage):
 
     def get_context(self, *args, **kwargs):
         context = super().get_context(*args, **kwargs)
+
         context['form'] = self.form
         return context
