@@ -76,9 +76,9 @@ class ConstituentForm(forms.Form):
     phone_consent = forms.BooleanField(label="May we contact you by phone?", required=False)
     address_line_one = forms.CharField(label="Address line one, E.G 123 Main street")
     city = forms.CharField(label="City")
-    country = forms.CharField(label="County")
-    county = forms.CharField(label="county")
+    county = forms.CharField(label="County")
     postal_code = forms.CharField(label="Postcode")
+    country = forms.CharField(label="Country")
 
 
 
