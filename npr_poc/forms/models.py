@@ -73,7 +73,6 @@ class ConstituentForm(forms.Form):
         ("Home","Home"),
         ("Business","Business"),
     ])
-    phone_consent = forms.BooleanField(label="May we contact you by phone?", required=False)
     address_line_one = forms.CharField(label="Address line one, E.G 123 Main street")
     city = forms.CharField(label="City")
     county = forms.CharField(label="County")
@@ -97,7 +96,6 @@ class ConstituentFormPage(BasePage):
                 "phone": {
                     "number": self.form.data.get('phone_number'),
                     "type": self.form.data.get('phone_number_type'),
-                    "consent": not self.form.data.get('phone_consent'),
                 },
                 "address": {
                     "address_lines": self.form.data.get('address_line_one'),
