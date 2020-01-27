@@ -102,9 +102,9 @@ class ConstituentFormPage(BasePage):
                 "address": {
                     "address_lines": self.form.data.get('address_line_one'),
                     "city": self.form.data.get('city'),
-                    "country": self.form.data.get('country'),
                     "county": self.form.data.get('county'),
                     "postal_code": self.form.data.get('postal_code'),
+                    "country": self.form.data.get('country'),
                     "type": "Home",
                 }
             }
