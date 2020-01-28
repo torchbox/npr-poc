@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <body class="theme-{{ request.site.id }}">
 
-        <header class="global-header">
+        {% comment %} <header class="global-header">
             <div class="global-header__container">
                 <div class="global-header__branding">
                     <a href="#" class="logo">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-        </header>
+        </header> {% endcomment %}
 
         <main class="layout">
 
@@ -121,7 +121,7 @@
 
         </main>
 
-        <div class="global-footer">
+        {% comment %} <div class="global-footer">
             <div class="global-footer__container">
                 <div class="global-footer__about">
                     <div class="global-footer__about-container">
@@ -156,7 +156,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
         {% wagtailuserbar %}
         {% wagtailreview %}
     </body>
