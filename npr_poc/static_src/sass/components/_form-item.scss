@@ -95,3 +95,11 @@
     // sass-lint:enddisable
 
 }
+
+.form-item select {
+    height: 46px;
+    background: white;
+    border: 0;
+    outline: 1px solid #141414;
+    outline-offset: -1px;
+}
