@@ -85,6 +85,12 @@ class ConstituentFormPage(BasePage):
     template = 'patterns/pages/forms/form_page_renxt.html'
     landing_page_template = 'patterns/pages/forms/form_page_renxt_landing.html'
 
+    introduction = models.TextField(blank=True)
+
+    content_panels = BasePage.content_panels + [
+        FieldPanel('introduction'),
+    ]
+
     def serve(self, request):
         self.form = ConstituentForm(request.POST or None)
         if request.method == 'POST' and self.form.is_valid():
