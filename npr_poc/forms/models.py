@@ -86,9 +86,11 @@ class ConstituentFormPage(BasePage):
     landing_page_template = 'patterns/pages/forms/form_page_renxt_landing.html'
 
     introduction = models.TextField(blank=True)
+    action_text = models.CharField(max_length=32, blank=True, help_text="Form action text. Defaults to \"Submit\"")
 
     content_panels = BasePage.content_panels + [
         FieldPanel('introduction'),
+        FieldPanel('action_text'),
     ]
 
     def serve(self, request):
