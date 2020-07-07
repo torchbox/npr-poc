@@ -184,6 +184,13 @@ const wordiness = {
     "happy hours": "",
     "young parents": "",
     "mental illness": "",
+    // https://readabilityguidelines.co.uk/
+    "disincentivise": "",
+    "liaise": "",
+    "streamline": "",
+    "dialogue": "",
+    "touch base": "",
+    "blue sky thinking": "",
 };
 
 const unusalWords = {
