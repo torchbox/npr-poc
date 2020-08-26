@@ -758,3 +758,6 @@ PBS_API_SECRET = env.get("PBS_API_SECRET", "")
 WAGTAIL_USAGE_COUNT_ENABLED = True
 
 WAGTAILCONTENTIMPORT_DEFAULT_MAPPER = 'npr_poc.utils.mappers.StoryMapper'
+
+# https://docs.wagtail.io/en/v2.8.1/releases/2.8.html#responsive-html-for-embeds-no-longer-added-by-default
+WAGTAILEMBEDS_RESPONSIVE_HTML = True
