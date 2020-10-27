@@ -44,6 +44,6 @@ wagtail_guide==1.0.5
 wagtail-nhsuk-frontend==0.4.0
 
 # Migration
-cryptography==2.6.1
+cryptography==3.2
 
 requests==2.22.0
