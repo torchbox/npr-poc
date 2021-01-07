@@ -16,7 +16,7 @@ wagtailaltgenerator==4.1.1
 feedparser==5.2.1
 git+git://github.com/wagtail/wagtail-review.git@0337683fbe5433dbb6c27da6486684348d96e4c2#egg=wagtail-review
 git+git://github.com/gasman/wagtail-generic-chooser.git@e4946df3aae9ec22adfe4964a2dee0ddd766a8b6#egg=wagtail-generic-chooser
-lxml==4.3.3
+lxml==4.6.2
 wagtail-content-import==0.3.3
 wagtail-accessibility==0.2.0
 wagtail-marketing-addons==0.4.1
