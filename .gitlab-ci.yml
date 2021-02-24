@@ -71,7 +71,7 @@ isort:
 # Check settings, migrations and run tests.
 test:
   # Make sure this Python version matches the version in your Dockerfile.
-  image: python:3.6.13
+  image: python:3.6
   stage: test
   services:
     # Make sure this matches the Postgres version you run on your servers.
